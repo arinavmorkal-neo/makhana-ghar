@@ -1,0 +1,376 @@
+/* ══════════════════════════════════════════════════════
+   Product Section — Premium Makhana Grades
+═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@700&display=swap');
+
+.sectionWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 580px;
+  overflow: hidden;
+}
+
+/* ── Kisan Logo — top right ── */
+.kisanLogo {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  height: 55%;
+  width: auto;
+  z-index: 5;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+.kisanLogo:hover {
+  opacity: 1;
+}
+
+/* ── Split background ── */
+.yellowHalf {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+  background: #F5C800;
+  z-index: 0;
+}
+
+.waveDivider {
+  position: absolute;
+  top: calc(55% - 40px);
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 1;
+}
+
+.waveSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.whiteHalf {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: #fff;
+  z-index: 0;
+}
+
+/* ── Section Header ── */
+.sectionHeader {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 48px 24px 12px;
+}
+
+.sectionTag {
+  display: inline-block;
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a2e12;
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+.sectionTitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 900;
+  color: #1a2e12;
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+
+.sectionSubtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #3a3a2a;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Cards Row ── */
+.cardsRow {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  gap: 22px;
+  padding: 28px 40px 64px;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* ── Product Card ── */
+.productCard {
+  flex: 1;
+  max-width: 270px;
+  border-radius: 7px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  box-shadow:
+    0 10px 36px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.38s ease;
+}
+
+.productCard:hover {
+  transform: translateY(-14px) scale(1.04);
+  box-shadow:
+    0 28px 64px rgba(0, 0, 0, 0.25),
+    0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Gradient background */
+.cardBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Product image — sets the card size */
+.cardImage {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  transition: transform 0.4s ease;
+}
+
+.productCard:hover .cardImage {
+  transform: scale(1.05);
+}
+
+/* ── Hover Panel ── */
+.cardHoverPanel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(8px);
+  padding: 20px 18px 18px;
+  transform: translateY(100%);
+  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 0 0 7px 7px;
+}
+
+.productCard:hover .cardHoverPanel {
+  transform: translateY(0);
+}
+
+.panelName {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #F5C800;
+  margin-bottom: 3px;
+  line-height: 1.2;
+}
+
+.panelOrigin {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  color: #999;
+  margin-bottom: 8px;
+  letter-spacing: 0.4px;
+}
+
+.panelDesc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #ccc;
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+
+.panelTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.panelTag {
+  background: rgba(245, 200, 0, 0.12);
+  border: 1px solid rgba(245, 200, 0, 0.35);
+  color: #F5C800;
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.panelFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 10px;
+}
+
+.panelPrice {
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+
+.panelWeight {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  color: #777;
+  margin-top: 2px;
+}
+
+.panelBtn {
+  display: inline-block;
+  background: #F5C800;
+  color: #111;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.panelBtn:hover {
+  background: #ffd600;
+  transform: scale(1.05);
+}
+
+/* ── Mobile-only bottom bar (hidden on desktop) ── */
+.mobileBottom {
+  display: none;
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — Tablet
+═══════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .cardsRow {
+    flex-wrap: wrap;
+    padding: 28px 20px 48px;
+    gap: 18px;
+  }
+
+  .productCard {
+    max-width: 45%;
+  }
+
+  .sectionHeader {
+    padding: 36px 20px 8px;
+  }
+
+  .sectionTitle {
+    font-size: 28px;
+  }
+
+  .kisanLogo {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — Mobile
+═══════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .cardsRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 12px 36px;
+  }
+
+  .productCard {
+    max-width: 100%;
+    width: 100%;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Disable all hover animations */
+  .productCard:hover {
+    transform: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .productCard:hover .cardImage {
+    transform: none;
+  }
+
+  /* Hide the hover panel */
+  .cardHoverPanel {
+    display: none;
+  }
+
+  /* Show mobile bottom bar */
+  .mobileBottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: rgba(26, 46, 18, 0.92);
+    position: relative;
+    z-index: 5;
+  }
+
+  .mobileName {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    margin-right: 6px;
+  }
+
+  .mobileBtn {
+    display: inline-block;
+    background: #F5C800;
+    color: #1a2e12;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .sectionHeader {
+    padding: 28px 16px 4px;
+  }
+
+  .sectionTitle {
+    font-size: 24px;
+  }
+
+  .sectionSubtitle {
+    font-size: 13px;
+  }
+}

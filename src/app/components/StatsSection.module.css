@@ -1,0 +1,167 @@
+/* ══════════════════════════════════════════════════════
+   Stats Section — Animated Counter Bar
+═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700;800;900&display=swap');
+
+.statsSection {
+  width: 100%;
+  background-color: #5c3a1e;
+  background-image:
+    radial-gradient(ellipse at 80% 50%, rgba(120, 70, 10, 0.5) 0%, transparent 60%),
+    url("/tructor.png");
+  background-size: cover, 300px 300px;
+  background-position: center, right center;
+  background-repeat: no-repeat, no-repeat;
+  padding: 64px 40px;
+  position: relative;
+  overflow: visible;
+}
+
+/* ── Decorative top edge image ── */
+.topEdge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: -10px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ── Decorative bottom edge image ── */
+.bottomEdge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: -10px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ── Grid layout ── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Individual stat item ── */
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 32px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.statItem:hover {
+  transform: translateY(-4px);
+}
+
+/* vertical divider between items */
+.statItem:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10%;
+  height: 80%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(255, 255, 255, 0.2) 70%,
+    transparent
+  );
+}
+
+/* ── Icon ── */
+.iconWrapper {
+  opacity: 0.9;
+  transition: transform 0.3s ease;
+}
+
+.statItem:hover .iconWrapper {
+  transform: scale(1.1);
+}
+
+/* ── Number ── */
+.number {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  color: #f5a623;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+/* ── Label ── */
+.label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — Tablet
+═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .statItem:nth-child(2)::after {
+    display: none;
+  }
+
+  .statItem:nth-child(even)::after {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — Mobile
+═══════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .statsSection {
+    padding: 48px 20px;
+  }
+
+  .topEdge {
+    margin-top: -5px;
+  }
+
+  .bottomEdge {
+    margin-bottom: -5px;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .statItem::after {
+    display: none !important;
+  }
+
+  .statItem {
+    gap: 10px;
+    padding: 18px 16px;
+  }
+}

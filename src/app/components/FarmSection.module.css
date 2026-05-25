@@ -1,0 +1,190 @@
+/* ══════════════════════════════════════════════════════
+   Parallax Farm Section — Sticky Background + Center Text
+═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&display=swap');
+
+.section {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  background-image: url("/new-section.png");
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* dark overlay for text readability */
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(26, 15, 0, 0.55) 0%,
+    rgba(26, 15, 0, 0.4) 50%,
+    rgba(26, 15, 0, 0.55) 100%
+  );
+  z-index: 1;
+}
+
+/* ── Content container ── */
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 800px;
+  padding: 60px 32px;
+  margin: 0 auto;
+}
+
+/* eyebrow / tagline */
+.eyebrow {
+  display: inline-block;
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  font-weight: 700;
+  color: #f5c800;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  background: rgba(245, 200, 0, 0.5);
+  vertical-align: middle;
+}
+
+.eyebrow::before {
+  margin-right: 14px;
+}
+
+.eyebrow::after {
+  margin-left: 14px;
+}
+
+/* main heading */
+.heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.headingAccent {
+  color: #f5c800;
+}
+
+/* description */
+.description {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(14px, 1.8vw, 17px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.75;
+  margin-bottom: 32px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* CTA button */
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #f5c800;
+  color: #1a2e12;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 14px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 20px rgba(245, 200, 0, 0.3);
+}
+
+.ctaBtn:hover {
+  background: #ffd600;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(245, 200, 0, 0.45);
+}
+
+.ctaArrow {
+  display: inline-flex;
+  transition: transform 0.3s ease;
+}
+
+.ctaBtn:hover .ctaArrow {
+  transform: translateX(4px);
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — Tablet
+═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .section {
+    min-height: 400px;
+    background-attachment: fixed;
+  }
+
+  .content {
+    padding: 48px 24px;
+  }
+
+  .eyebrow::before,
+  .eyebrow::after {
+    width: 24px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — Mobile
+═══════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .section {
+    min-height: 360px;
+  }
+
+  .section::before {
+    background: rgba(0, 0, 0, 0.65); /* darker overlay on mobile for high readability */
+  }
+
+  .content {
+    padding: 36px 16px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .heading {
+    text-align: center;
+  }
+
+  .description {
+    text-align: center;
+  }
+
+  .ctaBtn {
+    padding: 12px 24px;
+    font-size: 13px;
+  }
+}

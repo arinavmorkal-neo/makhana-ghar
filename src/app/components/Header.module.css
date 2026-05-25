@@ -1,0 +1,435 @@
+/* ══════════════════════════════════════════════════════
+   Header — Fresh build
+   Top bar → Main nav → Mobile drawer → Decorative edge
+═══════════════════════════════════════════════════════ */
+
+/* ── Wrapper — positioning context for the decorative edge ── */
+.headerWrapper {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  /* CRITICAL: this wrapper is the positioning parent for the
+     absolutely-placed rough-edge image below the header */
+}
+
+/* ── Root <header> ── */
+.headerRoot {
+  position: relative;
+  font-family: var(--font-body, 'Inter', sans-serif);
+}
+
+/* ══════════════════════════════════════════════════════
+   TOP BAR
+═══════════════════════════════════════════════════════ */
+.topBar {
+  background-color: #1e3d1a;
+  color: #c8d8c4;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.topBarInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Promo text — left */
+.topPromo {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topPromoLink {
+  color: #f0c02a;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+.topPromoLink:hover { color: #f7d84a; }
+
+/* Contact icons */
+.topContacts {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.topContact {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #c8d8c4;
+  font-size: 0.78rem;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+.topContact:hover { color: #fff; }
+
+.contactIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  flex-shrink: 0;
+}
+
+.topDivider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255,255,255,0.2);
+}
+
+/* Social icons — right */
+.topSocials {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  color: #a0b89c;
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.socialLink:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.35);
+}
+
+/* ══════════════════════════════════════════════════════
+   MAIN NAV
+═══════════════════════════════════════════════════════ */
+.mainNav {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding-top: 10px;
+}
+
+.mainNavInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ── Logo ── */
+.logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+  position: relative;
+  z-index: 50;
+}
+
+.logoImg {
+  width: auto;
+  height: 95px;
+  max-width: 280px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: -20px; /* overlap below the nav bar */
+}
+
+/* ── Desktop nav ── */
+.nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 0;
+  align-items: center;
+}
+
+.navItem {
+  position: relative;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 0.8rem;
+  height: 64px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2a3d28;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: #2d7a27;
+  border-bottom-color: #2d7a27;
+}
+
+.chevron {
+  transition: transform 0.25s ease;
+  color: #7a9a78;
+  margin-top: 1px;
+}
+
+.chevronUp {
+  transform: rotate(180deg);
+}
+
+/* ── Dropdown ── */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 0;
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0;
+  background: #fff;
+  border: 1px solid #e2ede0;
+  border-top: 2px solid #2d7a27;
+  border-radius: 0 0 8px 8px;
+  min-width: 200px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  z-index: 300;
+  animation: dropdownIn 0.2s ease both;
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownItem {
+  display: block;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.84rem;
+  color: #3a5038;
+  transition: background 0.15s ease, color 0.15s ease;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+}
+
+.dropdownItem:hover {
+  background: #f0f7ef;
+  color: #2d7a27;
+  border-left-color: #2d7a27;
+}
+
+/* ── CTA button ── */
+.cta {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.3rem;
+  border-radius: 6px;
+  background: #1e3d1a;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cta:hover {
+  background: #2d5a27;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(30,61,26,0.35);
+}
+
+.ctaIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.15);
+}
+
+/* ── Hamburger ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #e2ede0;
+  background: transparent;
+  margin-left: auto;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #1e3d1a;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ══════════════════════════════════════════════════════
+   MOBILE DRAWER
+═══════════════════════════════════════════════════════ */
+.drawer {
+  background: #fff;
+  border-top: 1px solid #e2ede0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease;
+}
+
+.drawerOpen {
+  max-height: 600px;
+}
+
+.drawerList {
+  list-style: none;
+  padding: 0.5rem 0 1rem;
+  margin: 0;
+}
+
+.drawerLink {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2a3d28;
+  border-bottom: 1px solid #f0f5ef;
+  transition: color 0.2s, background 0.2s;
+  text-decoration: none;
+}
+
+.drawerLink:hover {
+  color: #2d7a27;
+  background: #f5faf4;
+}
+
+.drawerCta {
+  display: inline-block;
+  margin: 0.75rem 1.5rem 0;
+  padding: 0.7rem 1.6rem;
+  border-radius: 6px;
+  background: #1e3d1a;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+
+.drawerCta:hover { background: #2d5a27; }
+
+/* ══════════════════════════════════════════════════════
+   DECORATIVE ROUGH PAPER EDGE — page-title-top.webp
+
+   Normal flow inside the header — NOT absolute positioned.
+   The negative margin-bottom on headerWrapper pulls the
+   rough edge into the hero content, creating a seamless overlap.
+═══════════════════════════════════════════════════════ */
+.headerEdge {
+  line-height: 0;
+  pointer-events: none;
+  position: relative;
+  z-index: 10;
+  margin-top: -10px;
+  margin-bottom: -20px; /* overlap into the content below */
+}
+
+.headerEdgeImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .navLink {
+    padding: 0 0.55rem;
+    font-size: 0.82rem;
+  }
+  .cta { padding: 0.55rem 1rem; font-size: 0.82rem; }
+}
+
+@media (max-width: 900px) {
+  .nav,
+  .cta {
+    display: none;
+  }
+
+  .hamburger {
+    display: none;
+  }
+
+  .drawer {
+    display: none;
+  }
+
+  .topBar {
+    display: none;
+  }
+
+  .topContacts {
+    display: none;
+  }
+
+  .mainNavInner {
+    justify-content: center;
+  }
+
+  .logoImg {
+    margin-bottom: -8px;
+  }
+
+  .headerEdge {
+    margin-top: -5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .topPromo { font-size: 0.72rem; }
+  .mainNavInner { padding: 0 1rem; }
+  .topBarInner { padding: 0 1rem; }
+}
