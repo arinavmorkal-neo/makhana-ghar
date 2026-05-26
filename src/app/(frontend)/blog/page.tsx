@@ -147,7 +147,7 @@ export default function BlogPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className={styles.grassEdge}
-          src="/grass-4.png"
+          src="/grassnew-white.png"
           alt=""
           aria-hidden="true"
         />

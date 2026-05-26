@@ -217,7 +217,7 @@ export default async function BlogDetailPage({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className={styles.grassEdge}
-          src="/grass-4.png"
+          src="/grassnew-white.png"
           alt=""
           aria-hidden="true"
         />
@@ -285,7 +285,7 @@ export default async function BlogDetailPage({
             <aside className={styles.sidebarCard}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/blog/admin.png"
+                src="/blog/arinav.png"
                 alt="Admin"
                 className={styles.sidebarAvatar}
               />

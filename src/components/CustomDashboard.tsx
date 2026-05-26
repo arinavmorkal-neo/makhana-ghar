@@ -24,10 +24,15 @@ export const CustomDashboard = async () => {
     collection: 'blogs',
   });
 
+  const productsCountResult = await payload.count({
+    collection: 'products',
+  });
+
   const totalPages = pagesResult.totalDocs;
   const totalMedia = mediaCountResult.totalDocs;
   const totalUsers = usersCountResult.totalDocs;
   const totalBlogs = blogsCountResult.totalDocs;
+  const totalProducts = productsCountResult.totalDocs;
   const pagesList = pagesResult.docs;
 
   return (
@@ -127,6 +132,7 @@ export const CustomDashboard = async () => {
         .stat-card.media::before { background: #4a7c3f; }
         .stat-card.users::before { background: #8b5a2b; }
         .stat-card.blogs::before { background: #2e7d32; }
+        .stat-card.products::before { background: #d4af37; }
 
         .stat-icon {
           width: 54px;
@@ -142,6 +148,7 @@ export const CustomDashboard = async () => {
         .stat-card.media .stat-icon { background: #eef7ee; color: #4a7c3f; }
         .stat-card.users .stat-icon { background: #f9f2eb; color: #8b5a2b; }
         .stat-card.blogs .stat-icon { background: #e8f5e9; color: #2e7d32; }
+        .stat-card.products .stat-icon { background: #fdf8e7; color: #d4af37; }
 
         .stat-info {
           display: flex;
@@ -424,6 +431,13 @@ export const CustomDashboard = async () => {
             <span className="stat-label">Blog Posts</span>
           </div>
         </div>
+        <div className="stat-card products">
+          <div className="stat-icon">📦</div>
+          <div className="stat-info">
+            <span className="stat-number">{totalProducts}</span>
+            <span className="stat-label">Products</span>
+          </div>
+        </div>
       </div>
 
       {/* Main content grid */}
@@ -518,6 +532,14 @@ export const CustomDashboard = async () => {
               <div className="action-text">
                 <span className="action-title">Create Blog Post</span>
                 <span className="action-desc">Write and publish a new blog article</span>
+              </div>
+            </a>
+
+            <a href="/admin/collections/products/create" className="action-card-btn product">
+              <div className="action-icon">📦</div>
+              <div className="action-text">
+                <span className="action-title">Add Product</span>
+                <span className="action-desc">Add a new product to the catalog</span>
               </div>
             </a>
 

@@ -8,11 +8,7 @@ import styles from './Header.module.css';
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/#about' },
-  {
-    label: 'Phool Makhana',
-    href: '/#makhana',
-    dropdown: ['Classic Roasted', 'Flavoured', 'Raw / Unprocessed', 'Gift Packs'],
-  },
+  { label: 'Categories', href: '/categories' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/#contact' },
 ];
