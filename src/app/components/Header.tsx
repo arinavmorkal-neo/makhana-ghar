@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './Header.module.css';
+import EnquiryPopup from './EnquiryPopup';
 
 /* ── Nav data ────────────────────────────────────────── */
 type NavLink = { label: string; href: string; dropdown?: string[] };
@@ -83,6 +84,7 @@ function NavItem({ link }: { link: (typeof navLinks)[0] }) {
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   return (
     <div className={styles.headerWrapper}>
@@ -167,7 +169,12 @@ export default function Header() {
             </nav>
 
             {/* CTA */}
-            <a href="/#contact" className={styles.cta} id="header-enquiry-btn">
+            <button
+              type="button"
+              className={styles.cta}
+              id="header-enquiry-btn"
+              onClick={() => setPopupOpen(true)}
+            >
               Send Enquiry
               <span className={styles.ctaIcon}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -175,7 +182,7 @@ export default function Header() {
                   <path d="M2 7l10 7 10-7" />
                 </svg>
               </span>
-            </a>
+            </button>
 
             {/* Mobile hamburger */}
             <button
@@ -201,9 +208,13 @@ export default function Header() {
               </li>
             ))}
             <li>
-              <a href="#contact" className={styles.drawerCta} onClick={() => setMobileOpen(false)}>
+              <button
+                type="button"
+                className={styles.drawerCta}
+                onClick={() => { setMobileOpen(false); setPopupOpen(true); }}
+              >
                 Send Enquiry
-              </a>
+              </button>
             </li>
           </ul>
         </div>
@@ -221,6 +232,7 @@ export default function Header() {
 
       </header>
 
+      <EnquiryPopup open={popupOpen} onClose={() => setPopupOpen(false)} />
     </div>
   );
 }

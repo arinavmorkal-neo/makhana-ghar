@@ -77,7 +77,7 @@ export default function MobileNavBar() {
         <span className={styles.navIcon}><HomeIcon /></span>
         <span className={styles.navLabel}>Home</span>
       </a>
-      <a href="#products" className={styles.navTab}>
+      <a href="/categories" className={styles.navTab}>
         <span className={styles.navIcon}><ProductsIcon /></span>
         <span className={styles.navLabel}>Products</span>
       </a>

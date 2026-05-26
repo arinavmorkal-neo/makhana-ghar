@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import MobileNavBar from '../../../components/MobileNavBar';
+import EnquiryPopup from '../../../components/EnquiryPopup';
 import styles from './Product.module.css';
 
 /* ── Product Data ── */
@@ -103,6 +104,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   const [activeImg, setActiveImg] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const [activeTab, setActiveTab] = useState<'description' | 'aboutUs' | 'specs'>('description');
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const product = products[slug];
 
@@ -291,12 +293,21 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
             {/* CTA Buttons */}
             <div className={styles.ctaRow}>
-              <Link href="/#contact" className={styles.ctaEnquiry}>
+              <button
+                type="button"
+                className={styles.ctaEnquiry}
+                onClick={() => setPopupOpen(true)}
+              >
                 🛒 Send Enquiry
-              </Link>
-              <Link href="/#contact" className={styles.ctaCallback}>
+              </button>
+              <a
+                href="https://wa.me/917903195957?text=I%20am%20interested"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.ctaCallback}
+              >
                 📞 Get Callback
-              </Link>
+              </a>
             </div>
 
             {/* Share */}
@@ -348,6 +359,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
       <Footer />
       <MobileNavBar />
+      <EnquiryPopup open={popupOpen} onClose={() => setPopupOpen(false)} />
     </main>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from 'next/link';
 import styles from './ProductSection.module.css';
 
 const defaultProducts = [
@@ -14,6 +15,7 @@ const defaultProducts = [
     tags: ["4+ Grade", "Crunchy", "Roast Ready"],
     image: "/4+.png",
     bg: "linear-gradient(160deg, #e8f5e9 0%, #2e7d32 100%)",
+    slug: "4-suta-round-makhana-flake",
   },
   {
     id: 2,
@@ -26,6 +28,7 @@ const defaultProducts = [
     tags: ["5+ Grade", "Fluffy", "Versatile"],
     image: "/5+.png",
     bg: "linear-gradient(160deg, #fff8e1 0%, #f9a825 100%)",
+    slug: "5-suta-round-makhana",
   },
   {
     id: 3,
@@ -38,6 +41,7 @@ const defaultProducts = [
     tags: ["6+ Grade", "Jumbo Size", "Gift Pack"],
     image: "/6+.png",
     bg: "linear-gradient(160deg, #fce4ec 0%, #c62828 100%)",
+    slug: "6-suta-plus-makhana",
   },
   {
     id: 4,
@@ -50,8 +54,16 @@ const defaultProducts = [
     tags: ["Zero Oil", "Low Calorie", "Vegan"],
     image: "/4+.png",
     bg: "linear-gradient(160deg, #e0f2f1 0%, #00695c 100%)",
+    slug: "4-suta-round-makhana-flake",
   },
 ];
+
+function getSlugFromName(name: string): string {
+  const n = (name || "").toLowerCase();
+  if (n.includes("6")) return "6-suta-plus-makhana";
+  if (n.includes("5")) return "5-suta-round-makhana";
+  return "4-suta-round-makhana-flake";
+}
 
 export default function ProductSection({ data }: { data?: any }) {
   const sectionTag = data?.sectionTag || "Our Products";
@@ -70,6 +82,7 @@ export default function ProductSection({ data }: { data?: any }) {
         tags: p.tags && p.tags.length > 0 ? p.tags.map((t: any) => t.tag) : [],
         image: typeof p.image === 'object' && p.image?.url ? p.image.url : p.image || "/4+.png",
         bg: p.bg || "linear-gradient(160deg, #e8f5e9 0%, #2e7d32 100%)",
+        slug: p.slug || getSlugFromName(p.name),
       }))
     : defaultProducts;
 
@@ -136,14 +149,14 @@ export default function ProductSection({ data }: { data?: any }) {
                   <div className={styles.panelPrice}>{p.price}</div>
                   <div className={styles.panelWeight}>{p.weight}</div>
                 </div>
-                <a href="#contact" className={styles.panelBtn}>Enquire Now</a>
+                <Link href={`/product/${p.slug}`} className={styles.panelBtn}>Enquire Now</Link>
               </div>
             </div>
 
             {/* Mobile-only bottom bar */}
             <div className={styles.mobileBottom}>
               <span className={styles.mobileName}>{p.name}</span>
-              <a href="#contact" className={styles.mobileBtn}>Get Now</a>
+              <Link href={`/product/${p.slug}`} className={styles.mobileBtn}>Get Now</Link>
             </div>
           </div>
         ))}

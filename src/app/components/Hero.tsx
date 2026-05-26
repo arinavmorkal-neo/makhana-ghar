@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import styles from './Hero.module.css';
+import EnquiryPopup from './EnquiryPopup';
 
 const defaultSlides = [
   {
@@ -60,6 +61,7 @@ export default function Hero({ slides: cmsSlides }: { slides?: any[] }) {
 
   const [current, setCurrent] = useState(0);
   const [animKey, setAnimKey] = useState(0);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const goTo = useCallback((idx: number) => {
     setCurrent(idx);
@@ -110,10 +112,24 @@ export default function Hero({ slides: cmsSlides }: { slides?: any[] }) {
 
         <p className={styles.body} style={{ whiteSpace: 'pre-line' }}>{slide.body}</p>
 
-        <a href={slide.ctaHref} className={styles.cta}>
-          <span className={styles.ctaLabel}>{slide.ctaText}</span>
-          <span className={styles.ctaArrow}>›</span>
-        </a>
+        <button
+          type="button"
+          className={styles.cta}
+          onClick={() => setPopupOpen(true)}
+        >
+          {slide.ctaText}
+          <span className={styles.ctaArrow}>
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path
+                d="M1 6.5H12M7 1.5L12 6.5L7 11.5"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </button>
       </div>
 
       {/* Dot navigation */}
@@ -137,6 +153,7 @@ export default function Hero({ slides: cmsSlides }: { slides?: any[] }) {
         aria-hidden="true"
       />
 
+      <EnquiryPopup open={popupOpen} onClose={() => setPopupOpen(false)} />
     </section>
   );
 }
