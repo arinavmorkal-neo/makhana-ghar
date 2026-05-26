@@ -5,7 +5,9 @@ import Image from 'next/image';
 import styles from './Header.module.css';
 
 /* ── Nav data ────────────────────────────────────────── */
-const navLinks = [
+type NavLink = { label: string; href: string; dropdown?: string[] };
+
+const navLinks: NavLink[] = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/#about' },
   { label: 'Categories', href: '/categories' },
