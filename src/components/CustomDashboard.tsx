@@ -1,6 +1,7 @@
 import React from 'react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
+import { SyncButtons } from './SyncButtons';
 
 export const CustomDashboard = async () => {
   const payload = await getPayload({ config: configPromise });
@@ -28,12 +29,29 @@ export const CustomDashboard = async () => {
     collection: 'products',
   });
 
+  const enquiriesCountResult = await payload.count({
+    collection: 'enquiries',
+  });
+
+  const subscribersCountResult = await payload.count({
+    collection: 'subscribers',
+  });
+
   const totalPages = pagesResult.totalDocs;
   const totalMedia = mediaCountResult.totalDocs;
   const totalUsers = usersCountResult.totalDocs;
   const totalBlogs = blogsCountResult.totalDocs;
   const totalProducts = productsCountResult.totalDocs;
+  const totalEnquiries = enquiriesCountResult.totalDocs;
+  const totalSubscribers = subscribersCountResult.totalDocs;
   const pagesList = pagesResult.docs;
+
+  // Check if Google Sheet variables exist
+  const isGoogleSheetsConfigured = !!(
+    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
+    process.env.GOOGLE_PRIVATE_KEY &&
+    process.env.GOOGLE_SHEET_ID
+  );
 
   return (
     <div className="custom-dash-container">
@@ -133,6 +151,8 @@ export const CustomDashboard = async () => {
         .stat-card.users::before { background: #8b5a2b; }
         .stat-card.blogs::before { background: #2e7d32; }
         .stat-card.products::before { background: #d4af37; }
+        .stat-card.enquiries::before { background: #4a7c3f; }
+        .stat-card.subscribers::before { background: #d4af37; }
 
         .stat-icon {
           width: 54px;
@@ -149,6 +169,8 @@ export const CustomDashboard = async () => {
         .stat-card.users .stat-icon { background: #f9f2eb; color: #8b5a2b; }
         .stat-card.blogs .stat-icon { background: #e8f5e9; color: #2e7d32; }
         .stat-card.products .stat-icon { background: #fdf8e7; color: #d4af37; }
+        .stat-card.enquiries .stat-icon { background: #eef7ee; color: #4a7c3f; }
+        .stat-card.subscribers .stat-icon { background: #fdf8e7; color: #d4af37; }
 
         .stat-info {
           display: flex;
@@ -417,25 +439,25 @@ export const CustomDashboard = async () => {
             <span className="stat-label">Media Items</span>
           </div>
         </div>
-        <div className="stat-card users">
-          <div className="stat-icon">👤</div>
-          <div className="stat-info">
-            <span className="stat-number">{totalUsers}</span>
-            <span className="stat-label">Admin Users</span>
-          </div>
-        </div>
-        <div className="stat-card blogs">
-          <div className="stat-icon">✍️</div>
-          <div className="stat-info">
-            <span className="stat-number">{totalBlogs}</span>
-            <span className="stat-label">Blog Posts</span>
-          </div>
-        </div>
         <div className="stat-card products">
           <div className="stat-icon">📦</div>
           <div className="stat-info">
             <span className="stat-number">{totalProducts}</span>
             <span className="stat-label">Products</span>
+          </div>
+        </div>
+        <div className="stat-card enquiries">
+          <div className="stat-icon">📞</div>
+          <div className="stat-info">
+            <span className="stat-number">{totalEnquiries}</span>
+            <span className="stat-label">Enquiries</span>
+          </div>
+        </div>
+        <div className="stat-card subscribers">
+          <div className="stat-icon">✉️</div>
+          <div className="stat-info">
+            <span className="stat-number">{totalSubscribers}</span>
+            <span className="stat-label">Subscribers</span>
           </div>
         </div>
       </div>
@@ -504,53 +526,63 @@ export const CustomDashboard = async () => {
           </div>
         </div>
 
-        {/* Quick Actions Panel */}
-        <div className="panel-card">
-          <div className="panel-header">
-            <h2>⚡ Quick Actions</h2>
+        {/* Sidebar Panel */}
+        <div>
+          {/* Quick Actions Panel */}
+          <div className="panel-card">
+            <div className="panel-header">
+              <h2>⚡ Quick Actions</h2>
+            </div>
+
+            <div className="quick-actions-list">
+              <a href="/admin/collections/pages/create" className="action-card-btn create">
+                <div className="action-icon">➕</div>
+                <div className="action-text">
+                  <span className="action-title">Create Page</span>
+                  <span className="action-desc">Add a new page for future routes</span>
+                </div>
+              </a>
+
+              <a href="/admin/collections/media" className="action-card-btn media">
+                <div className="action-icon">🖼</div>
+                <div className="action-text">
+                  <span className="action-title">Media Library</span>
+                  <span className="action-desc">Upload or browse ImageKit media assets</span>
+                </div>
+              </a>
+
+              <a href="/admin/collections/blogs/create" className="action-card-btn blog">
+                <div className="action-icon">✍️</div>
+                <div className="action-text">
+                  <span className="action-title">Create Blog Post</span>
+                  <span className="action-desc">Write and publish a new blog article</span>
+                </div>
+              </a>
+
+              <a href="/admin/collections/products/create" className="action-card-btn product">
+                <div className="action-icon">📦</div>
+                <div className="action-text">
+                  <span className="action-title">Add Product</span>
+                  <span className="action-desc">Add a new product to the catalog</span>
+                </div>
+              </a>
+
+              <a href="/admin/collections/users" className="action-card-btn cache">
+                <div className="action-icon">⚙️</div>
+                <div className="action-text">
+                  <span className="action-title">Manage Admins</span>
+                  <span className="action-desc">Manage admin team login credentials</span>
+                </div>
+              </a>
+            </div>
           </div>
 
-          <div className="quick-actions-list">
-            <a href="/admin/collections/pages/create" className="action-card-btn create">
-              <div className="action-icon">➕</div>
-              <div className="action-text">
-                <span className="action-title">Create Page</span>
-                <span className="action-desc">Add a new page for future routes</span>
-              </div>
-            </a>
-
-            <a href="/admin/collections/media" className="action-card-btn media">
-              <div className="action-icon">🖼</div>
-              <div className="action-text">
-                <span className="action-title">Media Library</span>
-                <span className="action-desc">Upload or browse ImageKit media assets</span>
-              </div>
-            </a>
-
-            <a href="/admin/collections/blogs/create" className="action-card-btn blog">
-              <div className="action-icon">✍️</div>
-              <div className="action-text">
-                <span className="action-title">Create Blog Post</span>
-                <span className="action-desc">Write and publish a new blog article</span>
-              </div>
-            </a>
-
-            <a href="/admin/collections/products/create" className="action-card-btn product">
-              <div className="action-icon">📦</div>
-              <div className="action-text">
-                <span className="action-title">Add Product</span>
-                <span className="action-desc">Add a new product to the catalog</span>
-              </div>
-            </a>
-
-            <a href="/admin/collections/users" className="action-card-btn cache">
-              <div className="action-icon">⚙️</div>
-              <div className="action-text">
-                <span className="action-title">Manage Admins</span>
-                <span className="action-desc">Manage admin team login credentials</span>
-              </div>
-            </a>
-          </div>
+          {/* Google Sheets Sync Controls */}
+          <SyncButtons
+            isConfigured={isGoogleSheetsConfigured}
+            enquiriesCount={totalEnquiries}
+            subscribersCount={totalSubscribers}
+          />
         </div>
       </div>
     </div>

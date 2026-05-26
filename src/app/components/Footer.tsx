@@ -186,14 +186,42 @@ function FooterLinkList({
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  const [subMessage, setSubMessage] = useState("");
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setEmail("");
-      setTimeout(() => setSubscribed(false), 3000);
+    if (!email.trim()) return;
+
+    setLoading(true);
+    setSubMessage("");
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubscribed(true);
+        setSubMessage(result.message || "Thanks for subscribing!");
+        setEmail("");
+        setTimeout(() => {
+          setSubscribed(false);
+          setSubMessage("");
+        }, 5000);
+      } else {
+        alert(result.error || "Failed to subscribe. Please try again.");
+      }
+    } catch (error) {
+      console.error('Subscription error:', error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -609,7 +637,7 @@ export default function Footer() {
 
             {/* Newsletter */}
             {subscribed ? (
-              <p className="subscribed-msg">✓ Thanks for subscribing!</p>
+              <p className="subscribed-msg">✓ {subMessage}</p>
             ) : (
               <form className="newsletter-form" onSubmit={handleSubscribe}>
                 <input
@@ -619,9 +647,10 @@ export default function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={loading}
                 />
-                <button type="submit" className="newsletter-btn">
-                  Subscribe Now! <Send size={13} />
+                <button type="submit" className="newsletter-btn" disabled={loading}>
+                  {loading ? 'Subscribing...' : 'Subscribe Now!'} <Send size={13} />
                 </button>
               </form>
             )}

@@ -7,6 +7,7 @@ import { Pages } from './collections/Pages';
 import { Media } from './collections/Media';
 import { Users } from './collections/Users';
 import { Enquiries } from './collections/Enquiries';
+import { Subscribers } from './collections/Subscribers';
 import { Blogs } from './collections/Blogs';
 import { Products } from './collections/Products';
 import { Categories } from './collections/Categories';
@@ -24,7 +25,7 @@ export default buildConfig({
       beforeDashboard: ['/src/components/CustomDashboard#CustomDashboard'],
     },
   },
-  collections: [Pages, Media, Users, Enquiries, Blogs, Products, Categories],
+  collections: [Pages, Media, Users, Enquiries, Subscribers, Blogs, Products, Categories],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'fallback-secret-for-local-dev-only',
   db: mongooseAdapter({
