@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./WhyChooseSection.module.css";
+import { getImageUrl, getImageUrlWithOverride } from '../../lib/getImageUrl';
 
 const defaultCards = [
   {
@@ -35,27 +36,27 @@ export default function WhyChooseSection({ data }: { data?: any }) {
   const body = data?.body || "At Makhana Ghar, we are a trusted makhana dealer, supplier, and manufacturer, delivering the finest quality makhana straight from reliable sources. Our makhanas are 100% natural, fresh, and free from chemicals, ensuring a healthy and nutritious snack for everyone. As leading makhana suppliers, we maintain export-quality standards, offering makhanas rich in essential nutrients like protein, fiber, magnesium, and potassium. Whether you're looking for a makhana manufacturer for bulk orders or a makhana supplier for retail needs, we guarantee reliable supply at affordable prices.";
   const ctaText = data?.ctaText || "Tell us about your need";
   const ctaHref = data?.ctaHref || "#contact";
-  const videoThumbnail = typeof data?.videoThumbnail === 'object' && data.videoThumbnail?.url ? data.videoThumbnail.url : "/banner1.png";
+  const videoThumbnail = getImageUrlWithOverride(data?.videoThumbnailUrl, data?.videoThumbnail, "/banner1.png");
   const videoUrl = data?.videoUrl || "https://www.youtube.com/embed/dKDRhqPcpts?autoplay=1";
-  const heroImage = typeof data?.heroImage === 'object' && data.heroImage?.url ? data.heroImage.url : "/banner2.png";
+  const heroImage = getImageUrlWithOverride(data?.heroImageUrl, data?.heroImage, "/banner2.png");
 
   const CARDS = data?.cards && data.cards.length > 0
     ? data.cards.map((c: any, idx: number) => ({
         id: c.id || idx,
         title: c.title,
         description: c.description,
-        image: typeof c.image === 'object' && c.image?.url ? c.image.url : c.image || "/4+.png",
+        image: getImageUrlWithOverride(c.imageUrl, c.image, "/4+.png"),
       }))
     : defaultCards;
 
   return (
     <>
-      <section className={styles.wrap}>
+      <section className={styles.wrap} suppressHydrationWarning>
         {/* ── TOP SECTION ── */}
-        <div className={styles.top}>
+        <div className={styles.top} suppressHydrationWarning>
 
           {/* LEFT: hero image + floating video card */}
-          <div className={styles.left}>
+          <div className={styles.left} suppressHydrationWarning>
             {/* floating video card */}
             <div
               className={styles.videoCard}

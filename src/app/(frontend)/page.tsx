@@ -42,6 +42,7 @@ export default async function HomePage() {
       collection: 'pages',
       where: { slug: { equals: 'home' } },
       limit: 1,
+      depth: 2,
     });
     if (result.docs.length > 0) {
       pageData = result.docs[0];

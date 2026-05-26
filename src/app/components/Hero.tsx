@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import styles from './Hero.module.css';
 import EnquiryPopup from './EnquiryPopup';
+import { getImageUrlWithOverride } from '../../lib/getImageUrl';
 
 const defaultSlides = [
   {
@@ -50,7 +51,7 @@ const INTERVAL = 6000;
 export default function Hero({ slides: cmsSlides }: { slides?: any[] }) {
   const slides = cmsSlides && cmsSlides.length > 0
     ? cmsSlides.map((s: any) => ({
-        image: s.imageUrl || (typeof s.image === 'object' && s.image?.url ? s.image.url : s.image) || '/banner1.png',
+        image: getImageUrlWithOverride(s.imageUrl, s.image, '/banner1.png'),
         tag: s.tag,
         heading: s.heading,
         body: s.body,

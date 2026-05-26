@@ -2,6 +2,8 @@ import { CollectionConfig } from 'payload';
 import { imagekit } from '../lib/imagekit';
 import { toFile } from '@imagekit/nodejs';
 
+const IMAGEKIT_ENDPOINT = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || 'https://ik.imagekit.io/3uuhtxmof/';
+
 export const Media: CollectionConfig = {
   slug: 'media',
   upload: {
@@ -36,6 +38,8 @@ export const Media: CollectionConfig = {
             // Update document data with remote url and name from ImageKit
             data.url = uploadResponse.url;
             data.filename = uploadResponse.name;
+            // Store the ImageKit URL separately so it persists
+            data.imagekitUrl = uploadResponse.url;
           } catch (error) {
             console.error('ImageKit upload error:', error);
             throw new Error(
@@ -47,12 +51,36 @@ export const Media: CollectionConfig = {
         return data;
       },
     ],
+    afterRead: [
+      ({ doc }) => {
+        // If the stored url is not an ImageKit URL, fix it
+        if (doc.url && typeof doc.url === 'string' && !doc.url.startsWith('http')) {
+          // Try to use the stored imagekitUrl first
+          if (doc.imagekitUrl) {
+            doc.url = doc.imagekitUrl;
+          } else if (doc.filename) {
+            // Reconstruct the ImageKit URL from the filename
+            doc.url = `${IMAGEKIT_ENDPOINT.replace(/\/$/, '')}/makhana-shop/${doc.filename}`;
+          }
+        }
+        return doc;
+      },
+    ],
   },
   fields: [
     {
       name: 'alt',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'imagekitUrl',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Auto-populated ImageKit URL (do not edit)',
+      },
     },
   ],
 };

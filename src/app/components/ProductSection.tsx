@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import styles from './ProductSection.module.css';
+import { getImageUrlWithOverride } from '../../lib/getImageUrl';
 
 const defaultProducts = [
   {
@@ -80,7 +81,7 @@ export default function ProductSection({ data }: { data?: any }) {
         category: p.category,
         description: p.description,
         tags: p.tags && p.tags.length > 0 ? p.tags.map((t: any) => t.tag) : [],
-        image: p.imageUrl || (typeof p.image === 'object' && p.image?.url ? p.image.url : p.image) || "/4+.png",
+        image: getImageUrlWithOverride(p.imageUrl, p.image, "/4+.png"),
         bg: p.bg || "linear-gradient(160deg, #e8f5e9 0%, #2e7d32 100%)",
         slug: p.slug || getSlugFromName(p.name),
       }))

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { getImageUrlWithOverride } from '../../lib/getImageUrl';
 
 const defaultProducts = [
   {
@@ -57,7 +58,7 @@ export default function ProductSlider({ data }: { data?: any }) {
         id: p.id || idx,
         name: p.name,
         category: p.category,
-        image: p.imageUrl || (typeof p.image === 'object' && p.image?.url ? p.image.url : p.image) || "/4+.png",
+        image: getImageUrlWithOverride(p.imageUrl, p.image, "/4+.png"),
         badge: p.badge,
       }))
     : defaultProducts;
