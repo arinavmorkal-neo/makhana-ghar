@@ -50,7 +50,7 @@ const INTERVAL = 6000;
 export default function Hero({ slides: cmsSlides }: { slides?: any[] }) {
   const slides = cmsSlides && cmsSlides.length > 0
     ? cmsSlides.map((s: any) => ({
-        image: typeof s.image === 'object' && s.image?.url ? s.image.url : s.image || '/banner1.png',
+        image: s.imageUrl || (typeof s.image === 'object' && s.image?.url ? s.image.url : s.image) || '/banner1.png',
         tag: s.tag,
         heading: s.heading,
         body: s.body,

@@ -70,6 +70,17 @@ export const Pages: CollectionConfig = {
                   name: 'image',
                   type: 'upload',
                   relationTo: 'media',
+                  admin: {
+                    description: 'Upload image OR use Image URL below (URL takes priority)',
+                  },
+                },
+                {
+                  name: 'imageUrl',
+                  type: 'text',
+                  label: 'Image URL (ImageKit / External)',
+                  admin: {
+                    description: 'Paste an ImageKit or external image URL directly. Takes priority over uploaded image.',
+                  },
                 },
                 {
                   name: 'tag',
@@ -158,6 +169,17 @@ export const Pages: CollectionConfig = {
                   name: 'image',
                   type: 'upload',
                   relationTo: 'media',
+                  admin: {
+                    description: 'Upload image OR use Image URL below (URL takes priority)',
+                  },
+                },
+                {
+                  name: 'imageUrl',
+                  type: 'text',
+                  label: 'Image URL (ImageKit / External)',
+                  admin: {
+                    description: 'Paste an ImageKit or external image URL directly. Takes priority over uploaded image.',
+                  },
                 },
                 {
                   name: 'bg',
@@ -203,6 +225,17 @@ export const Pages: CollectionConfig = {
               name: 'videoThumbnail',
               type: 'upload',
               relationTo: 'media',
+              admin: {
+                description: 'Upload image OR use URL below (URL takes priority)',
+              },
+            },
+            {
+              name: 'videoThumbnailUrl',
+              type: 'text',
+              label: 'Video Thumbnail URL (ImageKit / External)',
+              admin: {
+                description: 'Paste an ImageKit or external image URL. Takes priority over uploaded thumbnail.',
+              },
             },
             {
               name: 'videoUrl',
@@ -215,6 +248,17 @@ export const Pages: CollectionConfig = {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',
+              admin: {
+                description: 'Upload image OR use URL below (URL takes priority)',
+              },
+            },
+            {
+              name: 'heroImageUrl',
+              type: 'text',
+              label: 'Hero Image URL (ImageKit / External)',
+              admin: {
+                description: 'Paste an ImageKit or external image URL. Takes priority over uploaded image.',
+              },
             },
             {
               name: 'cards',
@@ -233,6 +277,17 @@ export const Pages: CollectionConfig = {
                   name: 'image',
                   type: 'upload',
                   relationTo: 'media',
+                  admin: {
+                    description: 'Upload image OR use Image URL below (URL takes priority)',
+                  },
+                },
+                {
+                  name: 'imageUrl',
+                  type: 'text',
+                  label: 'Image URL (ImageKit / External)',
+                  admin: {
+                    description: 'Paste an ImageKit or external image URL. Takes priority over uploaded image.',
+                  },
                 },
               ],
             },
@@ -275,6 +330,17 @@ export const Pages: CollectionConfig = {
                   name: 'image',
                   type: 'upload',
                   relationTo: 'media',
+                  admin: {
+                    description: 'Upload image OR use Image URL below (URL takes priority)',
+                  },
+                },
+                {
+                  name: 'imageUrl',
+                  type: 'text',
+                  label: 'Image URL (ImageKit / External)',
+                  admin: {
+                    description: 'Paste an ImageKit or external image URL. Takes priority over uploaded image.',
+                  },
                 },
                 {
                   name: 'badge',

@@ -57,7 +57,7 @@ export default function ProductSlider({ data }: { data?: any }) {
         id: p.id || idx,
         name: p.name,
         category: p.category,
-        image: typeof p.image === 'object' && p.image?.url ? p.image.url : p.image || "/4+.png",
+        image: p.imageUrl || (typeof p.image === 'object' && p.image?.url ? p.image.url : p.image) || "/4+.png",
         badge: p.badge,
       }))
     : defaultProducts;
