@@ -35,7 +35,7 @@ export default function WhyChooseSection({ data }: { data?: any }) {
   const heading = data?.heading || "We are a trusted makhana Dealer, Supplier";
   const body = data?.body || "At Makhana Ghar, we are a trusted makhana dealer, supplier, and manufacturer, delivering the finest quality makhana straight from reliable sources. Our makhanas are 100% natural, fresh, and free from chemicals, ensuring a healthy and nutritious snack for everyone. As leading makhana suppliers, we maintain export-quality standards, offering makhanas rich in essential nutrients like protein, fiber, magnesium, and potassium. Whether you're looking for a makhana manufacturer for bulk orders or a makhana supplier for retail needs, we guarantee reliable supply at affordable prices.";
   const ctaText = data?.ctaText || "Tell us about your need";
-  const ctaHref = data?.ctaHref || "#contact";
+  const ctaHref = (data?.ctaHref === "#contact" || !data?.ctaHref) ? "/contact-us" : data.ctaHref;
   const videoThumbnail = getImageUrlWithOverride(data?.videoThumbnailUrl, data?.videoThumbnail, "/banner1.png");
   const videoUrl = data?.videoUrl || "https://www.youtube.com/embed/dKDRhqPcpts?autoplay=1";
   const heroImage = getImageUrlWithOverride(data?.heroImageUrl, data?.heroImage, "/banner2.png");

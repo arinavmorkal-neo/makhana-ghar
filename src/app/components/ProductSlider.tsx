@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { getImageUrlWithOverride } from '../../lib/getImageUrl';
 
 const defaultProducts = [
@@ -582,13 +583,13 @@ export default function ProductSlider({ data }: { data?: any }) {
 
         {/* View All */}
         <div className="slider-view-all-wrap">
-          <button className="slider-view-all-btn">
+          <Link href="/categories" className="slider-view-all-btn">
             View All Products
             <svg viewBox="0 0 24 24">
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />
             </svg>
-          </button>
+          </Link>
         </div>
       </section>
     </>

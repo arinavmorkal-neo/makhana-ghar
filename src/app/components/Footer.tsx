@@ -103,7 +103,7 @@ const footerData = {
   },
   quickLinks: [
     { label: "About Us", href: "/about" },
-    { label: "Contact Us", href: "/contact" },
+    { label: "Contact Us", href: "/contact-us" },
     { label: "Blog", href: "/blog" },
     { label: "Gallery", href: "/gallery" },
     { label: "Testimonials", href: "/testimonials" },

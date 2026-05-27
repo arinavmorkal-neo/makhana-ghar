@@ -127,7 +127,6 @@ export default function CategoriesPage() {
                 }`}
                 onClick={() => setActiveCategory(cat.key)}
               >
-                <span className={styles.filterIcon}>{cat.icon}</span>
                 {cat.label}
               </button>
             ))}
@@ -222,7 +221,7 @@ export default function CategoriesPage() {
                   wholesale pricing, custom packaging, and export support.
                 </p>
               </div>
-              <Link href="/#contact" className={styles.ctaButton}>
+              <Link href="/contact-us" className={styles.ctaButton}>
                 📞 Get in Touch
               </Link>
             </div>

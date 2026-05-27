@@ -89,7 +89,7 @@ export default function MobileNavBar() {
         <span className={styles.navIcon}><AboutIcon /></span>
         <span className={styles.navLabel}>About</span>
       </a>
-      <a href="#contact" className={styles.navTab}>
+      <a href="/contact-us" className={styles.navTab}>
         <span className={styles.navIcon}><EnquiryIcon /></span>
         <span className={styles.navLabel}>Enquiry</span>
       </a>

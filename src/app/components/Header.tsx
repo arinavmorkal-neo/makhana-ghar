@@ -13,7 +13,7 @@ const navLinks: NavLink[] = [
   { label: 'About', href: '/#about' },
   { label: 'Categories', href: '/categories' },
   { label: 'Blog', href: '/blog' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'Contact', href: '/contact-us' },
 ];
 
 /* ── Dropdown ────────────────────────────────────────── */
