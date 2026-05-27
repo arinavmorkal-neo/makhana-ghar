@@ -54,14 +54,22 @@ export default function MobileNavBar() {
   const lastScrollY = useRef(0);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const currentY = window.scrollY;
-      if (currentY > lastScrollY.current && currentY > 80) {
-        setHidden(true);  // scrolling down → hide
-      } else {
-        setHidden(false); // scrolling up → show
-      }
-      lastScrollY.current = currentY;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        const delta = currentY - lastScrollY.current;
+        // Only trigger hide/show if scrolled more than 10px (prevents flicker)
+        if (delta > 10 && currentY > 80) {
+          setHidden(true);  // scrolling down → hide
+        } else if (delta < -10) {
+          setHidden(false); // scrolling up → show
+        }
+        lastScrollY.current = currentY;
+        ticking = false;
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });

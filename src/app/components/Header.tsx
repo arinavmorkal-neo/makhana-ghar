@@ -10,7 +10,7 @@ type NavLink = { label: string; href: string; dropdown?: string[] };
 
 const navLinks: NavLink[] = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/#about' },
+  { label: 'About', href: '/about-us' },
   { label: 'Categories', href: '/categories' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact-us' },

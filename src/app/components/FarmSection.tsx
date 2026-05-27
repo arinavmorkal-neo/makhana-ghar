@@ -6,7 +6,7 @@ export default function FarmSection({ data }: { data?: any }) {
   const eyebrow = data?.eyebrow || "From Our Farms";
   const description = data?.description || "Our makhana is cultivated in the pristine ponds of Bihar, hand-harvested by local farmers, and sun-dried to perfection — preserving every bit of its natural crunch, nutrition, and earthy flavor. From farm to you, with zero compromise on quality.";
   const ctaText = data?.ctaText || "Get In Touch";
-  const ctaHref = (data?.ctaHref === "#contact" || !data?.ctaHref) ? "/contact-us" : data.ctaHref;
+  const ctaHref = (data?.ctaHref === "#contact" || !data?.ctaHref) ? "/about-us" : data.ctaHref;
 
   return (
     <section className={styles.section}>
