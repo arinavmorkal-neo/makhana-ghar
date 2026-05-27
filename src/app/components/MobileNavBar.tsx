@@ -49,8 +49,11 @@ function EnquiryIcon() {
   );
 }
 
+import EnquiryPopup from './EnquiryPopup';
+
 export default function MobileNavBar() {
   const [hidden, setHidden] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -77,30 +80,40 @@ export default function MobileNavBar() {
   }, []);
 
   return (
-    <nav
-      className={`${styles.mobileNav} ${hidden ? styles.mobileNavHidden : ''}`}
-      aria-label="Mobile navigation"
-    >
-      <a href="#home" className={styles.navTab}>
-        <span className={styles.navIcon}><HomeIcon /></span>
-        <span className={styles.navLabel}>Home</span>
-      </a>
-      <a href="/categories" className={styles.navTab}>
-        <span className={styles.navIcon}><ProductsIcon /></span>
-        <span className={styles.navLabel}>Products</span>
-      </a>
-      <a href="tel:+917903195957" className={`${styles.navTab} ${styles.navTabHighlight}`}>
-        <span className={styles.navIcon}><CallIcon /></span>
-        <span className={styles.navLabel}>Call</span>
-      </a>
-      <a href="#about" className={styles.navTab}>
-        <span className={styles.navIcon}><AboutIcon /></span>
-        <span className={styles.navLabel}>About</span>
-      </a>
-      <a href="/contact-us" className={styles.navTab}>
-        <span className={styles.navIcon}><EnquiryIcon /></span>
-        <span className={styles.navLabel}>Enquiry</span>
-      </a>
-    </nav>
+    <>
+      <nav
+        className={`${styles.mobileNav} ${hidden ? styles.mobileNavHidden : ''}`}
+        aria-label="Mobile navigation"
+      >
+        <a href="/" className={styles.navTab}>
+          <span className={styles.navIcon}><HomeIcon /></span>
+          <span className={styles.navLabel}>Home</span>
+        </a>
+        <a href="/categories" className={styles.navTab}>
+          <span className={styles.navIcon}><ProductsIcon /></span>
+          <span className={styles.navLabel}>Products</span>
+        </a>
+        <a href="https://wa.me/917903195957?text=I%20am%20interested" target="_blank" rel="noopener noreferrer" className={`${styles.navTab} ${styles.navTabHighlight}`}>
+          <span className={styles.navIcon}><CallIcon /></span>
+          <span className={styles.navLabel}>Call</span>
+        </a>
+        <a href="/about-us" className={styles.navTab}>
+          <span className={styles.navIcon}><AboutIcon /></span>
+          <span className={styles.navLabel}>About</span>
+        </a>
+        <button
+          type="button"
+          className={styles.navTab}
+          onClick={() => setPopupOpen(true)}
+          style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+        >
+          <span className={styles.navIcon}><EnquiryIcon /></span>
+          <span className={styles.navLabel}>Enquiry</span>
+        </button>
+      </nav>
+
+      <EnquiryPopup open={popupOpen} onClose={() => setPopupOpen(false)} />
+    </>
   );
 }
+

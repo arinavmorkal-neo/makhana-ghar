@@ -7,7 +7,7 @@ import styles from './AboutUs.module.css';
 
 export default function AboutUsPage() {
   return (
-    <main style={{ overflowX: 'hidden' }}>
+    <main>
       <Header />
 
       {/* ── HERO BANNER ── */}
