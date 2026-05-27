@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 
 const defaultMeta = {
@@ -60,6 +61,7 @@ export default function FrontendLayout({
       </head>
       <body suppressHydrationWarning>
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
