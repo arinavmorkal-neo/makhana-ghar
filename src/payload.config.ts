@@ -11,6 +11,8 @@ import { Subscribers } from './collections/Subscribers';
 import { Blogs } from './collections/Blogs';
 import { Products } from './collections/Products';
 import { Categories } from './collections/Categories';
+import { Gallery } from './collections/Gallery';
+import { Founders } from './collections/Founders';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -24,8 +26,9 @@ export default buildConfig({
     components: {
       beforeDashboard: ['/src/components/CustomDashboard#CustomDashboard'],
     },
+    suppressHydrationWarning: true,
   },
-  collections: [Pages, Media, Users, Enquiries, Subscribers, Blogs, Products, Categories],
+  collections: [Pages, Media, Users, Enquiries, Subscribers, Blogs, Products, Categories, Gallery, Founders],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'fallback-secret-for-local-dev-only',
   db: mongooseAdapter({
