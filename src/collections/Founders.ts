@@ -2,6 +2,9 @@ import { CollectionConfig } from 'payload';
 
 export const Founders: CollectionConfig = {
   slug: 'founders',
+  access: {
+    read: () => true,
+  },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'role', 'order', 'status', 'updatedAt'],
