@@ -11,6 +11,11 @@ import ProductSlider from '../components/ProductSlider';
 import Footer from '../components/Footer';
 import MobileNavBar from '../components/MobileNavBar';
 
+// Force dynamic rendering so Payload CMS data is always fresh on Vercel.
+// Without this, the page is statically generated at build time and never
+// re-fetches data from MongoDB when you update content in the admin panel.
+export const dynamic = 'force-dynamic';
+
 // Map block slugs to component renderers
 function renderBlock(block: any, index: number) {
   switch (block.blockType) {
