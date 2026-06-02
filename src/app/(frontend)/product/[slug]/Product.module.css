@@ -280,6 +280,7 @@
 }
 
 .askPriceBtn {
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -287,7 +288,6 @@
   border: 1px solid #b5d9bb;
   border-radius: 8px;
   padding: 7px 14px;
-  margin-bottom: 20px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
   font-size: 13px;
@@ -309,9 +309,17 @@
 /* Horizontal tabs positioned above the content box */
 .cylinderTabs {
   display: flex;
-  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
   padding: 0;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tabsGroup {
+  display: flex;
+  gap: 8px;
 }
 
 .cylinderTab {
@@ -579,8 +587,14 @@
   .cylinderTabs {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
     margin-bottom: 12px;
+  }
+  .tabsGroup {
+    display: flex;
+    flex: 1 1 auto;
+    gap: 6px;
+    width: 100%;
   }
   .cylinderTab {
     text-align: center;
@@ -589,6 +603,11 @@
     font-size: 12px;
     min-width: 0;
     justify-content: center;
+  }
+  .askPriceBtn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
   }
 }
 

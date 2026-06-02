@@ -103,7 +103,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   const { slug } = use(params);
   const [activeImg, setActiveImg] = useState(0);
   const [zoomed, setZoomed] = useState(false);
-  const [activeTab, setActiveTab] = useState<'description' | 'aboutUs' | 'specs'>('description');
+  const [activeTab, setActiveTab] = useState<'description' | 'specs'>('specs');
   const [popupOpen, setPopupOpen] = useState(false);
 
   const product = products[slug];
@@ -235,43 +235,40 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
             {/* Cylinder Tabbed Section */}
             <div className={styles.tabbedSection}>
-              {/* Ask Price */}
-              <button className={styles.askPriceBtn}>
-                🏷 Ask Latest Price
-              </button>
-
               {/* Tabbed Layout */}
               <div className={styles.tabbedLayout}>
                 {/* Cylinder Tabs */}
                 <div className={styles.cylinderTabs}>
-                  <button
-                    className={`${styles.cylinderTab}${activeTab === 'description' ? ` ${styles.cylinderTabActive}` : ''}`}
-                    onClick={() => setActiveTab('description')}
+                  <div className={styles.tabsGroup}>
+                    <button
+                      className={`${styles.cylinderTab}${activeTab === 'specs' ? ` ${styles.cylinderTabActive}` : ''}`}
+                      onClick={() => setActiveTab('specs')}
+                    >
+                      Specifications
+                    </button>
+                    <button
+                      className={`${styles.cylinderTab}${activeTab === 'description' ? ` ${styles.cylinderTabActive}` : ''}`}
+                      onClick={() => setActiveTab('description')}
+                    >
+                      Description
+                    </button>
+                  </div>
+
+                  {/* Ask Price Button attached to the tab bar */}
+                  <a
+                    href={`https://wa.me/917903195957?text=I%20am%20interested%20in%20getting%20the%20latest%20price%20for%20${encodeURIComponent(product.name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.askPriceBtn}
                   >
-                    📝 Description
-                  </button>
-                  <button
-                    className={`${styles.cylinderTab}${activeTab === 'aboutUs' ? ` ${styles.cylinderTabActive}` : ''}`}
-                    onClick={() => setActiveTab('aboutUs')}
-                  >
-                    🏢 About Us
-                  </button>
-                  <button
-                    className={`${styles.cylinderTab}${activeTab === 'specs' ? ` ${styles.cylinderTabActive}` : ''}`}
-                    onClick={() => setActiveTab('specs')}
-                  >
-                    📋 Specifications
-                  </button>
+                    🏷 Ask Latest Price
+                  </a>
                 </div>
 
                 {/* Tab Content */}
                 <div className={styles.tabContent}>
                   {activeTab === 'description' && (
                     <p className={styles.tabContentText}>{product.description}</p>
-                  )}
-
-                  {activeTab === 'aboutUs' && (
-                    <p className={styles.tabContentText}>{product.aboutUs}</p>
                   )}
 
                   {activeTab === 'specs' && (
