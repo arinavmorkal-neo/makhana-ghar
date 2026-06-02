@@ -106,7 +106,7 @@ export default function EnquiryPopup({ open, onClose }: EnquiryPopupProps) {
         {/* LEFT: Image */}
         <div className={styles.imageHalf}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/farmer-popup.png" alt="Makhana farmer" className={styles.popupImage} />
+          <img src="/farmer-popup.webp" alt="Makhana farmer" className={styles.popupImage} />
           <div className={styles.imageOverlay}>
             <h3 className={styles.imageTitle}>Get the Best Price for Premium Makhana</h3>
             <p className={styles.imageSubtitle}>

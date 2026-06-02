@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import styles from './Hero.module.css';
 import EnquiryPopup from './EnquiryPopup';
 import { getImageUrlWithOverride } from '../../lib/getImageUrl';
 
 const defaultSlides = [
   {
-    image: '/banner1.png',
+    image: '/banner1.webp',
     tag: 'Superior Quality Makhana Wholesale Supply',
     heading: (
       <>
@@ -26,7 +27,7 @@ const defaultSlides = [
     ctaHref: '#contact',
   },
   {
-    image: '/banner2.png',
+    image: '/banner2.webp',
     tag: 'Farm Fresh & Naturally Processed',
     heading: (
       <>
@@ -51,7 +52,7 @@ const INTERVAL = 6000;
 export default function Hero({ slides: cmsSlides }: { slides?: any[] }) {
   const slides = cmsSlides && cmsSlides.length > 0
     ? cmsSlides.map((s: any) => ({
-        image: getImageUrlWithOverride(s.imageUrl, s.image, '/banner1.png'),
+        image: getImageUrlWithOverride(s.imageUrl, s.image, '/banner1.webp'),
         tag: s.tag,
         heading: s.heading,
         body: s.body,
@@ -82,15 +83,20 @@ export default function Hero({ slides: cmsSlides }: { slides?: any[] }) {
   return (
     <section className={styles.section}>
 
-      {/* Slide backgrounds */}
+      {/* Slide backgrounds — use Next.js Image for optimization */}
       {slides.map((s, i) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           key={i}
           className={`${styles.bgImg} ${i === current ? styles.bgImgActive : ''}`}
           src={s.image}
           alt=""
           aria-hidden="true"
+          width={1920}
+          height={1080}
+          priority={i === 0}
+          loading={i === 0 ? 'eager' : 'lazy'}
+          sizes="100vw"
+          quality={80}
         />
       ))}
 
@@ -103,12 +109,13 @@ export default function Hero({ slides: cmsSlides }: { slides?: any[] }) {
 
         <h1 className={styles.heading} style={{ whiteSpace: 'pre-line' }}>{slide.heading}</h1>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className={styles.rule}
-          src="/line-throw-title.png"
+          src="/line-throw-title.webp"
           alt=""
           aria-hidden="true"
+          width={200}
+          height={10}
         />
 
         <p className={styles.body} style={{ whiteSpace: 'pre-line' }}>{slide.body}</p>
@@ -146,15 +153,18 @@ export default function Hero({ slides: cmsSlides }: { slides?: any[] }) {
       </div>
 
       {/* Decorative grass edge at the bottom */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         className={styles.grassEdge}
-        src="/grass-4.png"
+        src="/grass-4.webp"
         alt=""
         aria-hidden="true"
+        width={1920}
+        height={40}
+        sizes="100vw"
       />
 
       <EnquiryPopup open={popupOpen} onClose={() => setPopupOpen(false)} />
     </section>
   );
 }
+

@@ -4,8 +4,7 @@
    Headline & content: Poppins
 ═══════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-
+/* Fonts loaded centrally from layout.tsx */
 @font-face {
   font-family: 'Little';
   src: url('/fonts/Little.otf') format('opentype');

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import styles from "./WhyChooseSection.module.css";
 import { getImageUrl, getImageUrlWithOverride } from '../../lib/getImageUrl';
 
@@ -10,21 +11,21 @@ const defaultCards = [
     title: "Best Makhana Supplier",
     description:
       "Makhana Ghar is a trusted best makhana supplier and exporter, providing premium quality makhana and fox nuts worldwide with guaranteed freshness.",
-    image: "/4+.png",
+    image: "/4+.webp",
   },
   {
     id: 2,
     title: "4 Suta Round Makhana Flake",
     description:
       "Discover 4 Suta Round Makhana Flake: The Best Blend of Health and Taste. Organic, gluten-free, and low-calorie round Makhana for every diet.",
-    image: "/5+.png",
+    image: "/5+.webp",
   },
   {
     id: 3,
     title: "White Plain Makhana Flake",
     description:
       "White Plain Makhana Flake: A wholesome snack with gluten-free and protein-rich goodness. Perfect for healthy living and weight management.",
-    image: "/6+.png",
+    image: "/6+.webp",
   },
 ];
 
@@ -36,16 +37,16 @@ export default function WhyChooseSection({ data }: { data?: any }) {
   const body = data?.body || "At Makhana Ghar, we are a trusted makhana dealer, supplier, and manufacturer, delivering the finest quality makhana straight from reliable sources. Our makhanas are 100% natural, fresh, and free from chemicals, ensuring a healthy and nutritious snack for everyone. As leading makhana suppliers, we maintain export-quality standards, offering makhanas rich in essential nutrients like protein, fiber, magnesium, and potassium. Whether you're looking for a makhana manufacturer for bulk orders or a makhana supplier for retail needs, we guarantee reliable supply at affordable prices.";
   const ctaText = data?.ctaText || "Tell us about your need";
   const ctaHref = (data?.ctaHref === "#contact" || !data?.ctaHref) ? "/contact-us" : data.ctaHref;
-  const videoThumbnail = getImageUrlWithOverride(data?.videoThumbnailUrl, data?.videoThumbnail, "/banner1.png");
+  const videoThumbnail = getImageUrlWithOverride(data?.videoThumbnailUrl, data?.videoThumbnail, "/banner1.webp");
   const videoUrl = data?.videoUrl || "https://www.youtube.com/embed/dKDRhqPcpts?autoplay=1";
-  const heroImage = getImageUrlWithOverride(data?.heroImageUrl, data?.heroImage, "/banner2.png");
+  const heroImage = getImageUrlWithOverride(data?.heroImageUrl, data?.heroImage, "/banner2.webp");
 
   const CARDS = data?.cards && data.cards.length > 0
     ? data.cards.map((c: any, idx: number) => ({
         id: c.id || idx,
         title: c.title,
         description: c.description,
-        image: getImageUrlWithOverride(c.imageUrl, c.image, "/4+.png"),
+        image: getImageUrlWithOverride(c.imageUrl, c.image, "/4+.webp"),
       }))
     : defaultCards;
 
@@ -64,10 +65,12 @@ export default function WhyChooseSection({ data }: { data?: any }) {
               role="button"
               aria-label="Play video"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={videoThumbnail}
                 alt="Watch our story"
+                width={280}
+                height={180}
+                loading="lazy"
               />
               <div className={styles.videoOverlay}>
                 <div className={styles.playBtn}>
@@ -80,10 +83,13 @@ export default function WhyChooseSection({ data }: { data?: any }) {
 
             {/* hero image */}
             <div className={styles.heroWrap}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={heroImage}
                 alt="Trusted makhana dealer and supplier"
+                width={600}
+                height={500}
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </div>
@@ -134,11 +140,13 @@ export default function WhyChooseSection({ data }: { data?: any }) {
             {CARDS.map((card: any) => (
               <div className={styles.card} key={card.id}>
                 <div className={styles.cardImgWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     className={styles.cardImg}
                     src={card.image}
                     alt={card.title}
+                    width={100}
+                    height={100}
+                    loading="lazy"
                   />
                 </div>
                 <div className={styles.cardContent}>

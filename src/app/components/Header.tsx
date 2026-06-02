@@ -151,7 +151,7 @@ export default function Header() {
             {/* Logo */}
             <a href="/" className={styles.logo} aria-label="Makhana Shop – home">
               <Image
-                src="/logo.png"
+                src="/logo.webp"
                 alt="Makhana Shop logo"
                 width={160}
                 height={56}
@@ -223,11 +223,13 @@ export default function Header() {
 
         {/* ══ DECORATIVE ROUGH PAPER EDGE ══ */}
         <div className={styles.headerEdge} aria-hidden="true">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/page-title-top.webp"
             alt=""
             className={styles.headerEdgeImg}
+            width={1920}
+            height={30}
+            sizes="100vw"
           />
         </div>
 

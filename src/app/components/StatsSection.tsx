@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import styles from "./StatsSection.module.css";
 
 interface Stat {
@@ -150,12 +151,14 @@ export default function StatsSection({ stats: cmsStats }: { stats?: any[] }) {
 
   return (
     <div className={styles.statsSection} ref={sectionRef}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         className={styles.topEdge}
-        src="/page-title-top--brown.png"
+        src="/page-title-top--brown.webp"
         alt=""
         aria-hidden="true"
+        width={1920}
+        height={20}
+        sizes="100vw"
       />
       <div className={styles.statsGrid}>
         {stats.map((stat, i) => (
@@ -167,12 +170,14 @@ export default function StatsSection({ stats: cmsStats }: { stats?: any[] }) {
           />
         ))}
       </div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         className={styles.bottomEdge}
         src="/page-title-bottom-brown.webp"
         alt=""
         aria-hidden="true"
+        width={1920}
+        height={20}
+        sizes="100vw"
       />
     </div>
   );

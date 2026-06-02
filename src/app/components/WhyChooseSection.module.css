@@ -3,8 +3,7 @@
    Font: Poppins (consistent with site)
 ═══════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Caveat:wght@400;500;600;700&display=swap');
-
+/* Fonts loaded centrally from layout.tsx */
 .wrap {
   font-family: 'Poppins', sans-serif;
   background: #ffffff;

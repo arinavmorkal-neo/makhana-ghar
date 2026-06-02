@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* Farmhame font — local CDN fallback via Google Fonts alternative */
+/* Farmhame / Farmhouse font — loaded from local files for performance */
 @font-face {
   font-family: 'Farmhame';
-  src: url('https://fonts.cdnfonts.com/css/farmhame') format('woff2');
+  src: url('/fonts/Farmhouse.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
+
 
 /* ── Design Tokens ─────────────────────────────────── */
 :root {

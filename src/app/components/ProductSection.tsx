@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './ProductSection.module.css';
 import { getImageUrlWithOverride } from '../../lib/getImageUrl';
 
@@ -14,7 +15,7 @@ const defaultProducts = [
     category: "Premium Grade",
     description: "4-sutta grade makhana — compact, crunchy, and perfect for roasting or making namkeen snacks.",
     tags: ["4+ Grade", "Crunchy", "Roast Ready"],
-    image: "/4+.png",
+    image: "/4+.webp",
     bg: "linear-gradient(160deg, #e8f5e9 0%, #2e7d32 100%)",
     slug: "4-suta-round-makhana-flake",
   },
@@ -27,7 +28,7 @@ const defaultProducts = [
     category: "Export Grade",
     description: "Medium-large 5-sutta makhana — fluffy, light, and ideal for both sweet & savory preparations.",
     tags: ["5+ Grade", "Fluffy", "Versatile"],
-    image: "/5+.png",
+    image: "/5+.webp",
     bg: "linear-gradient(160deg, #fff8e1 0%, #f9a825 100%)",
     slug: "5-suta-round-makhana",
   },
@@ -40,7 +41,7 @@ const defaultProducts = [
     category: "Supreme Grade",
     description: "Largest 6-sutta premium makhana — the top grade for gifting, snacking, and gourmet recipes.",
     tags: ["6+ Grade", "Jumbo Size", "Gift Pack"],
-    image: "/6+.png",
+    image: "/6+.webp",
     bg: "linear-gradient(160deg, #fce4ec 0%, #c62828 100%)",
     slug: "6-suta-plus-makhana",
   },
@@ -53,7 +54,7 @@ const defaultProducts = [
     category: "Healthy Snack",
     description: "Lightly roasted plain makhana — zero oil, zero spice. A clean, guilt-free snacking option.",
     tags: ["Zero Oil", "Low Calorie", "Vegan"],
-    image: "/4+.png",
+    image: "/4+.webp",
     bg: "linear-gradient(160deg, #e0f2f1 0%, #00695c 100%)",
     slug: "4-suta-round-makhana-flake",
   },
@@ -81,7 +82,7 @@ export default function ProductSection({ data }: { data?: any }) {
         category: p.category,
         description: p.description,
         tags: p.tags && p.tags.length > 0 ? p.tags.map((t: any) => t.tag) : [],
-        image: getImageUrlWithOverride(p.imageUrl, p.image, "/4+.png"),
+        image: getImageUrlWithOverride(p.imageUrl, p.image, "/4+.webp"),
         bg: p.bg || "linear-gradient(160deg, #e8f5e9 0%, #2e7d32 100%)",
         slug: p.slug || getSlugFromName(p.name),
       }))
@@ -91,11 +92,13 @@ export default function ProductSection({ data }: { data?: any }) {
     <section id="products" className={styles.sectionWrapper}>
 
       {/* Kisan logo — top right */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         className={styles.kisanLogo}
-        src="/kisan-b-preview.png"
+        src="/kisan-b-preview.webp"
         alt="Kisan"
+        width={120}
+        height={120}
+        loading="lazy"
       />
 
       {/* Yellow top half */}
@@ -128,11 +131,14 @@ export default function ProductSection({ data }: { data?: any }) {
             <div className={styles.cardBg} style={{ background: p.bg }} />
 
             {/* Product image */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               className={styles.cardImage}
               src={p.image}
               alt={p.name}
+              width={400}
+              height={400}
+              loading="lazy"
+              sizes="(max-width: 768px) 50vw, 280px"
             />
 
             {/* Hover details panel */}

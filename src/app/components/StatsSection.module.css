@@ -2,14 +2,14 @@
    Stats Section — Animated Counter Bar
 ═══════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700;800;900&display=swap');
+/* Fonts: Playfair Display, Lato, Poppins — loaded centrally from layout.tsx */
 
 .statsSection {
   width: 100%;
   background-color: #5c3a1e;
   background-image:
     radial-gradient(ellipse at 80% 50%, rgba(120, 70, 10, 0.5) 0%, transparent 60%),
-    url("/tructor.png");
+    url("/tructor.webp");
   background-size: cover, 300px 300px;
   background-position: center, right center;
   background-repeat: no-repeat, no-repeat;

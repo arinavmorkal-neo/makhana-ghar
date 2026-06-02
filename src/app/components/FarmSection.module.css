@@ -2,13 +2,14 @@
    Parallax Farm Section — Sticky Background + Center Text
 ═══════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&display=swap');
+/* Fonts: Playfair Display, Poppins, Caveat — loaded centrally from layout.tsx */
 
 .section {
   position: relative;
   width: 100%;
   min-height: 480px;
-  background-image: url("/new-section.png");
+  background-image: url("/new-section.webp");
+
   background-attachment: fixed;
   background-position: center center;
   background-size: cover;

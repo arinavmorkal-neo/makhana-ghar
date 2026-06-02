@@ -48,15 +48,22 @@ export default function FrontendLayout({
   return (
     <html lang="en">
       <head>
+        {/* Preconnect to Google Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Single consolidated Google Fonts request — all families in one call */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Caveat:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
+
+        {/* Preload LCP image — hero banner */}
         <link
-          href="https://fonts.cdnfonts.com/css/farmhame"
-          rel="stylesheet"
+          rel="preload"
+          as="image"
+          href="/banner1.webp"
+          type="image/webp"
         />
       </head>
       <body suppressHydrationWarning>
@@ -67,3 +74,4 @@ export default function FrontendLayout({
     </html>
   );
 }
+

@@ -2,7 +2,8 @@
    Hero Section — Image Slider with animated content
 ═══════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@700&family=DM+Sans:wght@400;500;600&display=swap');
+/* Fonts: Bebas Neue, Caveat, DM Sans — loaded centrally from layout.tsx */
+
 
 @font-face {
   font-family: 'Little';
