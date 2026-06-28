@@ -98,7 +98,7 @@ const footerData = {
     },
     socials: [
       { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61590384691167", label: "Facebook" },
-      { icon: Instagram, href: "#", label: "Instagram" },
+      { icon: Instagram, href: "https://www.instagram.com/makhanaghar/", label: "Instagram" },
       { icon: Twitter, href: "#", label: "Twitter" },
       { icon: Linkedin, href: "#", label: "LinkedIn" },
     ],

@@ -7,95 +7,22 @@ import Footer from '../../components/Footer';
 import MobileNavBar from '../../components/MobileNavBar';
 import styles from './Blog.module.css';
 
-/* ── Fallback blog data (used when CMS is not available) ── */
-const defaultBlogs = [
-  {
-    id: 1,
-    slug: 'how-uae-importers-can-source-premium-fox-nuts-from-india',
-    title: 'How UAE Importers Can Source Premium Fox Nuts From India',
-    date: '10 Jan 26',
-    author: 'Admin',
-    category: 'EXPORT',
-    image: '/blog/uae-makhana.png',
-    excerpt:
-      'Explore how UAE importers can source premium quality fox nuts from trusted Indian suppliers with proper export standards, packaging, and logistics support.',
-    featured: true,
-    readTime: '5 min read',
-    content: '',
-  },
-  {
-    id: 2,
-    slug: 'why-premium-makhana-is-growing-in-global-markets',
-    title: 'Why Premium Makhana Is Growing In Global Markets',
-    date: '15 Jan 26',
-    author: 'Admin',
-    category: 'MARKET',
-    image: '/blog/uae-makhana.png',
-    excerpt:
-      'Makhana is becoming popular worldwide as a healthy, light, and nutritious snack option for modern consumers.',
-    featured: true,
-    readTime: '4 min read',
-    content: '',
-  },
-  {
-    id: 3,
-    slug: 'health-benefits-of-makhana-for-daily-diet',
-    title: 'Health Benefits of Makhana For Daily Diet',
-    date: '20 Feb 26',
-    author: 'Admin',
-    category: 'HEALTH',
-    image: '/blog/uae-makhana.png',
-    excerpt:
-      "Discover the incredible health benefits of Makhana and why it's becoming a staple in healthy diets around the world.",
-    featured: false,
-    readTime: '6 min read',
-    content: '',
-  },
-  {
-    id: 4,
-    slug: 'makhana-packaging-guide-for-wholesale-buyers',
-    title: 'Makhana Packaging Guide For Wholesale Buyers',
-    date: '5 Mar 26',
-    author: 'Admin',
-    category: 'WHOLESALE',
-    image: '/blog/uae-makhana.png',
-    excerpt:
-      'Understanding the right packaging options for bulk Makhana orders — from private label to retail-ready packs.',
-    featured: false,
-    readTime: '5 min read',
-    content: '',
-  },
-  {
-    id: 5,
-    slug: 'quality-grading-standards-for-indian-makhana',
-    title: 'Quality Grading Standards For Indian Makhana',
-    date: '12 Mar 26',
-    author: 'Admin',
-    category: 'QUALITY',
-    image: '/blog/uae-makhana.png',
-    excerpt:
-      'Learn about the grading system for Makhana in India and how to choose the right grade for your business needs.',
-    featured: false,
-    readTime: '7 min read',
-    content: '',
-  },
-  {
-    id: 6,
-    slug: 'building-a-makhana-supply-chain-for-international-trade',
-    title: 'Building A Makhana Supply Chain For International Trade',
-    date: '25 Mar 26',
-    author: 'Admin',
-    category: 'EXPORT',
-    image: '/blog/uae-makhana.png',
-    excerpt:
-      'A comprehensive guide to establishing a reliable Makhana supply chain for cross-border distribution and exports.',
-    featured: false,
-    readTime: '8 min read',
-    content: '',
-  },
-];
+/* ── Blog data (populated from CMS) ── */
+const defaultBlogs: {
+  id: number;
+  slug: string;
+  title: string;
+  date: string;
+  author: string;
+  category: string;
+  image: string;
+  excerpt: string;
+  featured: boolean;
+  readTime: string;
+  content: string;
+}[] = [];
 
-const tags = ['All', 'EXPORT', 'MARKET', 'HEALTH', 'WHOLESALE', 'QUALITY'];
+const tags = ['All'];
 
 export default function BlogPage() {
   const [search, setSearch] = useState('');
