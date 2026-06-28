@@ -197,7 +197,9 @@ export default async function BlogDetailPage({
                   x
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/makhana-ghar-a155ba41a"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={styles.sidebarSocialLink}
                   aria-label="LinkedIn"
                 >
