@@ -1,53 +1,35 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
 import LoadingScreen from '../components/LoadingScreen';
 import { organizationJsonLd } from '../lib/jsonLd';
 import './globals.css';
 
-const defaultMeta = {
-  title: 'Makhana Shop – Premium Organic Fox Nuts',
+export const metadata: Metadata = {
+  metadataBase: new URL('https://www.makhanaghar.in'),
+
+  title: {
+    default: 'Makhana Ghar | Premium Wholesale Makhana Supplier from Bihar',
+    template: '%s | Makhana Ghar',
+  },
+
   description:
-    'Hand-picked, organic makhana (fox nuts) roasted to perfection. A premium guilt-free snack delivered straight to your door.',
-  keywords: 'makhana, fox nuts, organic snacks, healthy snacks, roasted makhana',
+    'Makhana Ghar is a premium Makhana manufacturer, wholesaler and exporter from Bihar, supplying high-quality Makhana to domestic and international markets.',
+
+  applicationName: 'Makhana Ghar',
+
+  alternates: {
+    canonical: 'https://www.makhanaghar.in/',
+  },
+
+  openGraph: {
+    title: 'Makhana Ghar | Premium Wholesale Makhana Supplier from Bihar',
+    description:
+      'Premium Makhana manufacturer, wholesaler and exporter from Bihar.',
+    url: 'https://www.makhanaghar.in/',
+    siteName: 'Makhana Ghar',
+    type: 'website',
+  },
 };
-
-export async function generateMetadata(): Promise<Metadata> {
-  const base: Metadata = {
-    metadataBase: new URL('https://www.makhanaghar.com'),
-    alternates: { canonical: '/' },
-  };
-
-  try {
-    const payload = await getPayload({ config: configPromise });
-    const result = await payload.find({
-      collection: 'pages',
-      where: { slug: { equals: 'home' } },
-      limit: 1,
-    });
-
-    if (result.docs.length > 0) {
-      const page = result.docs[0] as any;
-      const seo = page.seo;
-      return {
-        ...base,
-        title: seo?.metaTitle || defaultMeta.title,
-        description: seo?.metaDescription || defaultMeta.description,
-        keywords: seo?.metaKeywords || defaultMeta.keywords,
-      };
-    }
-  } catch {
-    // Database may not be available during build — use defaults
-  }
-
-  return {
-    ...base,
-    title: defaultMeta.title,
-    description: defaultMeta.description,
-    keywords: defaultMeta.keywords,
-  };
-}
 
 export default function FrontendLayout({
   children,

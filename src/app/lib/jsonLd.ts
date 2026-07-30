@@ -1,4 +1,4 @@
-const SITE_URL = 'https://www.makhanaghar.com';
+const SITE_URL = 'https://www.makhanaghar.in';
 
 /**
  * Organization + WebSite schema — injected once in the layout.
@@ -43,6 +43,7 @@ export function organizationJsonLd() {
         '@id': `${SITE_URL}/#website`,
         url: SITE_URL,
         name: 'Makhana Ghar',
+        alternateName: 'Makhana Ghar',
         publisher: { '@id': `${SITE_URL}/#organization` },
       },
     ],
