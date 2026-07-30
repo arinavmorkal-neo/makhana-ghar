@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import LoadingScreen from '../components/LoadingScreen';
+import { organizationJsonLd } from '../lib/jsonLd';
 import './globals.css';
 
 const defaultMeta = {
@@ -13,6 +14,11 @@ const defaultMeta = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
+  const base: Metadata = {
+    metadataBase: new URL('https://www.makhanaghar.com'),
+    alternates: { canonical: '/' },
+  };
+
   try {
     const payload = await getPayload({ config: configPromise });
     const result = await payload.find({
@@ -25,6 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
       const page = result.docs[0] as any;
       const seo = page.seo;
       return {
+        ...base,
         title: seo?.metaTitle || defaultMeta.title,
         description: seo?.metaDescription || defaultMeta.description,
         keywords: seo?.metaKeywords || defaultMeta.keywords,
@@ -35,6 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
+    ...base,
     title: defaultMeta.title,
     description: defaultMeta.description,
     keywords: defaultMeta.keywords,
@@ -88,6 +96,12 @@ gtag('config', 'G-J38ME748LK');`}
           as="image"
           href="/banner1.webp"
           type="image/webp"
+        />
+
+        {/* Organization + WebSite structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
         />
       </head>
       <body suppressHydrationWarning>

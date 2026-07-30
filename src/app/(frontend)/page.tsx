@@ -10,6 +10,7 @@ import WhyChooseSection from '../components/WhyChooseSection';
 import ProductSlider from '../components/ProductSlider';
 import Footer from '../components/Footer';
 import MobileNavBar from '../components/MobileNavBar';
+import { breadcrumbJsonLd } from '../lib/jsonLd';
 
 // Force dynamic rendering so Payload CMS data is always fresh on Vercel.
 // Without this, the page is statically generated at build time and never
@@ -38,6 +39,10 @@ function renderBlock(block: any, index: number) {
   }
 }
 
+const homeBreadcrumb = breadcrumbJsonLd([
+  { name: 'Home', url: 'https://www.makhanaghar.com' },
+]);
+
 export default async function HomePage() {
   let pageData: any = null;
 
@@ -61,6 +66,10 @@ export default async function HomePage() {
   if (pageData?.layout && pageData.layout.length > 0) {
     return (
       <main>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(homeBreadcrumb) }}
+        />
         <Header />
         {pageData.layout.map((block: any, i: number) => renderBlock(block, i))}
         <Footer />
@@ -72,6 +81,10 @@ export default async function HomePage() {
   // Fallback: render the original static homepage
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeBreadcrumb) }}
+      />
       <Header />
       <Hero />
       <ProductSection />

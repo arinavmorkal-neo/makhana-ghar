@@ -6,6 +6,7 @@ import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import MobileNavBar from '../../../components/MobileNavBar';
 import EnquiryPopup from '../../../components/EnquiryPopup';
+import { productJsonLd, breadcrumbJsonLd } from '../../../lib/jsonLd';
 import styles from './Product.module.css';
 
 /* ── Product Data ── */
@@ -127,6 +128,25 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
   return (
     <main>
+      {/* Product + Breadcrumb structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd({ ...product, slug })),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: 'Home', url: 'https://www.makhanaghar.com' },
+              { name: 'Makhana', url: 'https://www.makhanaghar.com/categories' },
+              { name: product.name, url: `https://www.makhanaghar.com/product/${slug}` },
+            ]),
+          ),
+        }}
+      />
       <Header />
 
       {/* ── HERO BANNER ── */}

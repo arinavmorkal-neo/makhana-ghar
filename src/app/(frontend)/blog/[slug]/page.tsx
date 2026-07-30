@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import MobileNavBar from '../../../components/MobileNavBar';
+import { articleJsonLd, breadcrumbJsonLd } from '../../../lib/jsonLd';
 import styles from './BlogDetail.module.css';
 import { Metadata } from 'next';
 
@@ -42,6 +43,7 @@ export async function generateMetadata({
   return {
     title: `${blog.title} | Makhana Ghar Blog`,
     description: blog.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
   };
 }
 
@@ -61,6 +63,25 @@ export default async function BlogDetailPage({
 
   return (
     <main>
+      {/* Article + Breadcrumb structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd(blog)),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: 'Home', url: 'https://www.makhanaghar.com' },
+              { name: 'Blog', url: 'https://www.makhanaghar.com/blog' },
+              { name: blog.title, url: `https://www.makhanaghar.com/blog/${blog.slug}` },
+            ]),
+          ),
+        }}
+      />
       <Header />
 
       {/* ── HERO BANNER ── */}

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Privacy Policy | Makhana Ghar',
   description: 'Learn how Makhana Ghar collects, uses, and safeguards your personal data when you interact with our website, products, or services. Sourced directly from Bihar.',
   keywords: 'privacy policy, makhana ghar, data protection, privacy terms',
+  alternates: { canonical: '/privacy-policy' },
 };
 
 export default function PrivacyPage() {

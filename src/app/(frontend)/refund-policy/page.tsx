@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Refund Policy | Makhana Ghar',
   description: 'Understand the Return and Refund Policy of Makhana Ghar. In rare cases where you receive damaged, defective, or incorrect products, we are here to help.',
   keywords: 'refund policy, returns makhana, customer satisfaction, makhana ghar',
+  alternates: { canonical: '/refund-policy' },
 };
 
 export default function RefundPolicyPage() {
