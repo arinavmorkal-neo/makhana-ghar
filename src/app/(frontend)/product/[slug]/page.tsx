@@ -237,6 +237,25 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                 />
               ))}
             </div>
+
+            {/* CTA Buttons — mobile only (below image) */}
+            <div className={`${styles.ctaRow} ${styles.ctaRowMobile}`}>
+              <button
+                type="button"
+                className={styles.ctaEnquiry}
+                onClick={() => setPopupOpen(true)}
+              >
+                🛒 Send Enquiry
+              </button>
+              <a
+                href="https://wa.me/917903195957?text=I%20am%20interested"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.ctaCallback}
+              >
+                📞 Get Callback
+              </a>
+            </div>
           </div>
 
           {/* RIGHT: Details */}
@@ -308,8 +327,8 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
               </div>
             </div>
 
-            {/* CTA Buttons */}
-            <div className={styles.ctaRow}>
+            {/* CTA Buttons — desktop only */}
+            <div className={`${styles.ctaRow} ${styles.ctaRowDesktop}`}>
               <button
                 type="button"
                 className={styles.ctaEnquiry}

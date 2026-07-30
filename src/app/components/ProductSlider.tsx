@@ -10,6 +10,7 @@ const defaultProducts = [
   {
     id: 1,
     name: "Phool Makhana 6+ Grade",
+    slug: "6-suta-plus-makhana",
     category: "PREMIUM GRADE",
     image: "/6+.webp",
     badge: "Best Seller",
@@ -17,6 +18,7 @@ const defaultProducts = [
   {
     id: 2,
     name: "Roasted Makhana Classic",
+    slug: "4-suta-round-makhana-flake",
     category: "ROASTED MAKHANA",
     image: "/4+.webp",
     badge: "Crunchy",
@@ -24,6 +26,7 @@ const defaultProducts = [
   {
     id: 3,
     name: "Phool Makhana 5+ Grade",
+    slug: "5-suta-round-makhana",
     category: "EXPORT GRADE",
     image: "/5+.webp",
     badge: "Export Quality",
@@ -31,6 +34,7 @@ const defaultProducts = [
   {
     id: 4,
     name: "Makhana 4+ Sutta",
+    slug: "4-suta-round-makhana-flake",
     category: "WHOLESALE GRADE",
     image: "/4+.webp",
     badge: "Wholesale",
@@ -38,6 +42,7 @@ const defaultProducts = [
   {
     id: 5,
     name: "Flavour Spiced Makhana",
+    slug: "5-suta-round-makhana",
     category: "FLAVOURED MAKHANA",
     image: "/5+.webp",
     badge: "New Arrival",
@@ -45,6 +50,7 @@ const defaultProducts = [
   {
     id: 6,
     name: "Raw Organic Makhana",
+    slug: "4-suta-round-makhana-flake",
     category: "RAW / UNPROCESSED",
     image: "/4+.webp",
     badge: "100% Organic",
@@ -60,6 +66,7 @@ export default function ProductSlider({ data }: { data?: any }) {
     ? data.products.map((p: any, idx: number) => ({
         id: p.id || idx,
         name: p.name,
+        slug: p.slug || '',
         category: p.category,
         image: getImageUrlWithOverride(p.imageUrl, p.image, "/4+.webp"),
         badge: p.badge,
@@ -75,11 +82,18 @@ export default function ProductSlider({ data }: { data?: any }) {
   const cardWidth = 336; // 312px card width + 24px gap
   const totalCards = products.length;
 
+  // Drag state
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartPos = useRef(0);
+  const hasDragged = useRef(false);
+  const DRAG_THRESHOLD = 5; // px — beyond this, it's a drag, not a click
+
   useEffect(() => {
     const speed = 0.6; // px per frame
 
     const animate = () => {
-      if (!isPaused && trackRef.current) {
+      if (!isPaused && !isDragging.current && trackRef.current) {
         positionRef.current += speed;
         if (positionRef.current >= cardWidth * totalCards) {
           positionRef.current = 0;
@@ -105,6 +119,72 @@ export default function ProductSlider({ data }: { data?: any }) {
     setActiveIndex(index);
     if (trackRef.current) {
       trackRef.current.style.transform = `translateX(-${positionRef.current}px)`;
+    }
+  };
+
+  // ── Drag Handlers ──
+  const handleDragStart = (clientX: number) => {
+    isDragging.current = true;
+    hasDragged.current = false;
+    dragStartX.current = clientX;
+    dragStartPos.current = positionRef.current;
+    setIsPaused(true);
+  };
+
+  const handleDragMove = (clientX: number) => {
+    if (!isDragging.current || !trackRef.current) return;
+    const delta = dragStartX.current - clientX;
+    if (Math.abs(delta) > DRAG_THRESHOLD) {
+      hasDragged.current = true;
+    }
+    let newPos = dragStartPos.current + delta;
+    // Wrap around for infinite loop
+    const maxPos = cardWidth * totalCards;
+    if (newPos < 0) newPos += maxPos;
+    if (newPos >= maxPos) newPos -= maxPos;
+    positionRef.current = newPos;
+    trackRef.current.style.transform = `translateX(-${newPos}px)`;
+    const idx = Math.round(newPos / cardWidth) % totalCards;
+    setActiveIndex(idx);
+  };
+
+  const handleDragEnd = () => {
+    isDragging.current = false;
+    // Snap to nearest card
+    const nearest = Math.round(positionRef.current / cardWidth);
+    const snapped = nearest * cardWidth;
+    positionRef.current = snapped >= cardWidth * totalCards ? 0 : snapped;
+    if (trackRef.current) {
+      trackRef.current.style.transition = 'transform 0.3s ease';
+      trackRef.current.style.transform = `translateX(-${positionRef.current}px)`;
+      setTimeout(() => {
+        if (trackRef.current) trackRef.current.style.transition = '';
+      }, 300);
+    }
+    setActiveIndex(Math.round(positionRef.current / cardWidth) % totalCards);
+  };
+
+  // Mouse events
+  const onMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleDragStart(e.clientX);
+  };
+  const onMouseMove = (e: React.MouseEvent) => handleDragMove(e.clientX);
+  const onMouseUp = () => handleDragEnd();
+  const onMouseLeave = () => {
+    if (isDragging.current) handleDragEnd();
+    setIsPaused(false);
+  };
+
+  // Touch events
+  const onTouchStart = (e: React.TouchEvent) => handleDragStart(e.touches[0].clientX);
+  const onTouchMove = (e: React.TouchEvent) => handleDragMove(e.touches[0].clientX);
+  const onTouchEnd = () => handleDragEnd();
+
+  // Prevent link navigation when dragging
+  const onCardClick = (e: React.MouseEvent) => {
+    if (hasDragged.current) {
+      e.preventDefault();
     }
   };
 
@@ -149,13 +229,25 @@ export default function ProductSlider({ data }: { data?: any }) {
 
       {/* Infinite Slider */}
       <div
-        className={styles.sliderViewport}
+        className={`${styles.sliderViewport}${isDragging.current ? ` ${styles.sliderDragging}` : ''}`}
         onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseLeave}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
         <div className={styles.sliderTrack} ref={trackRef}>
           {allProducts.map((product: any, i: number) => (
-            <div className={styles.sliderCard} key={`${product.id}-${i}`}>
+            <Link
+              href={product.slug ? `/product/${product.slug}` : '/categories'}
+              className={styles.sliderCard}
+              key={`${product.id}-${i}`}
+              onClick={onCardClick}
+              draggable={false}
+            >
               <div className={styles.sliderCardImgWrap}>
                 <Image
                   src={product.image}
@@ -164,6 +256,7 @@ export default function ProductSlider({ data }: { data?: any }) {
                   height={200}
                   loading="lazy"
                   sizes="312px"
+                  draggable={false}
                 />
                 <span className={styles.sliderCardLogo}>Makhana Ghar</span>
                 <span className={styles.sliderCardBadge}>{product.badge}</span>
@@ -181,7 +274,7 @@ export default function ProductSlider({ data }: { data?: any }) {
                   </svg>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

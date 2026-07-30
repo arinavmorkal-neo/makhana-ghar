@@ -470,8 +470,8 @@
 
 @media (max-width: 640px) {
   .productGrid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
   .sectionHeader {
     flex-direction: column;
@@ -484,6 +484,46 @@
   .filterPill {
     padding: 8px 16px;
     font-size: 0.76rem;
+  }
+  .cardImageWrap {
+    height: 160px;
+  }
+  .cardBody {
+    padding: 12px 12px 16px;
+  }
+  .cardTitle {
+    font-size: 0.88rem;
+  }
+  .cardDescription {
+    font-size: 0.74rem;
+    -webkit-line-clamp: 2;
+    margin: 0 0 10px;
+  }
+  .cardTag {
+    font-size: 0.58rem;
+    padding: 2px 7px;
+  }
+  .cardRating {
+    margin-bottom: 10px;
+  }
+  .stars {
+    font-size: 11px;
+  }
+  .ratingText {
+    font-size: 0.68rem;
+  }
+  .viewDetails {
+    font-size: 0.72rem;
+  }
+  .enquiryHint {
+    font-size: 0.64rem;
+    padding: 3px 8px;
+  }
+  .gradeBadge {
+    font-size: 0.58rem;
+    padding: 3px 10px;
+    top: 10px;
+    left: 10px;
   }
 }
 
@@ -498,9 +538,9 @@
     font-size: 13px;
   }
   .categoryContainer {
-    padding: 40px 16px 60px;
+    padding: 40px 12px 60px;
   }
   .cardImageWrap {
-    height: 200px;
+    height: 140px;
   }
 }

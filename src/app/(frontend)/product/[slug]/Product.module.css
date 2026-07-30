@@ -450,6 +450,16 @@
   margin-bottom: 24px;
 }
 
+/* Mobile CTA: hidden by default, shown on mobile */
+.ctaRowMobile {
+  display: none;
+}
+
+/* Desktop CTA: shown by default */
+.ctaRowDesktop {
+  display: flex;
+}
+
 .ctaEnquiry {
   flex: 1;
   background: #1a3a1a;
@@ -608,6 +618,14 @@
     width: 100%;
     justify-content: center;
     text-align: center;
+  }
+  /* Show mobile CTA (below image), hide desktop CTA */
+  .ctaRowMobile {
+    display: flex;
+    margin-top: 18px;
+  }
+  .ctaRowDesktop {
+    display: none;
   }
 }
 
