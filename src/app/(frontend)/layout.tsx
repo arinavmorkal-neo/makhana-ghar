@@ -57,6 +57,10 @@ export default function FrontendLayout({
   return (
     <html lang="en">
       <head>
+        {/* Favicon */}
+        <link rel="icon" href="/makhana-ghar.webp" type="image/webp" />
+        <link rel="apple-touch-icon" href="/makhana-ghar.webp" />
+
         {/* Google Tag Manager */}
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
