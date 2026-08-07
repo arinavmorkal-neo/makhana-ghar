@@ -229,20 +229,47 @@
 }
 
 /* ── Processing Section — Roadmap Timeline ── */
+/* ── Processing Section — Card Route Design ── */
 .processSection {
-  padding: 70px 24px 80px;
-  background: #f8faf7;
+  padding: 80px 24px 90px;
+  background: linear-gradient(180deg, #f0f5ee 0%, #f8faf7 40%, #f0f5ee 100%);
   overflow: hidden;
+  position: relative;
+}
+
+.processSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #2e7d3220, transparent);
 }
 
 .processInner {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
 .processHeader {
   text-align: center;
   margin-bottom: 60px;
+}
+
+.processEyebrow {
+  display: inline-block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #2e7d32;
+  background: rgba(46, 125, 50, 0.08);
+  border: 1px solid rgba(46, 125, 50, 0.15);
+  border-radius: 100px;
+  padding: 6px 20px;
+  margin-bottom: 16px;
 }
 
 .processTitle {
@@ -265,226 +292,247 @@
   margin: 0 auto;
 }
 
-/* Timeline container — central line */
-.processGrid {
+/* Route container */
+.processRoute {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 0;
 }
 
-/* The central vertical road line */
-.processGrid::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(to bottom, #2e7d32 0%, #dce8da 100%);
-  transform: translateX(-50%);
-  border-radius: 3px;
-}
-
-/* Each step */
-.processStep {
-  display: flex;
-  align-items: flex-start;
-  position: relative;
-  padding: 0 0 48px;
-  width: 50%;
-}
-
-/* Odd steps — left side */
-.processStep:nth-child(odd) {
-  align-self: flex-start;
-  padding-right: 48px;
-  text-align: right;
-  flex-direction: row-reverse;
-}
-
-/* Even steps — right side */
-.processStep:nth-child(even) {
-  align-self: flex-end;
-  padding-left: 48px;
-  text-align: left;
-}
-
-/* Hide the old left column structure */
-.processStepLeft {
+/* The SVG background route path — hidden, decorative only */
+.processRouteSvg {
   display: none;
 }
 
-/* The connecting line from card to center dot is done via pseudo-element */
-.processStep::after {
-  content: '';
+/* Row of 2 cards */
+.processRow {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  justify-content: center;
+}
+
+.processRowReverse {
+  flex-direction: row-reverse;
+}
+
+/* Arrow connector between cards */
+.processRouteArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 60px;
+}
+
+/* Curved connector between rows */
+.processRouteDown {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+/* Individual process card */
+.processCard {
+  flex: 1;
+  max-width: 460px;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1.5px solid rgba(46, 125, 50, 0.12);
+  box-shadow: 0 2px 12px rgba(26, 58, 26, 0.06);
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease;
+  cursor: default;
+}
+
+.processCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 36px rgba(46, 125, 50, 0.14);
+  border-color: rgba(46, 125, 50, 0.35);
+}
+
+/* Card image area */
+.processCardImageWrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e8f0e6, #d4e5d0);
+}
+
+.processCardImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.processCard:hover .processCardImage {
+  transform: scale(1.06);
+}
+
+/* Step number badge */
+.processCardBadge {
   position: absolute;
-  top: 22px;
-  width: 28px;
-  height: 3px;
-  background: #2e7d32;
-}
-
-.processStep:nth-child(odd)::after {
-  right: -1px;
-}
-
-.processStep:nth-child(even)::after {
-  left: -1px;
-}
-
-/* Central dot on the road */
-.processStep::before {
-  content: attr(data-step);
-  position: absolute;
-  top: 10px;
-  width: 44px;
-  height: 44px;
+  top: 12px;
+  left: 12px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: linear-gradient(135deg, #2e7d32 0%, #1a5428 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: #f5c842;
-  box-shadow: 0 4px 16px rgba(46,125,50,0.3);
-  z-index: 3;
-  border: 3px solid #f8faf7;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 3px 12px rgba(46, 125, 50, 0.35);
+  border: 2.5px solid rgba(255, 255, 255, 0.9);
+  z-index: 2;
+  transition: transform 0.3s ease;
 }
 
-.processStep:hover::before {
-  transform: scale(1.15);
-  box-shadow: 0 6px 24px rgba(46,125,50,0.4);
+.processCard:hover .processCardBadge {
+  transform: scale(1.12);
 }
 
-.processStep:nth-child(odd)::before {
-  right: -22px;
+/* Card body */
+.processCardBody {
+  padding: 20px 22px 24px;
 }
 
-.processStep:nth-child(even)::before {
-  left: -22px;
-}
-
-/* Step content card */
-.processStepContent {
-  background: #ffffff;
-  border: 1.5px solid #dce8da;
-  border-radius: 14px;
-  padding: 24px;
-  flex: 1;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.processStep:hover .processStepContent {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 28px rgba(26,58,26,0.1);
-  border-color: #2e7d32;
-}
-
-/* Step number (hidden on desktop, replaced by ::before) */
-.processStepNumber {
-  display: none;
-}
-
-.processStepLine {
-  display: none;
-}
-
-.processStepTitle {
+.processCardTitle {
   font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #1a3a1a;
   margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  line-height: 1.3;
 }
 
-.processStep:nth-child(odd) .processStepTitle {
-  justify-content: flex-end;
-}
-
-.processStepTitle svg {
-  color: #2e7d32;
-  flex-shrink: 0;
-}
-
-.processStepText {
-  font-size: 0.85rem;
+.processCardText {
+  font-size: 0.82rem;
   color: #5a7a58;
-  line-height: 1.75;
+  line-height: 1.7;
+  margin: 0;
 }
 
-/* ── Roadmap Responsive — Tablet ── */
+/* Hide old timeline styles that are no longer used */
+.processGrid,
+.processStep,
+.processStepLeft,
+.processStepNumber,
+.processStepLine,
+.processStepContent,
+.processStepTitle,
+.processStepText {
+  display: none;
+}
+
+/* ── Responsive — Tablet ── */
 @media (max-width: 900px) {
-  .processGrid::before {
-    left: 24px;
+  .processSection {
+    padding: 60px 20px 70px;
   }
 
-  .processStep {
-    width: 100%;
-    padding-left: 64px !important;
-    padding-right: 0 !important;
-    text-align: left !important;
-    flex-direction: row !important;
-    align-self: flex-start !important;
+  .processRow {
+    gap: 16px;
   }
 
-  .processStep::before {
-    left: 2px !important;
-    right: auto !important;
+  .processRouteArrow {
+    width: 40px;
   }
 
-  .processStep::after {
-    left: 46px !important;
-    right: auto !important;
-    width: 18px;
+  .processRouteArrow svg {
+    width: 28px;
   }
 
-  .processStep:nth-child(odd) .processStepTitle {
-    justify-content: flex-start;
+  .processCardImageWrap {
+    height: 140px;
+  }
+
+  .processCardBody {
+    padding: 16px 18px 20px;
+  }
+
+  .processCardTitle {
+    font-size: 0.88rem;
+  }
+
+  .processCardText {
+    font-size: 0.78rem;
   }
 }
 
-/* ── Roadmap Responsive — Mobile ── */
+/* ── Responsive — Mobile ── */
+@media (max-width: 680px) {
+  .processSection {
+    padding: 48px 16px 56px;
+  }
+
+  .processRow,
+  .processRowReverse {
+    flex-direction: column !important;
+    align-items: center;
+    gap: 0;
+  }
+
+  .processCard {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .processRouteArrow {
+    transform: rotate(90deg);
+    width: auto;
+    padding: 8px 0;
+  }
+
+  .processRouteDown {
+    padding: 8px 0;
+  }
+
+  .processRouteDown svg {
+    transform: rotate(0deg);
+  }
+
+  .processCardImageWrap {
+    height: 160px;
+  }
+
+  .processCardBody {
+    padding: 18px 16px 22px;
+  }
+
+  .processTitle {
+    font-size: 2.2rem;
+  }
+}
+
 @media (max-width: 480px) {
   .processSection {
-    padding: 40px 16px 50px;
+    padding: 40px 12px 48px;
   }
 
-  .processGrid::before {
-    left: 18px;
+  .processCardImageWrap {
+    height: 140px;
   }
 
-  .processStep {
-    padding-left: 52px !important;
-    padding-bottom: 32px;
+  .processCardBody {
+    padding: 14px 14px 18px;
   }
 
-  .processStep::before {
-    width: 36px;
-    height: 36px;
-    font-size: 0.75rem;
-    top: 12px;
-    left: 0 !important;
+  .processCardTitle {
+    font-size: 0.85rem;
   }
 
-  .processStep::after {
-    left: 36px !important;
-    width: 16px;
-    top: 24px;
-  }
-
-  .processStepContent {
-    padding: 18px 16px;
-  }
-
-  .processStepTitle {
-    font-size: 0.92rem;
+  .processCardText {
+    font-size: 0.76rem;
   }
 }
 
