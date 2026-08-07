@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     // ── 2. Append to Google Sheet (async, non-blocking) ──
     const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-    const phone = `${countryCode || '+91'} ${contact}`;
+    const phone = `'${countryCode || '+91'} ${contact}`;
     const productLabel = (({
       'makhana-4': 'Makhana 4+ Sutta',
       'makhana-5': 'Makhana 5+ Sutta',

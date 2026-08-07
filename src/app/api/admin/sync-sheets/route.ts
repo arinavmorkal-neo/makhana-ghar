@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       ];
 
       const rows = result.docs.map((doc: any) => {
-        const phone = `${doc.countryCode || '+91'} ${doc.contact || ''}`.trim();
+        const phone = `'${doc.countryCode || '+91'} ${doc.contact || ''}`.trim();
         const timestamp = doc.createdAt ? new Date(doc.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '';
         
         // Resolve product grade label
