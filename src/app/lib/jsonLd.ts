@@ -27,7 +27,7 @@ export function organizationJsonLd() {
         },
         contactPoint: {
           '@type': 'ContactPoint',
-          telephone: '+91-7903195957',
+          telephone: '+91-8002661555',
           contactType: 'customer service',
           email: 'makhanaghar.marketing@gmail.com',
         },

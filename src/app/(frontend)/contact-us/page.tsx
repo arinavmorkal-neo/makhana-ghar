@@ -125,7 +125,7 @@ export default function ContactUsPage() {
               </div>
               <h3 className={styles.infoTitle}>Call Us</h3>
               <p className={styles.infoText}>
-                <a href="tel:+917903195957">+91 7903 19 5957</a>
+                <a href="tel:+918002661555">+91 8002 66 1555</a>
                 <br />
                 Mon – Sat, 9 AM – 7 PM IST
               </p>
@@ -412,7 +412,7 @@ export default function ContactUsPage() {
               business needs today.
             </p>
             <div className={styles.ctaButtons}>
-              <a href="tel:+917903195957" className={styles.ctaBtnPrimary}>
+              <a href="tel:+918002661555" className={styles.ctaBtnPrimary}>
                 <svg
                   width="18"
                   height="18"

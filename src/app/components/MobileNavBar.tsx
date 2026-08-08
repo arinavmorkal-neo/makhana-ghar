@@ -93,7 +93,7 @@ export default function MobileNavBar() {
           <span className={styles.navIcon}><ProductsIcon /></span>
           <span className={styles.navLabel}>Products</span>
         </a>
-        <a href="https://wa.me/917903195957?text=I%20am%20interested" target="_blank" rel="noopener noreferrer" className={`${styles.navTab} ${styles.navTabHighlight}`}>
+        <a href="https://wa.me/918002661555?text=Hello%2C%20I%E2%80%99m%20interested%20in%20wholesale%20makhana.%20Please%20share%20your%20price%20list%20and%20available%20varieties." target="_blank" rel="noopener noreferrer" className={`${styles.navTab} ${styles.navTabHighlight}`}>
           <span className={styles.navIcon}><CallIcon /></span>
           <span className={styles.navLabel}>Call</span>
         </a>

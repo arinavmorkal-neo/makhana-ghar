@@ -243,7 +243,7 @@ export default function TermsPage() {
               <div className={styles.contactBox}>
                 <span className={styles.contactLabel}>Phone</span>
                 <span className={styles.contactValue}>
-                  <a href="tel:+917903195957">+91 7903195957</a>
+                  <a href="tel:+918002661555">+91 8002661555</a>
                 </span>
               </div>
               <div className={styles.contactBox}>
