@@ -20,11 +20,30 @@ export default function ContactUsPage() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    let { name, value } = e.target;
+    
+    if (name === 'name') {
+      value = value.replace(/[0-9]/g, '');
+    } else if (name === 'phone') {
+      value = value.replace(/\D/g, '');
+      if (value.length > 10) value = value.slice(0, 10);
+    }
+    
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.email.includes('@')) {
+      alert('Please enter a valid email address containing @.');
+      return;
+    }
+    if (formData.phone && formData.phone.length !== 10) {
+      alert('Phone number must be exactly 10 digits.');
+      return;
+    }
+    
     setLoading(true);
     setSuccess(false);
 

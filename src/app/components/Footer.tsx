@@ -196,6 +196,11 @@ export default function Footer() {
     e.preventDefault();
     if (!email.trim()) return;
 
+    if (!email.includes('@')) {
+      alert("Please enter a valid email address containing @.");
+      return;
+    }
+
     setLoading(true);
     setSubMessage("");
 

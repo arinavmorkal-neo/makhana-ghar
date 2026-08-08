@@ -25,7 +25,16 @@ export default function EnquiryPopup({ open, onClose }: EnquiryPopupProps) {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    let { name, value } = e.target;
+    
+    if (name === 'name') {
+      value = value.replace(/[0-9]/g, '');
+    } else if (name === 'contact') {
+      value = value.replace(/\D/g, '');
+      if (value.length > 10) value = value.slice(0, 10);
+    }
+    
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = async () => {
@@ -36,12 +45,12 @@ export default function EnquiryPopup({ open, onClose }: EnquiryPopupProps) {
       setErrorMessage('Please enter your name.');
       return;
     }
-    if (!form.contact.trim()) {
-      setErrorMessage('Please enter your contact number.');
+    if (!form.contact.trim() || form.contact.length !== 10) {
+      setErrorMessage('Please enter a valid 10-digit contact number.');
       return;
     }
-    if (!form.email.trim()) {
-      setErrorMessage('Please enter your email address.');
+    if (!form.email.trim() || !form.email.includes('@')) {
+      setErrorMessage('Please enter a valid email address containing @.');
       return;
     }
 
