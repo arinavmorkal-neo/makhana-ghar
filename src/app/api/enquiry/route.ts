@@ -2,7 +2,7 @@ import { NextRequest, NextResponse, after } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { appendToSheet } from '@/lib/google-sheets';
-import { triggerWebhook } from '@/lib/webhook';
+import { triggerWebhook, getWebhookUrl } from '@/lib/webhook';
 
 export async function POST(req: NextRequest) {
   try {
@@ -38,6 +38,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Resolve webhook URL now (Payload is already warm) so after() only does a fetch
+    const webhookUrl = await getWebhookUrl();
+
     // ── 2. Run Background Tasks (Google Sheets & Webhook) ──
     // Use after() so they don't block the HTTP response and cause high duration
     after(() => {
@@ -65,7 +68,7 @@ export async function POST(req: NextRequest) {
       });
 
       const webhookBody = { ...body, product: productLabel };
-      triggerWebhook(webhookBody, 'Enquiry').catch((err) => {
+      triggerWebhook(webhookBody, 'Enquiry', webhookUrl).catch((err) => {
         console.error('Webhook failed:', err.message);
       });
     });

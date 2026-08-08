@@ -2,7 +2,7 @@ import { NextRequest, NextResponse, after } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { appendToSheet } from '@/lib/google-sheets';
-import { triggerWebhook } from '@/lib/webhook';
+import { triggerWebhook, getWebhookUrl } from '@/lib/webhook';
 
 export async function POST(req: NextRequest) {
   try {
@@ -43,6 +43,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Resolve webhook URL now (Payload is already warm) so after() only does a fetch
+    const webhookUrl = await getWebhookUrl();
+
     // ── 2. Run Background Tasks ──
     after(() => {
       const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
@@ -57,7 +60,7 @@ export async function POST(req: NextRequest) {
         console.error('Google Sheets subscriber append failed:', err.message);
       });
 
-      triggerWebhook(body, 'Newsletter Subscription').catch((err) => {
+      triggerWebhook(body, 'Newsletter Subscription', webhookUrl).catch((err) => {
         console.error('Webhook failed:', err.message);
       });
     });
