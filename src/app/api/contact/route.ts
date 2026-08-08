@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         email,
         message: formattedMessage,
         status: 'new',
-        source: 'Contact Page',
+        source: body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
       },
     });
 
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       'N/A', // product
       formattedMessage,
       'New',
-      'Contact Page',
+      body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
     ]).catch((err) => {
       console.error('Google Sheets append failed:', err.message);
     });

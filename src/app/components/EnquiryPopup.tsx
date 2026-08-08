@@ -83,7 +83,7 @@ export default function EnquiryPopup({ open, onClose }: EnquiryPopupProps) {
       const response = await fetch('/api/enquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, pagePath: window.location.href }),
       });
 
       const result = await response.json();

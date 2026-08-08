@@ -208,7 +208,7 @@ export default function Footer() {
       const response = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: email.trim(), pagePath: window.location.href }),
       });
 
       const result = await response.json();

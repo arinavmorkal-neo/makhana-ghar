@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         product: product || undefined,
         message: message || '',
         status: 'new',
-        source: 'website',
+        source: body.pagePath ? `website (${body.pagePath})` : 'website',
       },
     });
 
@@ -53,13 +53,14 @@ export async function POST(req: NextRequest) {
       productLabel,
       message || '',
       'New',
-      'Website Form',
+      body.pagePath ? `Website Form (${body.pagePath})` : 'Website Form',
     ]).catch((err) => {
       console.error('Google Sheets append failed:', err.message);
     });
 
     // ── 3. Trigger Webhook ──
-    triggerWebhook(body, 'Enquiry').catch((err) => {
+    const webhookBody = { ...body, product: productLabel };
+    triggerWebhook(webhookBody, 'Enquiry').catch((err) => {
       console.error('Webhook failed:', err.message);
     });
 

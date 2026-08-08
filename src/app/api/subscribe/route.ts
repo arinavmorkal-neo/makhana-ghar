@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       collection: 'subscribers',
       data: {
         email: trimmedEmail,
-        source: 'newsletter',
+        source: body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
       },
     });
 
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     appendToSheet([
       timestamp,
       trimmedEmail,
-      'newsletter',
+      body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
     ], tabName).catch((err) => {
       console.error('Google Sheets subscriber append failed:', err.message);
     });

@@ -155,7 +155,7 @@ export default function ThirdSection({ data }: { data?: any }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, pagePath: window.location.href }),
       });
 
       const result = await response.json();
