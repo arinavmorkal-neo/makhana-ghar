@@ -5,7 +5,7 @@
  * Make sure the dev server (npm run dev) is running first.
  */
 
-const API = 'http://localhost:3000/api';
+const API = process.env.SEED_API_URL || process.argv[2] || 'https://www.makhanaghar.in/api';
 
 // ── First, ensure we have a user. Create one if needed. ──
 async function ensureUser() {
