@@ -19,6 +19,10 @@ export async function POST(req: NextRequest) {
 
     // ── 1. Save to Payload CMS (MongoDB) ──
     const payload = await getPayload({ config: configPromise });
+    const sourceString = body.sourceComponent 
+      ? `${body.sourceComponent} (${body.pagePath})`
+      : (body.pagePath ? `Website Form (${body.pagePath})` : 'Website Form');
+
     const enquiry = await payload.create({
       collection: 'enquiries',
       data: {
@@ -29,7 +33,7 @@ export async function POST(req: NextRequest) {
         product: product || undefined,
         message: message || '',
         status: 'new',
-        source: body.pagePath ? `website (${body.pagePath})` : 'website',
+        source: sourceString,
       },
     });
 
@@ -53,7 +57,7 @@ export async function POST(req: NextRequest) {
       productLabel,
       message || '',
       'New',
-      body.pagePath ? `Website Form (${body.pagePath})` : 'Website Form',
+      sourceString,
     ]).catch((err) => {
       console.error('Google Sheets append failed:', err.message);
     });
