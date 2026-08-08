@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import MobileNavBar from '../../components/MobileNavBar';
@@ -16,6 +18,18 @@ export default function ContactUsPage() {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [defaultCountry, setDefaultCountry] = useState('in');
+
+  useEffect(() => {
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.country_code) {
+          setDefaultCountry(data.country_code.toLowerCase());
+        }
+      })
+      .catch(err => console.error('Failed to fetch country code:', err));
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -24,12 +38,14 @@ export default function ContactUsPage() {
     
     if (name === 'name') {
       value = value.replace(/[0-9]/g, '');
-    } else if (name === 'phone') {
-      value = value.replace(/\D/g, '');
-      if (value.length > 10) value = value.slice(0, 10);
     }
     
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePhoneChange = (value: string) => {
+    // For contact-us API, we can just send the full formatted phone number string
+    setFormData(prev => ({ ...prev, phone: value }));
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -39,8 +55,10 @@ export default function ContactUsPage() {
       alert('Please enter a valid email address containing @.');
       return;
     }
-    if (formData.phone && formData.phone.length !== 10) {
-      alert('Phone number must be exactly 10 digits.');
+    // We only do a basic validation for presence of phone here because PhoneInput 
+    // already helps structure it, and international lengths vary.
+    if (!formData.phone) {
+      alert('Please enter a valid phone number.');
       return;
     }
     
@@ -252,15 +270,17 @@ export default function ContactUsPage() {
                     <label className={styles.formLabel} htmlFor="contact-phone">
                       Phone Number
                     </label>
-                    <input
-                      id="contact-phone"
-                      name="phone"
-                      type="tel"
-                      className={styles.formInput}
-                      placeholder="+91 XXXXX XXXXX"
-                      value={formData.phone}
-                      onChange={handleChange}
-                    />
+                    <div style={{ color: '#000' }}>
+                      <PhoneInput
+                        country={defaultCountry}
+                        value={formData.phone}
+                        onChange={handlePhoneChange}
+                        inputStyle={{ width: '100%', height: '48px', borderRadius: '8px', border: '1px solid var(--border)' }}
+                        buttonStyle={{ borderRadius: '8px 0 0 8px', border: '1px solid var(--border)', backgroundColor: '#fff' }}
+                        enableSearch={true}
+                        disableSearchIcon={true}
+                      />
+                    </div>
                   </div>
                   <div className={styles.formGroup}>
                     <label

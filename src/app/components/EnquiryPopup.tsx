@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import styles from './EnquiryPopup.module.css';
 
 interface EnquiryPopupProps {
@@ -21,6 +23,18 @@ export default function EnquiryPopup({ open, onClose }: EnquiryPopupProps) {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [defaultCountry, setDefaultCountry] = useState('in');
+
+  useEffect(() => {
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.country_code) {
+          setDefaultCountry(data.country_code.toLowerCase());
+        }
+      })
+      .catch(err => console.error('Failed to fetch country code:', err));
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -29,12 +43,21 @@ export default function EnquiryPopup({ open, onClose }: EnquiryPopupProps) {
     
     if (name === 'name') {
       value = value.replace(/[0-9]/g, '');
-    } else if (name === 'contact') {
-      value = value.replace(/\D/g, '');
-      if (value.length > 10) value = value.slice(0, 10);
     }
     
     setForm({ ...form, [name]: value });
+  };
+
+  const handlePhoneChange = (value: string, country: any) => {
+    // value is the full phone number string (e.g. "919876543210")
+    // country.dialCode is "91"
+    const dialCode = country.dialCode;
+    const contact = value.slice(dialCode.length);
+    setForm(prev => ({
+      ...prev,
+      countryCode: `+${dialCode}`,
+      contact: contact
+    }));
   };
 
   const handleSubmit = async () => {
@@ -45,8 +68,8 @@ export default function EnquiryPopup({ open, onClose }: EnquiryPopupProps) {
       setErrorMessage('Please enter your name.');
       return;
     }
-    if (!form.contact.trim() || form.contact.length !== 10) {
-      setErrorMessage('Please enter a valid 10-digit contact number.');
+    if (!form.contact.trim()) {
+      setErrorMessage('Please enter a valid contact number.');
       return;
     }
     if (!form.email.trim() || !form.email.includes('@')) {
@@ -152,32 +175,15 @@ export default function EnquiryPopup({ open, onClose }: EnquiryPopupProps) {
           {/* Contact */}
           <div className={styles.field}>
             <label className={styles.label}>Contact Number *</label>
-            <div className={styles.phoneRow}>
-              <select
-                name="countryCode"
-                value={form.countryCode}
-                onChange={handleChange}
-                className={styles.codeSelect}
-              >
-                <option value="+91">🇮🇳 +91</option>
-                <option value="+1">🇺🇸 +1</option>
-                <option value="+44">🇬🇧 +44</option>
-                <option value="+971">🇦🇪 +971</option>
-                <option value="+966">🇸🇦 +966</option>
-                <option value="+65">🇸🇬 +65</option>
-                <option value="+61">🇦🇺 +61</option>
-                <option value="+49">🇩🇪 +49</option>
-                <option value="+86">🇨🇳 +86</option>
-                <option value="+880">🇧🇩 +880</option>
-                <option value="+977">🇳🇵 +977</option>
-              </select>
-              <input
-                type="tel"
-                name="contact"
-                placeholder="Enter phone number"
-                value={form.contact}
-                onChange={handleChange}
-                className={styles.input}
+            <div className={styles.phoneRow} style={{ color: '#000' }}>
+              <PhoneInput
+                country={defaultCountry}
+                value={`${form.countryCode.replace('+', '')}${form.contact}`}
+                onChange={handlePhoneChange}
+                inputStyle={{ width: '100%', height: '42px', borderRadius: '4px', border: '1px solid #ccc' }}
+                buttonStyle={{ borderRadius: '4px 0 0 4px', border: '1px solid #ccc', backgroundColor: '#f8f9fa' }}
+                enableSearch={true}
+                disableSearchIcon={true}
               />
             </div>
           </div>
