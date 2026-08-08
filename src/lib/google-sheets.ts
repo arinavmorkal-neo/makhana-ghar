@@ -11,12 +11,15 @@ import { google } from 'googleapis';
  */
 export async function appendToSheet(row: string[], tabName?: string) {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+  const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n').replace(/"$/g, '').replace(/^"/g, '');
   const sheetId = process.env.GOOGLE_SHEET_ID;
   const sheetName = tabName || process.env.GOOGLE_SHEET_NAME || 'Sheet1';
 
   if (!email || !key || !sheetId) {
     console.warn('⚠️ Google Sheets env vars missing — skipping sheet append.');
+    console.warn(`  EMAIL present: ${!!email}`);
+    console.warn(`  KEY present: ${!!key}, starts with: ${key?.substring(0, 30)}`);
+    console.warn(`  SHEET_ID present: ${!!sheetId}`);
     return null;
   }
 
@@ -74,7 +77,7 @@ export async function appendToSheet(row: string[], tabName?: string) {
  */
 export async function syncAllToSheet(sheetName: string, headers: string[], rows: string[][]) {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+  const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n').replace(/"$/g, '').replace(/^"/g, '');
   const sheetId = process.env.GOOGLE_SHEET_ID;
 
   if (!email || !key || !sheetId) {
