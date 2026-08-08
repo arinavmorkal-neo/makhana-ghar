@@ -13,6 +13,7 @@ import { Products } from './collections/Products';
 import { Categories } from './collections/Categories';
 import { Gallery } from './collections/Gallery';
 import { Founders } from './collections/Founders';
+import { Settings } from './globals/Settings';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -29,6 +30,7 @@ export default buildConfig({
     suppressHydrationWarning: true,
   },
   collections: [Pages, Media, Users, Enquiries, Subscribers, Blogs, Products, Categories, Gallery, Founders],
+  globals: [Settings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'fallback-secret-for-local-dev-only',
   db: mongooseAdapter({

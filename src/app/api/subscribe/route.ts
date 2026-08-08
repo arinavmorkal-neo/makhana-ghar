@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { appendToSheet } from '@/lib/google-sheets';
+import { triggerWebhook } from '@/lib/webhook';
 
 export async function POST(req: NextRequest) {
   try {
@@ -54,6 +55,11 @@ export async function POST(req: NextRequest) {
       'newsletter',
     ], tabName).catch((err) => {
       console.error('Google Sheets subscriber append failed:', err.message);
+    });
+
+    // 3. Trigger Webhook
+    triggerWebhook(body, 'Newsletter Subscription').catch((err) => {
+      console.error('Webhook failed:', err.message);
     });
 
     return NextResponse.json({
