@@ -300,37 +300,11 @@
   gap: 0;
 }
 
-/* The SVG background route path — hidden, decorative only */
-.processRouteSvg {
-  display: none;
-}
-
-/* Row of 2 cards */
-.processRow {
-  display: flex;
-  align-items: stretch;
+/* Grid layout for processing cards */
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
-  justify-content: center;
-}
-
-.processRowReverse {
-  flex-direction: row-reverse;
-}
-
-/* Arrow connector between cards */
-.processRouteArrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 60px;
-}
-
-/* Curved connector between rows */
-.processRouteDown {
-  display: flex;
-  justify-content: center;
-  padding: 4px 0;
 }
 
 /* Individual process card */
@@ -358,7 +332,6 @@
 .processCardImageWrap {
   position: relative;
   width: 100%;
-  height: 180px;
   overflow: hidden;
   background: linear-gradient(135deg, #e8f0e6, #d4e5d0);
 }
@@ -366,8 +339,7 @@
 .processCardImage {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   transition: transform 0.5s ease;
 }
 
@@ -423,7 +395,6 @@
 }
 
 /* Hide old timeline styles that are no longer used */
-.processGrid,
 .processStep,
 .processStepLeft,
 .processStepNumber,
@@ -440,21 +411,11 @@
     padding: 60px 20px 70px;
   }
 
-  .processRow {
+  .processGrid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
 
-  .processRouteArrow {
-    width: 40px;
-  }
-
-  .processRouteArrow svg {
-    width: 28px;
-  }
-
-  .processCardImageWrap {
-    height: 140px;
-  }
 
   .processCardBody {
     padding: 16px 18px 20px;
@@ -475,34 +436,14 @@
     padding: 48px 16px 56px;
   }
 
-  .processRow,
-  .processRowReverse {
-    flex-direction: column !important;
-    align-items: center;
-    gap: 0;
-  }
-
   .processCard {
     max-width: 100%;
     width: 100%;
   }
 
-  .processRouteArrow {
-    transform: rotate(90deg);
-    width: auto;
-    padding: 8px 0;
-  }
-
-  .processRouteDown {
-    padding: 8px 0;
-  }
-
-  .processRouteDown svg {
-    transform: rotate(0deg);
-  }
-
-  .processCardImageWrap {
-    height: 160px;
+  .processGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
 
   .processCardBody {
@@ -519,8 +460,9 @@
     padding: 40px 12px 48px;
   }
 
-  .processCardImageWrap {
-    height: 140px;
+  .processGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 
   .processCardBody {

@@ -266,186 +266,125 @@ export default function AboutUsPage() {
             </p>
           </div>
 
-          {/* Route Path Cards Grid */}
-          <div className={styles.processRoute}>
-            {/* The SVG route path drawn behind the cards */}
-            <svg className={styles.processRouteSvg} viewBox="0 0 1200 1800" fill="none" preserveAspectRatio="none" aria-hidden="true">
-              <path
-                d="M 200 80 C 400 80, 600 80, 800 80 C 1000 80, 1100 180, 1000 280 C 900 380, 200 380, 200 480 C 200 580, 900 580, 1000 580 C 1100 580, 1100 680, 1000 680 C 900 780, 200 780, 200 880 C 200 980, 900 980, 1000 980 C 1100 980, 1100 1080, 1000 1080 C 900 1180, 200 1180, 200 1280"
-                className={styles.processRoutePathBg}
-              />
-              <path
-                d="M 200 80 C 400 80, 600 80, 800 80 C 1000 80, 1100 180, 1000 280 C 900 380, 200 380, 200 480 C 200 580, 900 580, 1000 580 C 1100 580, 1100 680, 1000 680 C 900 780, 200 780, 200 880 C 200 980, 900 980, 1000 980 C 1100 980, 1100 1080, 1000 1080 C 900 1180, 200 1180, 200 1280"
-                className={styles.processRoutePath}
-              />
-            </svg>
-
-            {/* Row 1 — Steps 1 & 2 */}
-            <div className={styles.processRow}>
-              <div className={styles.processCard}>
-                <div className={styles.processCardImageWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/process-step-1.png" alt="Pond Cultivation" className={styles.processCardImage} />
-                  <span className={styles.processCardBadge}>01</span>
-                </div>
-                <div className={styles.processCardBody}>
-                  <h4 className={styles.processCardTitle}>Pond Cultivation &amp; Seed Growth</h4>
-                  <p className={styles.processCardText}>
-                    Makhana plants grow naturally in stagnant freshwater ponds of Bihar. Seeds develop inside thorny fruits that mature underwater during monsoon.
-                  </p>
-                </div>
+          {/* Grid Layout for Processing Cards */}
+          <div className={styles.processGrid}>
+            {/* Step 1 */}
+            <div className={styles.processCard}>
+              <div className={styles.processCardImageWrap}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/process-step-1.png" alt="Pond Cultivation" className={styles.processCardImage} />
+                <span className={styles.processCardBadge}>01</span>
               </div>
-
-              <div className={styles.processRouteArrow}>
-                <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
-                  <path d="M0 12H36M30 6L36 12L30 18" stroke="#2e7d32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-
-              <div className={styles.processCard}>
-                <div className={styles.processCardImageWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/process-step-2.png" alt="Manual Harvesting" className={styles.processCardImage} />
-                  <span className={styles.processCardBadge}>02</span>
-                </div>
-                <div className={styles.processCardBody}>
-                  <h4 className={styles.processCardTitle}>Manual Harvesting by Divers</h4>
-                  <p className={styles.processCardText}>
-                    Skilled local farmers dive into ponds to manually collect ripe, spiny fruits from the muddy pond bed — entirely by hand.
-                  </p>
-                </div>
+              <div className={styles.processCardBody}>
+                <h4 className={styles.processCardTitle}>Pond Cultivation &amp; Seed Growth</h4>
+                <p className={styles.processCardText}>
+                  Makhana plants grow naturally in stagnant freshwater ponds of Bihar. Seeds develop inside thorny fruits that mature underwater during monsoon.
+                </p>
               </div>
             </div>
 
-            {/* Curved connector down */}
-            <div className={styles.processRouteDown}>
-              <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                <path d="M50 0C50 30 10 30 10 60" stroke="#2e7d32" strokeWidth="2.5" strokeDasharray="6 4" strokeLinecap="round"/>
-              </svg>
-            </div>
-
-            {/* Row 2 — Steps 3 & 4 (reversed) */}
-            <div className={`${styles.processRow} ${styles.processRowReverse}`}>
-              <div className={styles.processCard}>
-                <div className={styles.processCardImageWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/process-step-4.png" alt="Roasting and Popping" className={styles.processCardImage} />
-                  <span className={styles.processCardBadge}>04</span>
-                </div>
-                <div className={styles.processCardBody}>
-                  <h4 className={styles.processCardTitle}>Roasting &amp; Popping (Lawa)</h4>
-                  <p className={styles.processCardText}>
-                    Dried seeds are roasted in an iron pan over high heat, then struck with a wooden mallet to pop the outer shell — revealing fluffy white puffs.
-                  </p>
-                </div>
+            {/* Step 2 */}
+            <div className={styles.processCard}>
+              <div className={styles.processCardImageWrap}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/process-step-2.png" alt="Manual Harvesting" className={styles.processCardImage} />
+                <span className={styles.processCardBadge}>02</span>
               </div>
-
-              <div className={styles.processRouteArrow}>
-                <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
-                  <path d="M40 12H4M10 6L4 12L10 18" stroke="#2e7d32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-
-              <div className={styles.processCard}>
-                <div className={styles.processCardImageWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/process-step-3.png" alt="Seed Collection and Sun Drying" className={styles.processCardImage} />
-                  <span className={styles.processCardBadge}>03</span>
-                </div>
-                <div className={styles.processCardBody}>
-                  <h4 className={styles.processCardTitle}>Seed Collection &amp; Sun Drying</h4>
-                  <p className={styles.processCardText}>
-                    Black seeds are extracted, washed thoroughly, and spread under direct sunlight for 2–3 days of natural drying.
-                  </p>
-                </div>
+              <div className={styles.processCardBody}>
+                <h4 className={styles.processCardTitle}>Manual Harvesting by Divers</h4>
+                <p className={styles.processCardText}>
+                  Skilled local farmers dive into ponds to manually collect ripe, spiny fruits from the muddy pond bed — entirely by hand.
+                </p>
               </div>
             </div>
 
-            {/* Curved connector down */}
-            <div className={styles.processRouteDown}>
-              <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                <path d="M10 0C10 30 50 30 50 60" stroke="#2e7d32" strokeWidth="2.5" strokeDasharray="6 4" strokeLinecap="round"/>
-              </svg>
-            </div>
-
-            {/* Row 3 — Steps 5 & 6 */}
-            <div className={styles.processRow}>
-              <div className={styles.processCard}>
-                <div className={styles.processCardImageWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/process-step-5.png" alt="Shell Removal" className={styles.processCardImage} />
-                  <span className={styles.processCardBadge}>05</span>
-                </div>
-                <div className={styles.processCardBody}>
-                  <h4 className={styles.processCardTitle}>Shell Removal &amp; Cleaning</h4>
-                  <p className={styles.processCardText}>
-                    The hard black shell is peeled off by hand to reveal white makhana puffs, then cleaned to remove any remaining fragments.
-                  </p>
-                </div>
+            {/* Step 3 */}
+            <div className={styles.processCard}>
+              <div className={styles.processCardImageWrap}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/process-step-3.png" alt="Seed Collection and Sun Drying" className={styles.processCardImage} />
+                <span className={styles.processCardBadge}>03</span>
               </div>
-
-              <div className={styles.processRouteArrow}>
-                <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
-                  <path d="M0 12H36M30 6L36 12L30 18" stroke="#2e7d32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-
-              <div className={styles.processCard}>
-                <div className={styles.processCardImageWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/process-step-6.png" alt="Quality Sorting" className={styles.processCardImage} />
-                  <span className={styles.processCardBadge}>06</span>
-                </div>
-                <div className={styles.processCardBody}>
-                  <h4 className={styles.processCardTitle}>Grading &amp; Quality Sorting</h4>
-                  <p className={styles.processCardText}>
-                    Cleaned puffs are sorted by size — 4+ Sutta (small), 5+ Sutta (medium), and 6+ Sutta (large/premium) with quality checks.
-                  </p>
-                </div>
+              <div className={styles.processCardBody}>
+                <h4 className={styles.processCardTitle}>Seed Collection &amp; Sun Drying</h4>
+                <p className={styles.processCardText}>
+                  Black seeds are extracted, washed thoroughly, and spread under direct sunlight for 2–3 days of natural drying.
+                </p>
               </div>
             </div>
 
-            {/* Curved connector down */}
-            <div className={styles.processRouteDown}>
-              <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                <path d="M50 0C50 30 10 30 10 60" stroke="#2e7d32" strokeWidth="2.5" strokeDasharray="6 4" strokeLinecap="round"/>
-              </svg>
+            {/* Step 4 */}
+            <div className={styles.processCard}>
+              <div className={styles.processCardImageWrap}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/process-step-4.png" alt="Roasting and Popping" className={styles.processCardImage} />
+                <span className={styles.processCardBadge}>04</span>
+              </div>
+              <div className={styles.processCardBody}>
+                <h4 className={styles.processCardTitle}>Roasting &amp; Popping (Lawa)</h4>
+                <p className={styles.processCardText}>
+                  Dried seeds are roasted in an iron pan over high heat, then struck with a wooden mallet to pop the outer shell — revealing fluffy white puffs.
+                </p>
+              </div>
             </div>
 
-            {/* Row 4 — Steps 7 & 8 (reversed) */}
-            <div className={`${styles.processRow} ${styles.processRowReverse}`}>
-              <div className={styles.processCard}>
-                <div className={styles.processCardImageWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/process-step-8.png" alt="Packaging and Dispatch" className={styles.processCardImage} />
-                  <span className={styles.processCardBadge}>08</span>
-                </div>
-                <div className={styles.processCardBody}>
-                  <h4 className={styles.processCardTitle}>Packaging &amp; Dispatch</h4>
-                  <p className={styles.processCardText}>
-                    Graded makhana is sealed in food-grade, moisture-proof packaging — bulk bags, retail packs, or custom private-label formats.
-                  </p>
-                </div>
+            {/* Step 5 */}
+            <div className={styles.processCard}>
+              <div className={styles.processCardImageWrap}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/process-step-5.png" alt="Shell Removal" className={styles.processCardImage} />
+                <span className={styles.processCardBadge}>05</span>
               </div>
-
-              <div className={styles.processRouteArrow}>
-                <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
-                  <path d="M40 12H4M10 6L4 12L10 18" stroke="#2e7d32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <div className={styles.processCardBody}>
+                <h4 className={styles.processCardTitle}>Shell Removal &amp; Cleaning</h4>
+                <p className={styles.processCardText}>
+                  The hard black shell is peeled off by hand to reveal white makhana puffs, then cleaned to remove any remaining fragments.
+                </p>
               </div>
+            </div>
 
-              <div className={styles.processCard}>
-                <div className={styles.processCardImageWrap}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/process-step-7.png" alt="Quality Assurance" className={styles.processCardImage} />
-                  <span className={styles.processCardBadge}>07</span>
-                </div>
-                <div className={styles.processCardBody}>
-                  <h4 className={styles.processCardTitle}>Moisture Testing &amp; QA</h4>
-                  <p className={styles.processCardText}>
-                    Every batch is tested for moisture (below 12%), checked for purity, and verified against FSSAI &amp; export-grade standards.
-                  </p>
-                </div>
+            {/* Step 6 */}
+            <div className={styles.processCard}>
+              <div className={styles.processCardImageWrap}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/process-step-6.png" alt="Quality Sorting" className={styles.processCardImage} />
+                <span className={styles.processCardBadge}>06</span>
+              </div>
+              <div className={styles.processCardBody}>
+                <h4 className={styles.processCardTitle}>Grading &amp; Quality Sorting</h4>
+                <p className={styles.processCardText}>
+                  Cleaned puffs are sorted by size — 4+ Sutta (small), 5+ Sutta (medium), and 6+ Sutta (large/premium) with quality checks.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 7 */}
+            <div className={styles.processCard}>
+              <div className={styles.processCardImageWrap}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/process-step-7.png" alt="Quality Assurance" className={styles.processCardImage} />
+                <span className={styles.processCardBadge}>07</span>
+              </div>
+              <div className={styles.processCardBody}>
+                <h4 className={styles.processCardTitle}>Moisture Testing &amp; QA</h4>
+                <p className={styles.processCardText}>
+                  Every batch is tested for moisture (below 12%), checked for purity, and verified against FSSAI &amp; export-grade standards.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 8 */}
+            <div className={styles.processCard}>
+              <div className={styles.processCardImageWrap}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/process-step-8.png" alt="Packaging and Dispatch" className={styles.processCardImage} />
+                <span className={styles.processCardBadge}>08</span>
+              </div>
+              <div className={styles.processCardBody}>
+                <h4 className={styles.processCardTitle}>Packaging &amp; Dispatch</h4>
+                <p className={styles.processCardText}>
+                  Graded makhana is sealed in food-grade, moisture-proof packaging — bulk bags, retail packs, or custom private-label formats.
+                </p>
               </div>
             </div>
           </div>
