@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { appendToSheet } from '@/lib/google-sheets';
@@ -36,27 +36,27 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // ── 2. Append to Google Sheet (async, non-blocking) ──
-    const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-    const sheetPhone = phone && phone.startsWith('+') ? `'${phone}` : phone;
+    // ── 2. Run Background Tasks ──
+    after(() => {
+      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      const sheetPhone = phone && phone.startsWith('+') ? `'${phone}` : phone;
 
-    // Fire-and-forget
-    appendToSheet([
-      timestamp,
-      name,
-      email,
-      sheetPhone,
-      'N/A', // product
-      formattedMessage,
-      'New',
-      body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
-    ]).catch((err) => {
-      console.error('Google Sheets append failed:', err.message);
-    });
+      appendToSheet([
+        timestamp,
+        name,
+        email,
+        sheetPhone,
+        'N/A', // product
+        formattedMessage,
+        'New',
+        body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
+      ]).catch((err) => {
+        console.error('Google Sheets append failed:', err.message);
+      });
 
-    // ── 3. Trigger Webhook ──
-    triggerWebhook(body, 'Contact Us').catch((err) => {
-      console.error('Webhook failed:', err.message);
+      triggerWebhook(body, 'Contact Us').catch((err) => {
+        console.error('Webhook failed:', err.message);
+      });
     });
 
     return NextResponse.json({

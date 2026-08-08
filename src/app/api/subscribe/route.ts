@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { appendToSheet } from '@/lib/google-sheets';
@@ -16,20 +16,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedEmail = email.trim();
 
-    // 1. Save to Payload CMS (MongoDB)
+    // ── 1. Save to Payload CMS (MongoDB) ──
     const payload = await getPayload({ config: configPromise });
     
-    // Check if email already exists
+    // Optional: check if already exists
     const existing = await payload.find({
       collection: 'subscribers',
-      where: {
-        email: { equals: trimmedEmail },
-      },
+      where: { email: { equals: trimmedEmail } },
+      limit: 1,
     });
 
-    if (existing.docs.length > 0) {
+    if (existing.totalDocs > 0) {
       return NextResponse.json({
         success: true,
         message: 'You are already subscribed!',
@@ -44,22 +43,23 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // 2. Append to Google Sheet (async, non-blocking)
-    const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-    const tabName = process.env.GOOGLE_SUBSCRIBERS_SHEET_NAME || 'Subscribers';
+    // ── 2. Run Background Tasks ──
+    after(() => {
+      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      // Newsletter specific sheet handling
+      const tabName = process.env.GOOGLE_SUBSCRIBERS_SHEET_NAME || 'Subscribers';
+      
+      appendToSheet([
+        timestamp,
+        trimmedEmail,
+        body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
+      ], tabName).catch((err) => {
+        console.error('Google Sheets subscriber append failed:', err.message);
+      });
 
-    // Fire-and-forget — don't block the response
-    appendToSheet([
-      timestamp,
-      trimmedEmail,
-      body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
-    ], tabName).catch((err) => {
-      console.error('Google Sheets subscriber append failed:', err.message);
-    });
-
-    // 3. Trigger Webhook
-    triggerWebhook(body, 'Newsletter Subscription').catch((err) => {
-      console.error('Webhook failed:', err.message);
+      triggerWebhook(body, 'Newsletter Subscription').catch((err) => {
+        console.error('Webhook failed:', err.message);
+      });
     });
 
     return NextResponse.json({

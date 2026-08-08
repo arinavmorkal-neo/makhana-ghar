@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { appendToSheet } from '@/lib/google-sheets';
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ── 1. Save to Payload CMS (MongoDB) ──
+    // We await this so the lead is safely recorded before returning success.
     const payload = await getPayload({ config: configPromise });
     const sourceString = body.sourceComponent 
       ? `${body.sourceComponent} (${body.pagePath})`
@@ -37,35 +38,36 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // ── 2. Append to Google Sheet (async, non-blocking) ──
-    const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-    const phone = `'${countryCode || '+91'} ${contact}`;
-    const productLabel = (({
-      'makhana-4': 'Makhana 4+ Sutta',
-      'makhana-5': 'Makhana 5+ Sutta',
-      'makhana-6': 'Makhana 6+ Sutta',
-      'makhana-lite': 'Phool Makhana Lite',
-      'custom': 'Custom Grade / Mix',
-    } as Record<string, string>)[product]) || product || 'Not specified';
+    // ── 2. Run Background Tasks (Google Sheets & Webhook) ──
+    // Use after() so they don't block the HTTP response and cause high duration
+    after(() => {
+      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      const phone = `'${countryCode || '+91'} ${contact}`;
+      const productLabel = (({
+        'makhana-4': 'Makhana 4+ Sutta',
+        'makhana-5': 'Makhana 5+ Sutta',
+        'makhana-6': 'Makhana 6+ Sutta',
+        'makhana-lite': 'Phool Makhana Lite',
+        'custom': 'Custom Grade / Mix',
+      } as Record<string, string>)[product]) || product || 'Not specified';
 
-    // Fire-and-forget — don't block the response
-    appendToSheet([
-      timestamp,
-      name,
-      email,
-      phone,
-      productLabel,
-      message || '',
-      'New',
-      sourceString,
-    ]).catch((err) => {
-      console.error('Google Sheets append failed:', err.message);
-    });
+      appendToSheet([
+        timestamp,
+        name,
+        email,
+        phone,
+        productLabel,
+        message || '',
+        'New',
+        sourceString,
+      ]).catch((err) => {
+        console.error('Google Sheets append failed:', err.message);
+      });
 
-    // ── 3. Trigger Webhook ──
-    const webhookBody = { ...body, product: productLabel };
-    triggerWebhook(webhookBody, 'Enquiry').catch((err) => {
-      console.error('Webhook failed:', err.message);
+      const webhookBody = { ...body, product: productLabel };
+      triggerWebhook(webhookBody, 'Enquiry').catch((err) => {
+        console.error('Webhook failed:', err.message);
+      });
     });
 
     return NextResponse.json({
