@@ -41,11 +41,10 @@ export const Media: CollectionConfig = {
             // Store the ImageKit URL separately so it persists
             data.imagekitUrl = uploadResponse.url;
           } catch (error) {
-            console.error('ImageKit upload error:', error);
-            throw new Error(
-              'Failed to upload file to ImageKit: ' +
-                (error instanceof Error ? error.message : String(error))
-            );
+            console.warn('ImageKit upload failed (continuing with local file):', error);
+            // Don't block the upload — let Payload save the file locally as a fallback
+            const fileObj = req.file as any;
+            data.filename = fileObj.name || fileObj.filename || 'upload';
           }
         }
         return data;

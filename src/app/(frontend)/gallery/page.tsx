@@ -73,7 +73,7 @@ export default function GalleryPage() {
             featured: doc.featured || false,
             order: doc.order || 0,
             image: {
-              url: doc.image?.url || doc.image?.imagekitUrl || '',
+              url: doc.imageUrl || doc.image?.url || doc.image?.imagekitUrl || '',
               alt: doc.image?.alt || doc.title,
               width: doc.image?.width,
               height: doc.image?.height,

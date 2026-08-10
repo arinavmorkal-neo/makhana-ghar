@@ -61,7 +61,15 @@ export const Categories: CollectionConfig = {
       relationTo: 'media',
       label: 'Category Image',
       admin: {
-        description: 'Optional banner or thumbnail image for this category',
+        description: 'Upload an image, OR paste a direct URL below',
+      },
+    },
+    {
+      name: 'imageUrl',
+      type: 'text',
+      label: 'Direct Image URL',
+      admin: {
+        description: 'Paste a direct image URL here (use this OR upload above). This takes priority over upload.',
       },
     },
     {
