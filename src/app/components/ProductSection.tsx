@@ -5,60 +5,7 @@ import Image from 'next/image';
 import styles from './ProductSection.module.css';
 import { getImageUrlWithOverride } from '../../lib/getImageUrl';
 
-const defaultProducts = [
-  {
-    id: 1,
-    name: "Makhana 4+ Sutta",
-    weight: "1 kg",
-    price: "₹799",
-    origin: "Bihar, India",
-    category: "Premium Grade",
-    description: "4-sutta grade makhana — compact, crunchy, and perfect for roasting or making namkeen snacks.",
-    tags: ["4+ Grade", "Crunchy", "Roast Ready"],
-    image: "/4+.webp",
-    bg: "linear-gradient(160deg, #e8f5e9 0%, #2e7d32 100%)",
-    slug: "4-suta-round-makhana-flake",
-  },
-  {
-    id: 2,
-    name: "Makhana 5+ Sutta",
-    weight: "1 kg",
-    price: "₹999",
-    origin: "Bihar, India",
-    category: "Export Grade",
-    description: "Medium-large 5-sutta makhana — fluffy, light, and ideal for both sweet & savory preparations.",
-    tags: ["5+ Grade", "Fluffy", "Versatile"],
-    image: "/5+.webp",
-    bg: "linear-gradient(160deg, #fff8e1 0%, #f9a825 100%)",
-    slug: "5-suta-round-makhana",
-  },
-  {
-    id: 3,
-    name: "Makhana 6+ Sutta",
-    weight: "1 kg",
-    price: "₹1,299",
-    origin: "Bihar, India",
-    category: "Supreme Grade",
-    description: "Largest 6-sutta premium makhana — the top grade for gifting, snacking, and gourmet recipes.",
-    tags: ["6+ Grade", "Jumbo Size", "Gift Pack"],
-    image: "/6+.webp",
-    bg: "linear-gradient(160deg, #fce4ec 0%, #c62828 100%)",
-    slug: "6-suta-plus-makhana",
-  },
-  {
-    id: 4,
-    name: "Phool Makhana Lite",
-    weight: "500g",
-    price: "₹449",
-    origin: "Bihar, India",
-    category: "Healthy Snack",
-    description: "Lightly roasted plain makhana — zero oil, zero spice. A clean, guilt-free snacking option.",
-    tags: ["Zero Oil", "Low Calorie", "Vegan"],
-    image: "/4+.webp",
-    bg: "linear-gradient(160deg, #e0f2f1 0%, #00695c 100%)",
-    slug: "4-suta-round-makhana-flake",
-  },
-];
+const defaultProducts: { id: number; name: string; weight: string; price: string; origin: string; category: string; description: string; tags: string[]; image: string; bg: string; slug: string }[] = [];
 
 function getSlugFromName(name: string): string {
   const n = (name || "").toLowerCase();

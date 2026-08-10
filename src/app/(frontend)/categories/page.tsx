@@ -16,44 +16,7 @@ const categories = [
 ];
 
 /* ── Product Data ── */
-const products = [
-  {
-    slug: '4-suta-round-makhana-flake',
-    name: '4 Suta Round Makhana Flake',
-    category: 'flake',
-    grade: 'Standard',
-    description:
-      'Organic, gluten-free, and low-calorie round Makhana flakes. A crispy, protein-rich, vegan-friendly option perfect for health-conscious people.',
-    image: '/products/4-suta-makhana.png',
-    rating: 4.8,
-    reviews: 128,
-    tags: ['Organic', 'Gluten-Free', 'Vegan'],
-  },
-  {
-    slug: '5-suta-round-makhana',
-    name: '5 Suta Round Makhana',
-    category: 'round',
-    grade: 'Premium',
-    description:
-      'Premium quality 5 Suta Round Makhana with a larger size and superior crunch. Perfect for direct snacking, roasting, and gifting.',
-    image: '/5+.png',
-    rating: 4.9,
-    reviews: 96,
-    tags: ['Premium', 'Hand-Sorted', 'Fresh'],
-  },
-  {
-    slug: '6-suta-plus-makhana',
-    name: '6 Suta Plus Makhana',
-    category: 'premium',
-    grade: 'Super Premium',
-    description:
-      'The largest and most premium grade of Makhana. Top choice for retail packaging, gift boxes, and export markets.',
-    image: '/6+.png',
-    rating: 5.0,
-    reviews: 64,
-    tags: ['Super Premium', 'Export Quality', 'Large Size'],
-  },
-];
+const products: { slug: string; name: string; category: string; grade: string; description: string; image: string; rating: number; reviews: number; tags: string[] }[] = [];
 
 export default function CategoriesPage() {
   const [activeCategory, setActiveCategory] = useState('all');

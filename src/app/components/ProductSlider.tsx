@@ -6,56 +6,7 @@ import Image from "next/image";
 import styles from "./ProductSlider.module.css";
 import { getImageUrlWithOverride } from '../../lib/getImageUrl';
 
-const defaultProducts = [
-  {
-    id: 1,
-    name: "Phool Makhana 6+ Grade",
-    slug: "6-suta-plus-makhana",
-    category: "PREMIUM GRADE",
-    image: "/6+.webp",
-    badge: "Best Seller",
-  },
-  {
-    id: 2,
-    name: "Roasted Makhana Classic",
-    slug: "4-suta-round-makhana-flake",
-    category: "ROASTED MAKHANA",
-    image: "/4+.webp",
-    badge: "Crunchy",
-  },
-  {
-    id: 3,
-    name: "Phool Makhana 5+ Grade",
-    slug: "5-suta-round-makhana",
-    category: "EXPORT GRADE",
-    image: "/5+.webp",
-    badge: "Export Quality",
-  },
-  {
-    id: 4,
-    name: "Makhana 4+ Sutta",
-    slug: "4-suta-round-makhana-flake",
-    category: "WHOLESALE GRADE",
-    image: "/4+.webp",
-    badge: "Wholesale",
-  },
-  {
-    id: 5,
-    name: "Flavour Spiced Makhana",
-    slug: "5-suta-round-makhana",
-    category: "FLAVOURED MAKHANA",
-    image: "/5+.webp",
-    badge: "New Arrival",
-  },
-  {
-    id: 6,
-    name: "Raw Organic Makhana",
-    slug: "4-suta-round-makhana-flake",
-    category: "RAW / UNPROCESSED",
-    image: "/4+.webp",
-    badge: "100% Organic",
-  },
-];
+const defaultProducts: { id: number; name: string; slug: string; category: string; image: string; badge: string }[] = [];
 
 export default function ProductSlider({ data }: { data?: any }) {
   const headerLabel = data?.headerLabel || "Our Product Category";
