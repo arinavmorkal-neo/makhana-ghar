@@ -1,16 +1,16 @@
 'use client';
 
-import { use, useState } from 'react';
+import { use, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import MobileNavBar from '../../../components/MobileNavBar';
 import EnquiryPopup from '../../../components/EnquiryPopup';
-import { productJsonLd, breadcrumbJsonLd } from '../../../lib/jsonLd';
+import { getImageUrlWithOverride } from '../../../../lib/getImageUrl';
 import styles from './Product.module.css';
 
-/* ── Product Data ── */
-const products: Record<string, {
+/* ── Types ── */
+interface ProductData {
   name: string;
   tagline: string;
   description: string;
@@ -19,17 +19,77 @@ const products: Record<string, {
   images: string[];
   rating: number;
   reviews: number;
-}> = {};
+  isOrganic: boolean;
+}
 
 export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
+  const [product, setProduct] = useState<ProductData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const [activeTab, setActiveTab] = useState<'description' | 'specs'>('specs');
   const [popupOpen, setPopupOpen] = useState(false);
 
-  const product = products[slug];
+  /* Fetch product from CMS */
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        const res = await fetch(`/api/products?slug=${encodeURIComponent(slug)}`);
+        const data = await res.json();
+        if (data.product) {
+          const doc = data.product;
 
+          // Build image list: mainImage first, then gallery images
+          const images: string[] = [];
+          const mainImg = getImageUrlWithOverride(doc.mainImageUrl, doc.mainImage, '');
+          if (mainImg) images.push(mainImg);
+
+          if (doc.galleryImages && doc.galleryImages.length > 0) {
+            for (const gi of doc.galleryImages) {
+              const url = getImageUrlWithOverride(gi.imageUrl, gi.image, '');
+              if (url) images.push(url);
+            }
+          }
+
+          // Fallback if no images at all
+          if (images.length === 0) images.push('/4+.webp');
+
+          setProduct({
+            name: doc.name || '',
+            tagline: doc.tagline || `Why Choose ${doc.name}?`,
+            description: doc.description || '',
+            aboutUs: doc.aboutUs || '',
+            specs: doc.specs || [],
+            images,
+            rating: doc.rating || 4.8,
+            reviews: doc.reviews || 0,
+            isOrganic: doc.isOrganic !== false,
+          });
+        }
+      } catch (err) {
+        console.error('Failed to fetch product:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProduct();
+  }, [slug]);
+
+  /* Loading state */
+  if (loading) {
+    return (
+      <main>
+        <Header />
+        <div style={{ textAlign: 'center', padding: '100px 20px', fontFamily: 'Poppins, sans-serif' }}>
+          <p style={{ color: '#888' }}>Loading product…</p>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
+  /* Not found */
   if (!product) {
     return (
       <main>
@@ -49,25 +109,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
   return (
     <main>
-      {/* Product + Breadcrumb structured data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd({ ...product, slug })),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            breadcrumbJsonLd([
-              { name: 'Home', url: 'https://www.makhanaghar.com' },
-              { name: 'Makhana', url: 'https://www.makhanaghar.com/categories' },
-              { name: product.name, url: `https://www.makhanaghar.com/product/${slug}` },
-            ]),
-          ),
-        }}
-      />
       <Header />
 
       {/* ── HERO BANNER ── */}
@@ -130,7 +171,9 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                 alt={product.name}
                 className={`${styles.mainImage}${zoomed ? ` ${styles.mainImageZoomed}` : ''}`}
               />
-              <span className={styles.organicBadge}>ORGANIC</span>
+              {product.isOrganic && (
+                <span className={styles.organicBadge}>ORGANIC</span>
+              )}
             </div>
 
             {/* Thumbnails */}
@@ -233,15 +276,19 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
                   {activeTab === 'specs' && (
                     <div className={styles.specsTable}>
-                      {product.specs.map((spec, i) => (
-                        <div
-                          key={i}
-                          className={`${styles.specRow}${i % 2 === 0 ? ` ${styles.specRowEven}` : ''}`}
-                        >
-                          <span className={styles.specLabel}>{spec.label}</span>
-                          <span className={styles.specValue}>{spec.value}</span>
-                        </div>
-                      ))}
+                      {product.specs.length > 0 ? (
+                        product.specs.map((spec, i) => (
+                          <div
+                            key={i}
+                            className={`${styles.specRow}${i % 2 === 0 ? ` ${styles.specRowEven}` : ''}`}
+                          >
+                            <span className={styles.specLabel}>{spec.label}</span>
+                            <span className={styles.specValue}>{spec.value}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <p style={{ padding: '16px', color: '#888' }}>No specifications added yet.</p>
+                      )}
                     </div>
                   )}
                 </div>

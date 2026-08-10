@@ -1,25 +1,69 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import MobileNavBar from '../../components/MobileNavBar';
+import { getImageUrlWithOverride } from '../../../lib/getImageUrl';
 import styles from './Categories.module.css';
 
-/* ── Category definitions ── */
-const categories = [
-  { key: 'all', label: 'All Products', icon: '🌾' },
-  { key: 'round', label: 'Round Makhana', icon: '⚪' },
-  { key: 'flake', label: 'Makhana Flakes', icon: '🥜' },
-  { key: 'premium', label: 'Premium Grade', icon: '⭐' },
-];
-
-/* ── Product Data ── */
-const products: { slug: string; name: string; category: string; grade: string; description: string; image: string; rating: number; reviews: number; tags: string[] }[] = [];
+/* ── Types ── */
+interface Product {
+  slug: string;
+  name: string;
+  category: string;
+  grade: string;
+  description: string;
+  image: string;
+  rating: number;
+  reviews: number;
+  tags: string[];
+}
 
 export default function CategoriesPage() {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  /* Fetch products from CMS */
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        if (data.products && data.products.length > 0) {
+          const mapped: Product[] = data.products.map((doc: any) => ({
+            slug: doc.slug || '',
+            name: doc.name || '',
+            category: (doc.grade || 'all').toLowerCase().replace(/\s+/g, '-'),
+            grade: doc.grade || '',
+            description: doc.description || '',
+            image: getImageUrlWithOverride(doc.mainImageUrl, doc.mainImage, '/4+.webp'),
+            rating: doc.rating || 4.8,
+            reviews: doc.reviews || 0,
+            tags: doc.isOrganic ? ['Organic'] : [],
+          }));
+          setProducts(mapped);
+        }
+      } catch (err) {
+        console.error('Failed to fetch products:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  /* Build category filters dynamically from products */
+  const uniqueGrades = Array.from(new Set(products.map(p => p.grade).filter(Boolean)));
+  const categories = [
+    { key: 'all', label: 'All Products' },
+    ...uniqueGrades.map(g => ({
+      key: g.toLowerCase().replace(/\s+/g, '-'),
+      label: g,
+    })),
+  ];
 
   const filtered =
     activeCategory === 'all'
@@ -30,7 +74,7 @@ export default function CategoriesPage() {
     <main>
       <Header />
 
-      {/* ── HERO BANNER (same style as blog) ── */}
+      {/* ── HERO BANNER ── */}
       <section className={styles.heroSection}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -43,7 +87,7 @@ export default function CategoriesPage() {
 
         <div className={styles.heroContent}>
           <span className={styles.heroTag}>Explore</span>
-          <h1 className={styles.heroHeading}>Our Categories</h1>
+          <h1 className={styles.heroHeading}>Our Products</h1>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className={styles.heroRule}
@@ -95,13 +139,20 @@ export default function CategoriesPage() {
             ))}
           </div>
 
+          {/* Loading State */}
+          {loading && (
+            <div className={styles.emptyState}>
+              <p>Loading products…</p>
+            </div>
+          )}
+
           {/* Product Grid */}
-          {filtered.length === 0 ? (
+          {!loading && filtered.length === 0 ? (
             <div className={styles.emptyState}>
               <span className={styles.emptyIcon}>🔍</span>
               <p>No products found in this category.</p>
             </div>
-          ) : (
+          ) : !loading && (
             <div className={styles.productGrid}>
               {filtered.map((product) => (
                 <Link
@@ -118,19 +169,23 @@ export default function CategoriesPage() {
                       className={styles.cardImage}
                     />
                     <div className={styles.cardImageOverlay} />
-                    <span className={styles.gradeBadge}>{product.grade}</span>
+                    {product.grade && (
+                      <span className={styles.gradeBadge}>{product.grade}</span>
+                    )}
                   </div>
 
                   {/* Body */}
                   <div className={styles.cardBody}>
                     {/* Tags */}
-                    <div className={styles.cardTags}>
-                      {product.tags.map((tag) => (
-                        <span key={tag} className={styles.cardTag}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                    {product.tags.length > 0 && (
+                      <div className={styles.cardTags}>
+                        {product.tags.map((tag) => (
+                          <span key={tag} className={styles.cardTag}>
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
 
                     <h3 className={styles.cardTitle}>{product.name}</h3>
                     <p className={styles.cardDescription}>{product.description}</p>
