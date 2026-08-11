@@ -1,21 +1,23 @@
-import type { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next";
 
-const SITE_URL = 'https://www.makhanaghar.in'
+const SITE_URL = "https://www.makhanaghar.in";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/admin/', '/api/', '/_next/'],
-      },
-      {
-        userAgent: 'Googlebot',
-        allow: '/',
-      },
-    ],
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: [
+        "/admin/",
+        "/api/",
+        "/login/",
+        "/register/",
+        "/cart/",
+        "/checkout/",
+        "/account/",
+      ],
+    },
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,
-  }
+  };
 }
