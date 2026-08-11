@@ -8,7 +8,6 @@ export const Media: CollectionConfig = {
   slug: 'media',
   upload: {
     staticDir: 'public/media',
-    disableLocalStorage: true,
   },
   admin: {
     useAsTitle: 'filename',
@@ -16,6 +15,18 @@ export const Media: CollectionConfig = {
   hooks: {
     beforeChange: [
       async ({ req, data }) => {
+        // Auto-generate alt text from filename if not provided
+        if (!data.alt) {
+          const fileObj = req.file as any;
+          const rawName = data.filename || fileObj?.name || fileObj?.filename || 'image';
+          // Convert filename to readable alt text: "my-product_image.jpg" -> "my product image"
+          data.alt = rawName
+            .replace(/\.[^.]+$/, '') // remove extension
+            .replace(/[-_]+/g, ' ') // replace dashes/underscores with spaces
+            .replace(/\s+/g, ' ')   // normalize spaces
+            .trim();
+        }
+
         if (req.file) {
           try {
             const fileObj = req.file as any;
@@ -25,24 +36,31 @@ export const Media: CollectionConfig = {
               buffer = Buffer.from(arrayBuffer);
             } else if (fileObj.buffer) {
               buffer = fileObj.buffer;
+            } else if (fileObj.data) {
+              buffer = Buffer.isBuffer(fileObj.data) ? fileObj.data : Buffer.from(fileObj.data);
             } else {
-              throw new Error('No file buffer or arrayBuffer method found on req.file');
+              console.warn('No file buffer found on req.file, skipping ImageKit upload');
+              return data;
             }
 
-            const uploadFile = await toFile(buffer, fileObj.name || fileObj.filename || 'upload');
+            const fileName = fileObj.name || fileObj.filename || 'upload';
+            const uploadFile = await toFile(buffer, fileName);
             const uploadResponse = await imagekit.files.upload({
               file: uploadFile,
-              fileName: fileObj.name || fileObj.filename || 'upload',
+              fileName: fileName,
               folder: '/makhana-shop',
             });
+
+            console.log('ImageKit upload successful:', uploadResponse.url);
+
             // Update document data with remote url and name from ImageKit
             data.url = uploadResponse.url;
             data.filename = uploadResponse.name;
             // Store the ImageKit URL separately so it persists
             data.imagekitUrl = uploadResponse.url;
           } catch (error) {
-            console.warn('ImageKit upload failed (continuing with local file):', error);
-            // Don't block the upload — let Payload save the file locally as a fallback
+            console.error('ImageKit upload failed:', error);
+            // Let Payload save the file locally as a fallback
             const fileObj = req.file as any;
             data.filename = fileObj.name || fileObj.filename || 'upload';
           }
@@ -70,7 +88,6 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      required: true,
     },
     {
       name: 'imagekitUrl',

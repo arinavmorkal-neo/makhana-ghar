@@ -35,7 +35,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`/api/products?slug=${encodeURIComponent(slug)}`);
+        const res = await fetch(`/api/frontend/products?slug=${encodeURIComponent(slug)}`);
         const data = await res.json();
         if (data.product) {
           const doc = data.product;

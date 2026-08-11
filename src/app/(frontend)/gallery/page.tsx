@@ -62,7 +62,7 @@ export default function GalleryPage() {
   useEffect(() => {
     async function fetchGallery() {
       try {
-        const res = await fetch('/api/gallery');
+        const res = await fetch('/api/frontend/gallery');
         const data = await res.json();
         if (data.items && data.items.length > 0) {
           // Map CMS data to our shape

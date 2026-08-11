@@ -30,7 +30,7 @@ export default function CategoriesPage() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await fetch('/api/products');
+        const res = await fetch('/api/frontend/products');
         const data = await res.json();
         if (data.products && data.products.length > 0) {
           const mapped: Product[] = data.products.map((doc: any) => ({
