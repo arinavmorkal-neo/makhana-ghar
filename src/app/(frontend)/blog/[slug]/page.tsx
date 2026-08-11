@@ -75,9 +75,9 @@ export default async function BlogDetailPage({
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             breadcrumbJsonLd([
-              { name: 'Home', url: 'https://www.makhanaghar.com' },
-              { name: 'Blog', url: 'https://www.makhanaghar.com/blog' },
-              { name: blog.title, url: `https://www.makhanaghar.com/blog/${blog.slug}` },
+              { name: 'Home', url: 'https://www.makhanaghar.in' },
+              { name: 'Blog', url: 'https://www.makhanaghar.in/blog' },
+              { name: blog.title, url: `https://www.makhanaghar.in/blog/${blog.slug}` },
             ]),
           ),
         }}

@@ -125,7 +125,7 @@ const footerData = {
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy-policy" },
-    { label: "Terms & Conditions", href: "/terms-&-Conditions" },
+    { label: "Terms & Conditions", href: "/terms-and-conditions" },
     { label: "Refund Policy", href: "/refund-policy" },
   ],
   copyright: {

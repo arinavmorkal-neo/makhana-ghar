@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
-const SITE_URL = 'https://www.makhanaghar.com'
+const SITE_URL = 'https://www.makhanaghar.in'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = []
@@ -16,7 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/blog', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/privacy-policy', priority: 0.3, changeFrequency: 'yearly' as const },
     { path: '/refund-policy', priority: 0.3, changeFrequency: 'yearly' as const },
-    { path: '/terms-&-Conditions', priority: 0.3, changeFrequency: 'yearly' as const },
+    { path: '/terms-and-conditions', priority: 0.3, changeFrequency: 'yearly' as const },
   ]
 
   for (const page of staticPages) {

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Terms and Conditions | Makhana Ghar',
   description: 'Read the Terms and Conditions of using Makhana Ghar services, products, or website. Sourced directly from Bihar\'s finest farms.',
   keywords: 'terms and conditions, makhana ghar, wholesale makhana, retail terms',
-  alternates: { canonical: '/terms-&-Conditions' },
+  alternates: { canonical: '/terms-and-conditions' },
 };
 
 export default function TermsPage() {
