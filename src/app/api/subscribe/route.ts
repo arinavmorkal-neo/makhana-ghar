@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { appendToSheet } from '@/lib/google-sheets';
+import { sendToGoogleAppScript } from '@/lib/google-app-script';
 import { triggerWebhook, getWebhookUrl } from '@/lib/webhook';
 
 export async function POST(req: NextRequest) {
@@ -49,19 +49,16 @@ export async function POST(req: NextRequest) {
     // ── 2. Run Background Tasks ──
     after(() => {
       const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-      // Newsletter specific sheet handling
-      const tabName = process.env.GOOGLE_SUBSCRIBERS_SHEET_NAME || 'Subscribers';
-      
-      appendToSheet([
-        timestamp,
-        trimmedEmail,
-        body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
-      ], tabName).catch((err) => {
-        console.error('Google Sheets subscriber append failed:', err.message);
-      });
 
       triggerWebhook(body, 'Newsletter Subscription', webhookUrl).catch((err) => {
         console.error('Webhook failed:', err.message);
+      });
+
+      sendToGoogleAppScript({
+        formType: 'Newsletter Subscription',
+        timestamp,
+        email: trimmedEmail,
+        source: body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
       });
     });
 

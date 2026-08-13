@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { appendToSheet } from '@/lib/google-sheets';
+import { sendToGoogleAppScript } from '@/lib/google-app-script';
 import { triggerWebhook, getWebhookUrl } from '@/lib/webhook';
 
 export async function POST(req: NextRequest) {
@@ -54,22 +54,20 @@ export async function POST(req: NextRequest) {
         'custom': 'Custom Grade / Mix',
       } as Record<string, string>)[product]) || product || 'Not specified';
 
-      appendToSheet([
+      const webhookBody = { ...body, product: productLabel };
+      triggerWebhook(webhookBody, 'Enquiry', webhookUrl).catch((err) => {
+        console.error('Webhook failed:', err.message);
+      });
+
+      sendToGoogleAppScript({
+        formType: 'Enquiry',
         timestamp,
         name,
         email,
         phone,
-        productLabel,
-        message || '',
-        'New',
-        sourceString,
-      ]).catch((err) => {
-        console.error('Google Sheets append failed:', err.message);
-      });
-
-      const webhookBody = { ...body, product: productLabel };
-      triggerWebhook(webhookBody, 'Enquiry', webhookUrl).catch((err) => {
-        console.error('Webhook failed:', err.message);
+        product: productLabel,
+        message,
+        source: sourceString,
       });
     });
 

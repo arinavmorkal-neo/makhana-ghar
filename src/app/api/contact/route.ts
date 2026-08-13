@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { appendToSheet } from '@/lib/google-sheets';
+import { sendToGoogleAppScript } from '@/lib/google-app-script';
 import { triggerWebhook, getWebhookUrl } from '@/lib/webhook';
 
 export async function POST(req: NextRequest) {
@@ -44,21 +44,18 @@ export async function POST(req: NextRequest) {
       const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
       const sheetPhone = phone && phone.startsWith('+') ? `'${phone}` : phone;
 
-      appendToSheet([
+      triggerWebhook(body, 'Contact Us', webhookUrl).catch((err) => {
+        console.error('Webhook failed:', err.message);
+      });
+
+      sendToGoogleAppScript({
+        formType: 'Contact Us',
         timestamp,
         name,
         email,
-        sheetPhone,
-        'N/A', // product
-        formattedMessage,
-        'New',
-        body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
-      ]).catch((err) => {
-        console.error('Google Sheets append failed:', err.message);
-      });
-
-      triggerWebhook(body, 'Contact Us', webhookUrl).catch((err) => {
-        console.error('Webhook failed:', err.message);
+        phone: sheetPhone,
+        message: formattedMessage,
+        source: body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
       });
     });
 
