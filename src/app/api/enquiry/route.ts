@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
         product: productLabel,
         message,
         source: sourceString,
-      });
+      }, 'Enquiries');
     });
 
     return NextResponse.json({

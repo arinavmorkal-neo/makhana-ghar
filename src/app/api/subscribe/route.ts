@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
         timestamp,
         email: trimmedEmail,
         source: body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
-      });
+      }, 'Subscribers');
     });
 
     return NextResponse.json({

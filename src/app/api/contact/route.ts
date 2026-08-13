@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
         phone: sheetPhone,
         message: formattedMessage,
         source: body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
-      });
+      }, 'Enquiries');
     });
 
     return NextResponse.json({

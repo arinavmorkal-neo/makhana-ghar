@@ -1,4 +1,4 @@
-export async function sendToGoogleAppScript(data: Record<string, any>) {
+export async function sendToGoogleAppScript(data: Record<string, any>, sheetName?: string) {
   const url = process.env.GOOGLE_APP_SCRIPT_URL;
   
   if (!url) {
@@ -7,25 +7,13 @@ export async function sendToGoogleAppScript(data: Record<string, any>) {
   }
 
   try {
-    // We send data both as JSON and as form data since some apps scripts 
-    // are configured to read from `e.postData.contents` and others from `e.parameter`.
-    // Sending it as JSON inside the body is the cleanest way. 
-    // If the apps script requires application/x-www-form-urlencoded, we can also use that, 
-    // but typically fetch uses JSON if we send JSON string.
-    // Let's use URLSearchParams to be safe and compatible with basic doPost(e) e.parameter.
-    
-    const params = new URLSearchParams();
-    for (const key in data) {
-      if (data[key] !== undefined && data[key] !== null) {
-        params.append(key, String(data[key]));
-      }
-    }
+    const payload = sheetName ? { sheetName, ...data } : data;
 
     const response = await fetch(url, {
       method: 'POST',
-      body: params,
+      body: JSON.stringify(payload),
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
     });
 
