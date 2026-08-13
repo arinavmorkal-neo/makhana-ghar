@@ -22,22 +22,22 @@ export async function POST(req: NextRequest) {
     // we save it entirely into the 'contact' field since we don't know the exact countryCode split.
     const contactNumber = phone || 'N/A';
 
-    // ── 1. Save to Payload CMS (MongoDB) ──
+    // ── 1. Save to Payload CMS (MongoDB) + resolve webhook URL in parallel ──
     const payload = await getPayload({ config: configPromise });
-    const enquiry = await payload.create({
-      collection: 'enquiries',
-      data: {
-        name,
-        contact: contactNumber,
-        email,
-        message: formattedMessage,
-        status: 'new',
-        source: body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
-      },
-    });
-
-    // Resolve webhook URL now (Payload is already warm) so after() only does a fetch
-    const webhookUrl = await getWebhookUrl();
+    const [enquiry, webhookUrl] = await Promise.all([
+      payload.create({
+        collection: 'enquiries',
+        data: {
+          name,
+          contact: contactNumber,
+          email,
+          message: formattedMessage,
+          status: 'new',
+          source: body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
+        },
+      }),
+      getWebhookUrl(),
+    ]);
 
     // ── 2. Run Background Tasks ──
     after(() => {

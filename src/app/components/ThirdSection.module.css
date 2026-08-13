@@ -228,29 +228,22 @@
   line-height: 1.6;
 }
 
-/* ── Country Code Select ── */
-.countrySelect {
-  border: none;
-  outline: none;
-  background: transparent;
-  font-family: 'Poppins', sans-serif;
-  font-size: 13px;
-  color: #333333;
-  cursor: pointer;
-  appearance: auto;
-  flex-shrink: 0;
-  width: auto;
-  min-width: 80px;
+/* ── Phone Input Wrapper (react-phone-input-2) ── */
+.phoneInputWrap {
+  width: 100%;
+  flex: 1;
 }
 
-.codeDivider {
-  display: block;
-  width: 1px;
-  height: 20px;
-  background: #ddd;
-  flex-shrink: 0;
-  margin: 0 4px;
+.phoneInputWrap :global(.react-tel-input) {
+  width: 100%;
 }
+
+.phoneInputWrap :global(.react-tel-input .form-control) {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333333;
+}
+
 
 /* ── Submit Button ── */
 .submitBtn {

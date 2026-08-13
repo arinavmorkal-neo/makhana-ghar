@@ -35,16 +35,16 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const subscriber = await payload.create({
-      collection: 'subscribers',
-      data: {
-        email: trimmedEmail,
-        source: body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
-      },
-    });
-
-    // Resolve webhook URL now (Payload is already warm) so after() only does a fetch
-    const webhookUrl = await getWebhookUrl();
+    const [subscriber, webhookUrl] = await Promise.all([
+      payload.create({
+        collection: 'subscribers',
+        data: {
+          email: trimmedEmail,
+          source: body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
+        },
+      }),
+      getWebhookUrl(),
+    ]);
 
     // ── 2. Run Background Tasks ──
     after(() => {

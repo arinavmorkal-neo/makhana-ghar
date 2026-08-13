@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import styles from "./ThirdSection.module.css";
 
 /* ─── Inline SVG icons ─── */
@@ -9,14 +11,6 @@ function UserIcon() {
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
       <circle cx="12" cy="7" r="4" />
-    </svg>
-  );
-}
-
-function PhoneIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.07 10a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 5.61 5.61l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.72 15z" />
     </svg>
   );
 }
@@ -120,13 +114,41 @@ export default function ThirdSection({ data }: { data?: any }) {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [defaultCountry, setDefaultCountry] = useState('in');
+
+  useEffect(() => {
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.country_code) {
+          setDefaultCountry(data.country_code.toLowerCase());
+        }
+      })
+      .catch(err => console.error('Failed to fetch country code:', err));
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    let { name, value } = e.target;
+    
+    if (name === 'name') {
+      value = value.replace(/[0-9]/g, '');
+    }
+    
+    setForm({ ...form, [name]: value });
+  };
+
+  const handlePhoneChange = (value: string, country: any) => {
+    const dialCode = country.dialCode;
+    const contact = value.slice(dialCode.length);
+    setForm(prev => ({
+      ...prev,
+      countryCode: `+${dialCode}`,
+      contact: contact
+    }));
   };
 
   const handleSubmit = async () => {
@@ -142,8 +164,8 @@ export default function ThirdSection({ data }: { data?: any }) {
       setErrorMessage("Please enter your contact number.");
       return;
     }
-    if (!form.email.trim()) {
-      setErrorMessage("Please enter your email address.");
+    if (!form.email.trim() || !form.email.includes('@')) {
+      setErrorMessage("Please enter a valid email address containing @.");
       return;
     }
 
@@ -284,40 +306,19 @@ export default function ThirdSection({ data }: { data?: any }) {
             />
           </div>
 
-          {/* Contact with country code */}
+          {/* Contact with auto-detect country code */}
           <div className={styles.inputWrap}>
-            <PhoneIcon />
-            <select
-              name="countryCode"
-              value={form.countryCode}
-              onChange={handleChange}
-              className={styles.countrySelect}
-            >
-              <option value="+91">🇮🇳 +91</option>
-              <option value="+1">🇺🇸 +1</option>
-              <option value="+44">🇬🇧 +44</option>
-              <option value="+971">🇦🇪 +971</option>
-              <option value="+966">🇸🇦 +966</option>
-              <option value="+65">🇸🇬 +65</option>
-              <option value="+61">🇦🇺 +61</option>
-              <option value="+49">🇩🇪 +49</option>
-              <option value="+33">🇫🇷 +33</option>
-              <option value="+81">🇯🇵 +81</option>
-              <option value="+86">🇨🇳 +86</option>
-              <option value="+880">🇧🇩 +880</option>
-              <option value="+977">🇳🇵 +977</option>
-              <option value="+92">🇵🇰 +92</option>
-              <option value="+94">🇱🇰 +94</option>
-            </select>
-            <span className={styles.codeDivider} />
-            <input
-              type="tel"
-              name="contact"
-              placeholder="Enter Contact Number*"
-              value={form.contact}
-              onChange={handleChange}
-              className={styles.fieldInput}
-            />
+            <div className={styles.phoneInputWrap} style={{ color: '#000' }}>
+              <PhoneInput
+                country={defaultCountry}
+                value={`${form.countryCode.replace('+', '')}${form.contact}`}
+                onChange={handlePhoneChange}
+                inputStyle={{ width: '100%', height: '42px', borderRadius: '4px', border: '1px solid #ccc', paddingLeft: '48px' }}
+                buttonStyle={{ borderRadius: '4px 0 0 4px', border: '1px solid #ccc', backgroundColor: '#f8f9fa' }}
+                enableSearch={true}
+                disableSearchIcon={true}
+              />
+            </div>
           </div>
 
           {/* Email */}

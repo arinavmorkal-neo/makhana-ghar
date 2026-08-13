@@ -17,29 +17,27 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ── 1. Save to Payload CMS (MongoDB) ──
-    // We await this so the lead is safely recorded before returning success.
+    // ── 1. Save to Payload CMS (MongoDB) + resolve webhook URL in parallel ──
     const payload = await getPayload({ config: configPromise });
     const sourceString = body.sourceComponent 
       ? `${body.sourceComponent} (${body.pagePath})`
       : (body.pagePath ? `Website Form (${body.pagePath})` : 'Website Form');
-
-    const enquiry = await payload.create({
-      collection: 'enquiries',
-      data: {
-        name,
-        countryCode: countryCode || '+91',
-        contact,
-        email,
-        product: product || undefined,
-        message: message || '',
-        status: 'new',
-        source: sourceString,
-      },
-    });
-
-    // Resolve webhook URL now (Payload is already warm) so after() only does a fetch
-    const webhookUrl = await getWebhookUrl();
+    const [enquiry, webhookUrl] = await Promise.all([
+      payload.create({
+        collection: 'enquiries',
+        data: {
+          name,
+          countryCode: countryCode || '+91',
+          contact,
+          email,
+          product: product || undefined,
+          message: message || '',
+          status: 'new',
+          source: sourceString,
+        },
+      }),
+      getWebhookUrl(),
+    ]);
 
     // ── 2. Run Background Tasks (Google Sheets & Webhook) ──
     // Use after() so they don't block the HTTP response and cause high duration
@@ -65,6 +63,7 @@ export async function POST(req: NextRequest) {
         name,
         email,
         phone,
+        product: productLabel,
         message,
         pageUrl: body.pagePath || '',
         source: sourceString,
