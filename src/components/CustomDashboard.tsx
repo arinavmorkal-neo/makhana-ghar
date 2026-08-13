@@ -1,8 +1,6 @@
 import React from 'react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { SyncButtons } from './SyncButtons';
-
 export const CustomDashboard = async () => {
   const payload = await getPayload({ config: configPromise });
 
@@ -45,13 +43,6 @@ export const CustomDashboard = async () => {
   const totalEnquiries = enquiriesCountResult.totalDocs;
   const totalSubscribers = subscribersCountResult.totalDocs;
   const pagesList = pagesResult.docs;
-
-  // Check if Google Sheet variables exist
-  const isGoogleSheetsConfigured = !!(
-    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
-    process.env.GOOGLE_PRIVATE_KEY &&
-    process.env.GOOGLE_SHEET_ID
-  );
 
   return (
     <div className="custom-dash-container">
@@ -577,12 +568,6 @@ export const CustomDashboard = async () => {
             </div>
           </div>
 
-          {/* Google Sheets Sync Controls */}
-          <SyncButtons
-            isConfigured={isGoogleSheetsConfigured}
-            enquiriesCount={totalEnquiries}
-            subscribersCount={totalSubscribers}
-          />
         </div>
       </div>
     </div>
