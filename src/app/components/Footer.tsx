@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import {
   MapPin,
   Phone,
@@ -187,10 +189,25 @@ function FooterLinkList({
 // ─── Main Footer ──────────────────────────────────────────────────────────────
 
 export default function Footer() {
-  const [footerForm, setFooterForm] = useState({ name: "", contact: "" });
+  const [footerForm, setFooterForm] = useState({ name: "", countryCode: "in", contact: "" });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [subMessage, setSubMessage] = useState("");
+
+  // Auto-fetch country code for phone input
+  useEffect(() => {
+    fetch("https://ipapi.co/json/")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.country_code) {
+          setFooterForm((prev) => ({
+            ...prev,
+            countryCode: data.country_code.toLowerCase(),
+          }));
+        }
+      })
+      .catch((err) => console.error("Error fetching location:", err));
+  }, []);
 
   const handleFooterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
@@ -223,7 +240,7 @@ export default function Footer() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: footerForm.name.trim(),
-          countryCode: "+91",
+          countryCode: footerForm.countryCode,
           contact: footerForm.contact.trim(),
           email: "N/A",
           pagePath: window.location.href,
@@ -236,7 +253,7 @@ export default function Footer() {
       if (response.ok && result.success) {
         setSubmitted(true);
         setSubMessage(result.message || "Thank you! We'll call you back shortly.");
-        setFooterForm({ name: "", contact: "" });
+        setFooterForm({ name: "", countryCode: footerForm.countryCode, contact: "" });
         setTimeout(() => {
           setSubmitted(false);
           setSubMessage("");
@@ -329,16 +346,20 @@ export default function Footer() {
                   required
                   disabled={loading}
                 />
-                <input
-                  type="tel"
-                  name="contact"
-                  placeholder="Phone Number*"
-                  className={styles.newsletterInput}
-                  value={footerForm.contact}
-                  onChange={handleFooterChange}
-                  required
-                  disabled={loading}
-                />
+                <div className={styles.phoneInputWrap}>
+                  <PhoneInput
+                    country={footerForm.countryCode}
+                    value={footerForm.contact}
+                    onChange={(phone) => setFooterForm({ ...footerForm, contact: phone })}
+                    disabled={loading}
+                    enableSearch={true}
+                    disableSearchIcon={true}
+                    inputProps={{
+                      name: 'contact',
+                      required: true,
+                    }}
+                  />
+                </div>
               </div>
               <button type="submit" className={styles.newsletterBtn} disabled={loading}>
                 {loading ? 'Sending...' : 'Get Callback'} <Send size={13} />

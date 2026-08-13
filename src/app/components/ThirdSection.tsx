@@ -193,6 +193,9 @@ export default function ThirdSection({ data }: { data?: any }) {
           product: "",
           message: "",
         });
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 5000);
       } else {
         setErrorMessage(result.error || "Something went wrong. Please try again.");
       }
@@ -281,137 +284,139 @@ export default function ThirdSection({ data }: { data?: any }) {
             Submit Your Enquiry For Makhana Bulk Orders
           </p>
 
-          {successMessage && (
-            <div className={styles.successMessage}>
-              {successMessage}
+          {successMessage ? (
+            <div className={styles.successMessage} style={{ margin: '40px 0' }}>
+              ✓ {successMessage}
             </div>
-          )}
-
-          {errorMessage && (
-            <div className={styles.errorMessage}>
-              {errorMessage}
-            </div>
-          )}
-
-          {/* Name */}
-          <div className={styles.inputWrap}>
-            <UserIcon />
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter Name*"
-              value={form.name}
-              onChange={handleChange}
-              className={styles.fieldInput}
-            />
-          </div>
-
-          {/* Contact with auto-detect country code */}
-          <div className={styles.inputWrap}>
-            <div className={styles.phoneInputWrap} style={{ color: '#000' }}>
-              <PhoneInput
-                country={defaultCountry}
-                value={`${form.countryCode.replace('+', '')}${form.contact}`}
-                onChange={handlePhoneChange}
-                inputStyle={{ width: '100%', height: '42px', borderRadius: '4px', border: '1px solid #ccc', paddingLeft: '48px' }}
-                buttonStyle={{ borderRadius: '4px 0 0 4px', border: '1px solid #ccc', backgroundColor: '#f8f9fa' }}
-                enableSearch={true}
-                disableSearchIcon={true}
-              />
-            </div>
-          </div>
-
-          {/* Email */}
-          <div className={styles.inputWrap}>
-            <MailIcon />
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter Email*"
-              value={form.email}
-              onChange={handleChange}
-              className={styles.fieldInput}
-            />
-          </div>
-
-          {/* Product select */}
-          <div className={styles.inputWrap}>
-            <PackageIcon />
-            <select
-              name="product"
-              value={form.product}
-              onChange={handleChange}
-              className={`${styles.fieldInput} ${styles.fieldSelect}`}
-            >
-              <option value="" disabled>
-                Select Product*
-              </option>
-              <option value="makhana-4">Makhana 4+ Sutta</option>
-              <option value="makhana-5">Makhana 5+ Sutta</option>
-              <option value="makhana-6">Makhana 6+ Sutta</option>
-              <option value="makhana-lite">Phool Makhana Lite</option>
-              <option value="custom">Custom Grade / Mix</option>
-            </select>
-          </div>
-
-          {/* Message */}
-          <div className={`${styles.inputWrap} ${styles.inputWrapTop}`}>
-            <MessageIcon />
-            <textarea
-              name="message"
-              placeholder="Your Message / Quantity Required..."
-              value={form.message}
-              onChange={handleChange}
-              className={`${styles.fieldInput} ${styles.fieldTextarea}`}
-              rows={3}
-            />
-          </div>
-
-          {/* Submit */}
-          <button 
-            className={styles.submitBtn} 
-            onClick={handleSubmit} 
-            disabled={loading}
-            style={loading ? { opacity: 0.8, cursor: 'not-allowed' } : undefined}
-          >
-            {loading ? "Submitting..." : "Submit & Get Callback"}
-            <span className={styles.submitArrow}>
-              {loading ? (
-                <svg 
-                  viewBox="0 0 50 50" 
-                  style={{ 
-                    width: 16, 
-                    height: 16, 
-                    animation: `${styles.spin} 1s linear infinite` || 'spin 1s linear infinite' 
-                  }}
-                >
-                  <circle 
-                    cx="25" 
-                    cy="25" 
-                    r="20" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="5" 
-                    strokeDasharray="31.4"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
+          ) : (
+            <>
+              {errorMessage && (
+                <div className={styles.errorMessage}>
+                  {errorMessage}
+                </div>
               )}
-            </span>
-          </button>
+
+              {/* Name */}
+              <div className={styles.inputWrap}>
+                <UserIcon />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Enter Name*"
+                  value={form.name}
+                  onChange={handleChange}
+                  className={styles.fieldInput}
+                />
+              </div>
+
+              {/* Contact with auto-detect country code */}
+              <div className={styles.inputWrap}>
+                <div className={styles.phoneInputWrap} style={{ color: '#000' }}>
+                  <PhoneInput
+                    country={defaultCountry}
+                    value={`${form.countryCode.replace('+', '')}${form.contact}`}
+                    onChange={handlePhoneChange}
+                    inputStyle={{ width: '100%', height: '42px', borderRadius: '4px', border: '1px solid #ccc', paddingLeft: '48px' }}
+                    buttonStyle={{ borderRadius: '4px 0 0 4px', border: '1px solid #ccc', backgroundColor: '#f8f9fa' }}
+                    enableSearch={true}
+                    disableSearchIcon={true}
+                  />
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className={styles.inputWrap}>
+                <MailIcon />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter Email*"
+                  value={form.email}
+                  onChange={handleChange}
+                  className={styles.fieldInput}
+                />
+              </div>
+
+              {/* Product select */}
+              <div className={styles.inputWrap}>
+                <PackageIcon />
+                <select
+                  name="product"
+                  value={form.product}
+                  onChange={handleChange}
+                  className={`${styles.fieldInput} ${styles.fieldSelect}`}
+                >
+                  <option value="" disabled>
+                    Select Product*
+                  </option>
+                  <option value="makhana-4">Makhana 4+ Sutta</option>
+                  <option value="makhana-5">Makhana 5+ Sutta</option>
+                  <option value="makhana-6">Makhana 6+ Sutta</option>
+                  <option value="makhana-lite">Phool Makhana Lite</option>
+                  <option value="custom">Custom Grade / Mix</option>
+                </select>
+              </div>
+
+              {/* Message */}
+              <div className={`${styles.inputWrap} ${styles.inputWrapTop}`}>
+                <MessageIcon />
+                <textarea
+                  name="message"
+                  placeholder="Your Message / Quantity Required..."
+                  value={form.message}
+                  onChange={handleChange}
+                  className={`${styles.fieldInput} ${styles.fieldTextarea}`}
+                  rows={3}
+                />
+              </div>
+
+              {/* Submit */}
+              <button 
+                className={styles.submitBtn} 
+                onClick={handleSubmit} 
+                disabled={loading}
+                style={loading ? { opacity: 0.8, cursor: 'not-allowed' } : undefined}
+              >
+                {loading ? "Submitting..." : "Submit & Get Callback"}
+                <span className={styles.submitArrow}>
+                  {loading ? (
+                    <svg 
+                      viewBox="0 0 50 50" 
+                      style={{ 
+                        width: 16, 
+                        height: 16, 
+                        animation: `${styles.spin} 1s linear infinite` || 'spin 1s linear infinite' 
+                      }}
+                    >
+                      <circle 
+                        cx="25" 
+                        cy="25" 
+                        r="20" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="5" 
+                        strokeDasharray="31.4"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                  )}
+                </span>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </section>

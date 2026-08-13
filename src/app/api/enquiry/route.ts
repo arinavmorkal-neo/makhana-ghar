@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
           name,
           countryCode: countryCode || '+91',
           contact,
-          email,
+          email: email === 'N/A' ? 'no-reply@makhanaghar.in' : email,
           product: product || undefined,
           message: message || '',
           status: 'new',

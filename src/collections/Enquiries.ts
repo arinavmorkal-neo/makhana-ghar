@@ -36,7 +36,7 @@ export const Enquiries: CollectionConfig = {
     {
       name: 'email',
       type: 'email',
-      required: true,
+      required: false,
       label: 'Email Address',
     },
     {
