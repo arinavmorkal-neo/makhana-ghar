@@ -55,10 +55,11 @@ export async function POST(req: NextRequest) {
       });
 
       sendToGoogleAppScript({
-        formType: 'Newsletter Subscription',
-        timestamp,
+        website: 'Makhana Ghar',
+        form: 'Newsletter Subscription',
         email: trimmedEmail,
-        source: body.pagePath ? `newsletter (${body.pagePath})` : 'newsletter',
+        pageUrl: body.pagePath || '',
+        source: 'newsletter',
       }, 'Subscribers');
     });
 

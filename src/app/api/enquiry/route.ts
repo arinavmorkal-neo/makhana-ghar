@@ -60,13 +60,13 @@ export async function POST(req: NextRequest) {
       });
 
       sendToGoogleAppScript({
-        formType: 'Enquiry',
-        timestamp,
+        website: 'Makhana Ghar',
+        form: 'Product Enquiry',
         name,
         email,
         phone,
-        product: productLabel,
         message,
+        pageUrl: body.pagePath || '',
         source: sourceString,
       }, 'Enquiries');
     });

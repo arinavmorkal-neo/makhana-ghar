@@ -49,13 +49,14 @@ export async function POST(req: NextRequest) {
       });
 
       sendToGoogleAppScript({
-        formType: 'Contact Us',
-        timestamp,
+        website: 'Makhana Ghar',
+        form: 'Contact Us',
         name,
         email,
         phone: sheetPhone,
         message: formattedMessage,
-        source: body.pagePath ? `Contact Page (${body.pagePath})` : 'Contact Page',
+        pageUrl: body.pagePath || '',
+        source: 'Contact Page',
       }, 'Enquiries');
     });
 
