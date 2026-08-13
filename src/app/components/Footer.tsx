@@ -187,17 +187,30 @@ function FooterLinkList({
 // ─── Main Footer ──────────────────────────────────────────────────────────────
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
+  const [footerForm, setFooterForm] = useState({ name: "", contact: "" });
   const [loading, setLoading] = useState(false);
-  const [subscribed, setSubscribed] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [subMessage, setSubMessage] = useState("");
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim()) return;
+  const handleFooterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let { name, value } = e.target;
+    if (name === "name") {
+      value = value.replace(/[0-9]/g, "");
+    }
+    if (name === "contact") {
+      value = value.replace(/[^0-9]/g, "");
+    }
+    setFooterForm((prev) => ({ ...prev, [name]: value }));
+  };
 
-    if (!email.includes('@')) {
-      alert("Please enter a valid email address containing @.");
+  const handleFooterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!footerForm.name.trim()) {
+      alert("Please enter your name.");
+      return;
+    }
+    if (!footerForm.contact.trim() || footerForm.contact.length < 7) {
+      alert("Please enter a valid phone number.");
       return;
     }
 
@@ -205,27 +218,34 @@ export default function Footer() {
     setSubMessage("");
 
     try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), pagePath: window.location.href }),
+      const response = await fetch("/api/enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: footerForm.name.trim(),
+          countryCode: "+91",
+          contact: footerForm.contact.trim(),
+          email: "N/A",
+          pagePath: window.location.href,
+          sourceComponent: "Footer Quick Enquiry",
+        }),
       });
 
       const result = await response.json();
 
       if (response.ok && result.success) {
-        setSubscribed(true);
-        setSubMessage(result.message || "Thanks for subscribing!");
-        setEmail("");
+        setSubmitted(true);
+        setSubMessage(result.message || "Thank you! We'll call you back shortly.");
+        setFooterForm({ name: "", contact: "" });
         setTimeout(() => {
-          setSubscribed(false);
+          setSubmitted(false);
           setSubMessage("");
         }, 5000);
       } else {
-        alert(result.error || "Failed to subscribe. Please try again.");
+        alert(result.error || "Failed to submit. Please try again.");
       }
     } catch (error) {
-      console.error('Subscription error:', error);
+      console.error("Footer form error:", error);
       alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -293,22 +313,35 @@ export default function Footer() {
             </li>
           </ul>
 
-          {/* Newsletter */}
-          {subscribed ? (
+          {/* Quick Enquiry */}
+          {submitted ? (
             <p className={styles.subscribedMsg}>✓ {subMessage}</p>
           ) : (
-            <form className={styles.newsletterForm} onSubmit={handleSubscribe}>
-              <input
-                type="email"
-                placeholder="Email address*"
-                className={styles.newsletterInput}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
+            <form className={styles.newsletterForm} onSubmit={handleFooterSubmit}>
+              <div className={styles.formInputRow}>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name*"
+                  className={styles.newsletterInput}
+                  value={footerForm.name}
+                  onChange={handleFooterChange}
+                  required
+                  disabled={loading}
+                />
+                <input
+                  type="tel"
+                  name="contact"
+                  placeholder="Phone Number*"
+                  className={styles.newsletterInput}
+                  value={footerForm.contact}
+                  onChange={handleFooterChange}
+                  required
+                  disabled={loading}
+                />
+              </div>
               <button type="submit" className={styles.newsletterBtn} disabled={loading}>
-                {loading ? 'Subscribing...' : 'Subscribe Now!'} <Send size={13} />
+                {loading ? 'Sending...' : 'Get Callback'} <Send size={13} />
               </button>
             </form>
           )}

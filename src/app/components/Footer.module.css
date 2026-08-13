@@ -153,24 +153,31 @@
   margin-top: 2px;
 }
 
-/* Newsletter */
+/* Quick Enquiry Form */
 .newsletterForm {
   display: flex;
-  gap: 0;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.15);
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.formInputRow {
+  display: flex;
+  gap: 10px;
+  width: 100%;
 }
 
 .newsletterInput {
   flex: 1;
   background: rgba(255,255,255,0.08);
-  border: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
   outline: none;
   padding: 10px 14px;
   font-size: 13px;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
+  width: 100%;
 }
 .newsletterInput::placeholder { color: rgba(255,255,255,0.40); }
 
@@ -178,16 +185,19 @@
   background: #f5c518;
   color: #0d2d1a;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 10px 16px;
-  display: flex;
+  padding: 10px 24px;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   font-size: 13px;
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
   transition: background .2s;
   white-space: nowrap;
+  align-self: center;
 }
 .newsletterBtn:hover { background: #e6b800; }
 
