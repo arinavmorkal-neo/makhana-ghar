@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import MobileNavBar from '../../components/MobileNavBar';
@@ -200,11 +201,6 @@ export default function AboutUsPage() {
               Meet Our <span>Founders</span>
             </h2>
             <p className={styles.foundersSubtitle}>
-              The visionaries behind Makhana Ghar — driven by a passion for
-              quality and a mission to bring Bihar&apos;s finest superfood to the
-              world.
-            </p>
-            <p className={styles.foundersSubtitle}>
               Founded in 2015, Makhana Ghar has been led by Arinav since 2025,
               with a vision to bring premium Bihar Makhana to global markets.
             </p>
@@ -219,11 +215,13 @@ export default function AboutUsPage() {
               {founders.map((founder) => (
                 <div key={founder.id} className={styles.founderCard}>
                   <div className={styles.founderImageWrap}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={founder.photo.url}
                       alt={founder.photo.alt || founder.name}
                       className={styles.founderImage}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+                      priority
                     />
                     <div className={styles.founderImageOverlay} />
                   </div>
