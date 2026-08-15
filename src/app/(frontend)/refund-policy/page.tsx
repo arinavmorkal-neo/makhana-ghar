@@ -134,7 +134,7 @@ export default function RefundPolicyPage() {
               <div className={styles.contactBox}>
                 <span className={styles.contactLabel}>Email</span>
                 <span className={styles.contactValue}>
-                  <a href="mailto:makhanaghar.marketing@gmail.com">makhanaghar.marketing@gmail.com</a>
+                  <a href="mailto:arinav@makhanaghar.in">arinav@makhanaghar.in</a>
                 </span>
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function RefundPolicyPage() {
               <div className={styles.contactBox}>
                 <span className={styles.contactLabel}>Email</span>
                 <span className={styles.contactValue}>
-                  <a href="mailto:makhanaghar.marketing@gmail.com">makhanaghar.marketing@gmail.com</a>
+                  <a href="mailto:arinav@makhanaghar.in">arinav@makhanaghar.in</a>
                 </span>
               </div>
             </div>

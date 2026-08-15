@@ -187,8 +187,8 @@ export default function ContactUsPage() {
               </div>
               <h3 className={styles.infoTitle}>Email Us</h3>
               <p className={styles.infoText}>
-                <a href="mailto:makhanaghar.marketing@gmail.com">
-                  makhanaghar.marketing@gmail.com
+                <a href="mailto:arinav@makhanaghar.in">
+                  arinav@makhanaghar.in
                 </a>
                 <br />
                 We reply within 24 hours
@@ -467,7 +467,7 @@ export default function ContactUsPage() {
                 Call Now
               </a>
               <a
-                href="mailto:makhanaghar.marketing@gmail.com"
+                href="mailto:arinav@makhanaghar.in"
                 className={styles.ctaBtnSecondary}
               >
                 <svg

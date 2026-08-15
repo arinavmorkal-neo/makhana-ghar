@@ -96,7 +96,7 @@ const footerData = {
       address:
         "Mangal Bazar, Katihar, Bihar 854105",
       phone: "+91 8002661555",
-      email: "makhanaghar.marketing@gmail.com",
+      email: "arinav@makhanaghar.in",
     },
     socials: [
       { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61590384691167", label: "Facebook" },

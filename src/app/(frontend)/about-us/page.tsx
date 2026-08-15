@@ -204,6 +204,10 @@ export default function AboutUsPage() {
               quality and a mission to bring Bihar&apos;s finest superfood to the
               world.
             </p>
+            <p className={styles.foundersSubtitle}>
+              Founded in 2015, Makhana Ghar has been led by Arinav since 2025,
+              with a vision to bring premium Bihar Makhana to global markets.
+            </p>
           </div>
 
           {loadingFounders ? (

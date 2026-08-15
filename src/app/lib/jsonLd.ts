@@ -29,7 +29,7 @@ export function organizationJsonLd() {
           '@type': 'ContactPoint',
           telephone: '+91-8002661555',
           contactType: 'customer service',
-          email: 'makhanaghar.marketing@gmail.com',
+          email: 'arinav@makhanaghar.in',
         },
         sameAs: [
           'https://www.facebook.com/profile.php?id=61590384691167',
