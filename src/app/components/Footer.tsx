@@ -91,7 +91,7 @@ const footerData = {
     tagline: "Best Makhana Manufacturing Company",
     logo: "/logo.webp",
     description:
-      "Makhana Ghar is a global exporter of premium agro products, supplying high-quality Makhana, Cashew, Raisins, and Maize to international markets. With sourcing hubs in India, Thailand, and UAE, we deliver export-grade, ethically sourced food products to global distributors, wholesalers, and importers with consistent quality and reliability.",
+      "Makhana Ghar is a global exporter and supplier of premium-quality Makhana, serving international distributors, wholesalers, importers, and bulk buyers. We specialize exclusively in Makhana, sourced from trusted suppliers in India and carefully selected to meet global quality standards. With a strong focus on quality, competitive pricing, and reliable supply, we deliver export-grade Makhana to customers across international markets.",
     contact: {
       address:
         "Mangal Bazar, Katihar, Bihar 854105",
