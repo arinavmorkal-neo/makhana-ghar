@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import EnquiryPopup from '../../../../components/EnquiryPopup';
+import EnquiryPopup from '../../../components/EnquiryPopup';
 import styles from './Product.module.css';
 
 export interface ProductData {

@@ -4,13 +4,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import Header from '../../../../components/Header';
-import Footer from '../../../../components/Footer';
-import MobileNavBar from '../../../../components/MobileNavBar';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
+import MobileNavBar from '../../../components/MobileNavBar';
 import ProductDetailClient, { ProductData } from './ProductDetailClient';
-import { getProductMetadata } from '../../../../../lib/seo';
-import { productJsonLd, breadcrumbJsonLd } from '../../../../lib/jsonLd';
-import { getImageUrlWithOverride } from '../../../../../lib/getImageUrl';
+import { getProductMetadata } from '../../../../lib/seo';
+import { productJsonLd, breadcrumbJsonLd } from '../../../lib/jsonLd';
+import { getImageUrlWithOverride } from '../../../../lib/getImageUrl';
 import styles from './Product.module.css';
 
 export const revalidate = 60; // Revalidate every 60s for ISR

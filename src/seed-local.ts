@@ -53,6 +53,10 @@ async function main() {
         metaTitle: 'Makhana Ghar – Premium Wholesale Makhana Supply from Bihar',
         metaDescription:
           "India's trusted wholesale makhana supplier. Premium quality fox nuts sourced from Bihar — FSSAI certified, bulk delivery, competitive pricing.",
+        primaryKeywords:
+          'wholesale makhana, makhana supplier bihar, bulk makhana manufacturer, fox nuts exporter india',
+        secondaryKeywords:
+          'phool makhana wholesale price, raw makhana flakes supplier, organic lotus seeds bulk, buy makhana directly from farmers',
         metaKeywords:
           'makhana, fox nuts, wholesale makhana, makhana supplier, Bihar makhana, bulk makhana, organic makhana',
       },
