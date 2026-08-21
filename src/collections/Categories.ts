@@ -110,11 +110,41 @@ export const Categories: CollectionConfig = {
           name: 'metaTitle',
           type: 'text',
           label: 'Meta Title',
+          admin: {
+            description: 'Category meta title (recommended: 50-60 characters)',
+          },
         },
         {
           name: 'metaDescription',
           type: 'textarea',
           label: 'Meta Description',
+          admin: {
+            description: 'Category meta description for search results (recommended: 150-160 characters)',
+          },
+        },
+        {
+          name: 'primaryKeywords',
+          type: 'text',
+          label: 'Primary Keywords',
+          admin: {
+            description: 'Target keywords, comma-separated (e.g. makhana categories, makhana grades bihar)',
+          },
+        },
+        {
+          name: 'secondaryKeywords',
+          type: 'textarea',
+          label: 'Secondary / LSI Keywords',
+          admin: {
+            description: 'Secondary and related terms, comma-separated',
+          },
+        },
+        {
+          name: 'metaKeywords',
+          type: 'text',
+          label: 'Additional / Legacy Keywords',
+          admin: {
+            description: 'Optional additional tags (Primary and Secondary keywords will be automatically combined into the keywords meta tag).',
+          },
         },
       ],
     },

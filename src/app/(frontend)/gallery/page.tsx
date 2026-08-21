@@ -1,27 +1,28 @@
-'use client';
-
-import { useState, useEffect, useCallback } from 'react';
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import { getPayload } from 'payload';
+import configPromise from '@payload-config';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import MobileNavBar from '../../components/MobileNavBar';
+import GalleryClient, { GalleryItem } from './GalleryClient';
+import { getPageMetadata } from '../../../lib/seo';
+import { breadcrumbJsonLd } from '../../lib/jsonLd';
 import styles from './Gallery.module.css';
 
-/* ── Types ─────────────────────────────────────────── */
-interface GalleryItem {
-  id: string;
-  title: string;
-  category: string;
-  featured: boolean;
-  order: number;
-  image: {
-    url: string;
-    alt?: string;
-    width?: number;
-    height?: number;
-  };
+export const revalidate = 60; // ISR 60s
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata('gallery', {
+    title: 'Photo Gallery | Farm to Factory Tour – Makhana Ghar',
+    description:
+      'Explore photos of our Makhana ponds in Bihar, manual harvesting divers, sun-drying yards, sorting facilities, and premium packaging at Makhana Ghar.',
+    primaryKeywords: 'makhana gallery, makhana farm photos, bihar makhana harvesting pictures, makhana factory images',
+    secondaryKeywords: 'popped lotus seed processing photos, makhana processing unit bihar, katihar makhana farm pictures',
+    path: '/gallery',
+  });
 }
 
-/* ── Fallback data (shown when CMS is empty) ───────── */
 const fallbackItems: GalleryItem[] = [
   {
     id: '1',
@@ -29,7 +30,7 @@ const fallbackItems: GalleryItem[] = [
     category: 'products',
     featured: true,
     order: 0,
-    image: { url: '/products/product1.png', alt: 'Premium Makhana' },
+    image: { url: '/4+.webp', alt: 'Premium Makhana' },
   },
   {
     id: '2',
@@ -37,7 +38,7 @@ const fallbackItems: GalleryItem[] = [
     category: 'farm',
     featured: false,
     order: 1,
-    image: { url: '/new-section.png', alt: 'Farm Harvest' },
+    image: { url: '/new-section.webp', alt: 'Farm Harvest' },
   },
   {
     id: '3',
@@ -45,302 +46,102 @@ const fallbackItems: GalleryItem[] = [
     category: 'packaging',
     featured: false,
     order: 2,
-    image: { url: '/banner2.png', alt: 'Packaging' },
+    image: { url: '/banner2.webp', alt: 'Packaging' },
   },
 ];
 
-const categories = ['all', 'products', 'farm', 'events', 'packaging', 'team'];
+async function getGalleryItems(): Promise<GalleryItem[]> {
+  try {
+    const payload = await getPayload({ config: configPromise });
+    const result = await payload.find({
+      collection: 'gallery',
+      where: { status: { equals: 'published' } },
+      sort: 'order',
+      limit: 100,
+      depth: 1,
+    });
 
-/* ── Component ─────────────────────────────────────── */
-export default function GalleryPage() {
-  const [items, setItems] = useState<GalleryItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState('all');
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
-  /* Fetch gallery items from API */
-  useEffect(() => {
-    async function fetchGallery() {
-      try {
-        const res = await fetch('/api/frontend/gallery');
-        const data = await res.json();
-        if (data.items && data.items.length > 0) {
-          // Map CMS data to our shape
-          const mapped: GalleryItem[] = data.items.map((doc: any) => ({
-            id: doc.id,
-            title: doc.title,
-            category: doc.category || 'products',
-            featured: doc.featured || false,
-            order: doc.order || 0,
-            image: {
-              url: doc.imageUrl || doc.image?.url || doc.image?.imagekitUrl || '',
-              alt: doc.image?.alt || doc.title,
-              width: doc.image?.width,
-              height: doc.image?.height,
-            },
-          }));
-          setItems(mapped);
-        } else {
-          setItems(fallbackItems);
-        }
-      } catch {
-        setItems(fallbackItems);
-      } finally {
-        setLoading(false);
-      }
+    if (result.docs && result.docs.length > 0) {
+      return result.docs.map((doc: any) => ({
+        id: doc.id,
+        title: doc.title,
+        category: doc.category || 'products',
+        featured: doc.featured || false,
+        order: doc.order || 0,
+        image: {
+          url: doc.imageUrl || doc.image?.url || doc.image?.imagekitUrl || '/4+.webp',
+          alt: doc.image?.alt || doc.title,
+          width: doc.image?.width,
+          height: doc.image?.height,
+        },
+      }));
     }
-    fetchGallery();
-  }, []);
+  } catch (err) {
+    console.error('Failed to fetch gallery items server-side:', err);
+  }
+  return fallbackItems;
+}
 
-  /* Filter items */
-  const filtered =
-    activeFilter === 'all'
-      ? items
-      : items.filter((item) => item.category === activeFilter);
+export default async function GalleryPage() {
+  const items = await getGalleryItems();
 
-  /* Keyboard navigation for lightbox */
-  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
-  const prevImage = useCallback(() => {
-    setLightboxIndex((i) => (i !== null && i > 0 ? i - 1 : filtered.length - 1));
-  }, [filtered.length]);
-  const nextImage = useCallback(() => {
-    setLightboxIndex((i) => (i !== null && i < filtered.length - 1 ? i + 1 : 0));
-  }, [filtered.length]);
-
-  useEffect(() => {
-    if (lightboxIndex === null) return;
-
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') prevImage();
-      if (e.key === 'ArrowRight') nextImage();
-    };
-
-    // Prevent body scroll when lightbox is open
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', handleKey);
-
-    return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKey);
-    };
-  }, [lightboxIndex, closeLightbox, prevImage, nextImage]);
-
-  const currentItem = lightboxIndex !== null ? filtered[lightboxIndex] : null;
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: 'Home', url: 'https://www.makhanaghar.in' },
+    { name: 'Gallery', url: 'https://www.makhanaghar.in/gallery' },
+  ]);
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
       <Header />
 
       {/* ── HERO BANNER ── */}
       <section className={styles.heroSection}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className={styles.heroBg}
-          src="/banner1.png"
+          src="/banner1.webp"
           alt="Makhana Ghar Gallery"
-          aria-hidden="true"
+          width={1920}
+          height={1080}
+          priority
+          sizes="100vw"
+          quality={80}
         />
         <div className={styles.heroOverlay} />
 
         <div className={styles.heroContent}>
-          <span className={styles.heroTag}>Our Gallery</span>
+          <span className={styles.heroTag}>Visual Journey</span>
           <h1 className={styles.heroHeading}>Photo Gallery</h1>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             className={styles.heroRule}
-            src="/line-throw-title.png"
+            src="/line-throw-title.webp"
             alt=""
             aria-hidden="true"
+            width={200}
+            height={10}
           />
           <p className={styles.heroBody}>
-            A glimpse into our journey — from lush farms to premium products,
-            events, and the passionate team behind Makhana Ghar.
+            Explore our ponds, harvesting process, state-of-the-art grading
+            facility, and premium Makhana products.
           </p>
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className={styles.grassEdge}
-          src="/grassnew-white.png"
+          src="/grassnew-white.webp"
           alt=""
           aria-hidden="true"
+          width={1920}
+          height={40}
+          sizes="100vw"
         />
       </section>
 
       {/* ── GALLERY CONTENT ── */}
-      <section className={styles.galleryContainer}>
-        <div className={styles.galleryInner}>
-          {/* Section Header */}
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>
-              Explore Our{' '}
-              <span className={styles.sectionTitleAccent}>Moments</span>
-            </h2>
-            <p className={styles.sectionSubtitle}>
-              Browse through our collection of images showcasing our premium
-              makhana products, farm practices, and more.
-            </p>
-          </div>
-
-          {/* Category Filters */}
-          <div className={styles.filterBar}>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                className={`${styles.filterBtn}${activeFilter === cat ? ` ${styles.filterBtnActive}` : ''}`}
-                onClick={() => setActiveFilter(cat)}
-              >
-                {cat === 'all' ? 'All' : cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Loading State */}
-          {loading && (
-            <div className={styles.loadingState}>
-              <div className={styles.loadingSpinner} />
-              <p className={styles.loadingText}>Loading gallery…</p>
-            </div>
-          )}
-
-          {/* Empty State */}
-          {!loading && filtered.length === 0 && (
-            <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>📷</div>
-              <h3 className={styles.emptyTitle}>No images found</h3>
-              <p className={styles.emptyText}>
-                Try selecting a different category or check back later.
-              </p>
-            </div>
-          )}
-
-          {/* Masonry Grid */}
-          {!loading && filtered.length > 0 && (
-            <div className={styles.masonryGrid}>
-              {filtered.map((item, index) => (
-                <div
-                  key={item.id}
-                  className={styles.gridItem}
-                  onClick={() => setLightboxIndex(index)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`View ${item.title}`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setLightboxIndex(index);
-                    }
-                  }}
-                >
-                  {item.featured && (
-                    <span className={styles.featuredBadge}>★ Featured</span>
-                  )}
-
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    className={styles.gridItemImg}
-                    src={item.image.url}
-                    alt={item.image.alt || item.title}
-                    loading="lazy"
-                  />
-
-                  <div className={styles.gridItemOverlay}>
-                    <h3 className={styles.gridItemTitle}>{item.title}</h3>
-                    <span className={styles.gridItemCategory}>
-                      {item.category}
-                    </span>
-                  </div>
-
-                  <span className={styles.gridItemZoom} aria-hidden="true">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="11" cy="11" r="8" />
-                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                      <line x1="11" y1="8" x2="11" y2="14" />
-                      <line x1="8" y1="11" x2="14" y2="11" />
-                    </svg>
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ── LIGHTBOX ── */}
-      <div
-        className={`${styles.lightboxBackdrop}${lightboxIndex !== null ? ` ${styles.lightboxOpen}` : ''}`}
-        onClick={closeLightbox}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Image lightbox"
-      >
-        <div
-          className={styles.lightboxContent}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Close button */}
-          <button
-            className={styles.lightboxClose}
-            onClick={closeLightbox}
-            aria-label="Close lightbox"
-          >
-            ✕
-          </button>
-
-          {/* Prev */}
-          {filtered.length > 1 && (
-            <button
-              className={`${styles.lightboxNav} ${styles.lightboxPrev}`}
-              onClick={prevImage}
-              aria-label="Previous image"
-            >
-              ‹
-            </button>
-          )}
-
-          {/* Image */}
-          {currentItem && (
-            <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                className={styles.lightboxImg}
-                src={currentItem.image.url}
-                alt={currentItem.image.alt || currentItem.title}
-              />
-              <div className={styles.lightboxCaption}>
-                <h3 className={styles.lightboxTitle}>{currentItem.title}</h3>
-                <span className={styles.lightboxCategory}>
-                  {currentItem.category}
-                </span>
-              </div>
-              <span className={styles.lightboxCounter}>
-                {(lightboxIndex ?? 0) + 1} / {filtered.length}
-              </span>
-            </>
-          )}
-
-          {/* Next */}
-          {filtered.length > 1 && (
-            <button
-              className={`${styles.lightboxNav} ${styles.lightboxNext}`}
-              onClick={nextImage}
-              aria-label="Next image"
-            >
-              ›
-            </button>
-          )}
-        </div>
-      </div>
+      <GalleryClient initialItems={items} />
 
       <Footer />
       <MobileNavBar />

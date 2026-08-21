@@ -31,18 +31,40 @@ export const Pages: CollectionConfig = {
           name: 'metaTitle',
           type: 'text',
           label: 'Meta Title',
+          admin: {
+            description: 'Page title for search engines (recommended: 50-60 characters)',
+          },
         },
         {
           name: 'metaDescription',
           type: 'textarea',
           label: 'Meta Description',
+          admin: {
+            description: 'Brief summary of the page for search results (recommended: 150-160 characters)',
+          },
+        },
+        {
+          name: 'primaryKeywords',
+          type: 'text',
+          label: 'Primary Keywords',
+          admin: {
+            description: 'Core target keywords, comma-separated (e.g. wholesale makhana, bulk makhana supplier, bihar makhana)',
+          },
+        },
+        {
+          name: 'secondaryKeywords',
+          type: 'textarea',
+          label: 'Secondary / LSI Keywords',
+          admin: {
+            description: 'Secondary, related, and long-tail keywords, comma-separated (e.g. phool makhana price per kg, fox nut exporter india, raw makhana manufacturer)',
+          },
         },
         {
           name: 'metaKeywords',
           type: 'text',
-          label: 'Meta Keywords',
+          label: 'Additional / Legacy Keywords',
           admin: {
-            description: 'Comma separated tags (e.g. makhana, healthy snack)',
+            description: 'Optional additional tags (Primary and Secondary keywords will be automatically combined into the keywords meta tag).',
           },
         },
       ],

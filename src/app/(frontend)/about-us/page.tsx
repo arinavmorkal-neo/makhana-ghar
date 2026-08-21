@@ -7,7 +7,21 @@ import MobileNavBar from '../../components/MobileNavBar';
 import FoundersGrid from './FoundersGrid';
 import styles from './AboutUs.module.css';
 
+import type { Metadata } from 'next';
+import { getPageMetadata } from '../../../lib/seo';
+
 export const revalidate = 120; // ISR — revalidate every 2 minutes
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata('about-us', {
+    title: 'About Us | Makhana Ghar – Leading Makhana Supplier & Exporter',
+    description:
+      'Discover the story of Makhana Ghar. Sourced from the pristine ponds of Bihar, bringing export-grade, hand-sorted makhana to global markets since 2015.',
+    primaryKeywords: 'about makhana ghar, makhana manufacturer bihar, makhana exporter story, bihar fox nuts company',
+    secondaryKeywords: 'makhana processing history, sustainable makhana farming, katihar makhana factory, buy makhana directly from farmers',
+    path: '/about-us',
+  });
+}
 
 /* ── Fallback data (shown when CMS is empty) ───────── */
 const fallbackFounders = [

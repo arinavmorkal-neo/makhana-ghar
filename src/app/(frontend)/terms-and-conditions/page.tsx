@@ -1,15 +1,23 @@
+import Image from 'next/image';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import MobileNavBar from '../../components/MobileNavBar';
+import { getPageMetadata } from '../../../lib/seo';
 import styles from './Terms.module.css';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Terms and Conditions | Makhana Ghar',
-  description: 'Read the Terms and Conditions of using Makhana Ghar services, products, or website. Sourced directly from Bihar\'s finest farms.',
-  keywords: 'terms and conditions, makhana ghar, wholesale makhana, retail terms',
-  alternates: { canonical: '/terms-and-conditions' },
-};
+export const revalidate = 120;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata('terms-and-conditions', {
+    title: 'Terms and Conditions | Makhana Ghar',
+    description:
+      'Read the Terms and Conditions of using Makhana Ghar services, products, or website. Sourced directly from Bihar\'s finest farms.',
+    primaryKeywords: 'terms and conditions, makhana ghar terms, wholesale makhana purchase terms',
+    secondaryKeywords: 'makhana supply agreement, payment terms makhana exporter, bulk order terms',
+    path: '/terms-and-conditions',
+  });
+}
 
 export default function TermsPage() {
   return (
@@ -18,34 +26,40 @@ export default function TermsPage() {
 
       {/* ── HERO BANNER ── */}
       <section className={styles.heroSection}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className={styles.heroBg}
-          src="/banner1.png"
+          src="/banner1.webp"
           alt="Makhana Ghar Terms and Conditions"
-          aria-hidden="true"
+          width={1920}
+          height={1080}
+          priority
+          sizes="100vw"
+          quality={80}
         />
         <div className={styles.heroOverlay} />
         
         <div className={styles.heroContent}>
           <span className={styles.heroTag}>Agreement</span>
           <h1 className={styles.heroHeading}>Terms &amp; Conditions</h1>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             className={styles.heroRule}
-            src="/line-throw-title.png"
+            src="/line-throw-title.webp"
             alt=""
             aria-hidden="true"
+            width={200}
+            height={10}
           />
           <p className={styles.heroBody}>Effective Date: 10 Jun 2024</p>
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className={styles.grassEdge}
-          src="/grass-4.png"
+          src="/grassnew-white.webp"
           alt=""
           aria-hidden="true"
+          width={1920}
+          height={40}
+          sizes="100vw"
         />
       </section>
 

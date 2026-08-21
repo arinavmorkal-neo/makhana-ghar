@@ -12,9 +12,23 @@ import Footer from '../components/Footer';
 import MobileNavBar from '../components/MobileNavBar';
 import { breadcrumbJsonLd } from '../lib/jsonLd';
 
+import type { Metadata } from 'next';
+import { getPageMetadata } from '../../lib/seo';
+
 // Revalidate every 60 seconds (ISR) so the page is served from cache
 // and CMS updates appear within a minute, without cold-start delays.
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata('home', {
+    title: 'Makhana Ghar | Premium Wholesale Makhana Supplier from Bihar',
+    description:
+      'Makhana Ghar is a premium Makhana manufacturer, wholesaler and exporter from Bihar, supplying high-quality Makhana to domestic and international markets.',
+    primaryKeywords: 'makhana supplier, wholesale makhana, bulk makhana bihar, makhana manufacturer',
+    secondaryKeywords: 'fox nuts exporter india, phool makhana wholesale price, organic popped lotus seed, premium makhana flakes',
+    path: '/',
+  });
+}
 
 // Map block slugs to component renderers
 function renderBlock(block: any, index: number) {

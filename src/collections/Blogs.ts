@@ -121,11 +121,41 @@ export const Blogs: CollectionConfig = {
           name: 'metaTitle',
           type: 'text',
           label: 'Meta Title',
+          admin: {
+            description: 'Blog post meta title (recommended: 50-60 characters)',
+          },
         },
         {
           name: 'metaDescription',
           type: 'textarea',
           label: 'Meta Description',
+          admin: {
+            description: 'Post summary for search results (recommended: 150-160 characters)',
+          },
+        },
+        {
+          name: 'primaryKeywords',
+          type: 'text',
+          label: 'Primary Keywords',
+          admin: {
+            description: 'Target keywords, comma-separated (e.g. makhana health benefits, fox nut nutrition)',
+          },
+        },
+        {
+          name: 'secondaryKeywords',
+          type: 'textarea',
+          label: 'Secondary / LSI Keywords',
+          admin: {
+            description: 'Secondary and related terms, comma-separated (e.g. roasted makhana weight loss, lotus seeds protein)',
+          },
+        },
+        {
+          name: 'metaKeywords',
+          type: 'text',
+          label: 'Additional / Legacy Keywords',
+          admin: {
+            description: 'Optional additional tags (Primary and Secondary keywords will be automatically combined into the keywords meta tag).',
+          },
         },
       ],
     },

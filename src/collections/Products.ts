@@ -166,11 +166,41 @@ export const Products: CollectionConfig = {
           name: 'metaTitle',
           type: 'text',
           label: 'Meta Title',
+          admin: {
+            description: 'Product page title (e.g. 6+ Suta Makhana Wholesale | Makhana Ghar)',
+          },
         },
         {
           name: 'metaDescription',
           type: 'textarea',
           label: 'Meta Description',
+          admin: {
+            description: 'Short summary of the product for search results (recommended: 150-160 characters)',
+          },
+        },
+        {
+          name: 'primaryKeywords',
+          type: 'text',
+          label: 'Primary Keywords',
+          admin: {
+            description: 'Core product keywords, comma-separated (e.g. 6 suta makhana, jumbo makhana wholesale, buy 6+ suta fox nuts)',
+          },
+        },
+        {
+          name: 'secondaryKeywords',
+          type: 'textarea',
+          label: 'Secondary / LSI Keywords',
+          admin: {
+            description: 'Secondary and related search terms, comma-separated (e.g. bihar grade A makhana, export quality phool makhana, organic popped lotus seed)',
+          },
+        },
+        {
+          name: 'metaKeywords',
+          type: 'text',
+          label: 'Additional / Legacy Keywords',
+          admin: {
+            description: 'Optional additional tags (Primary and Secondary keywords will be automatically combined into the keywords meta tag).',
+          },
         },
       ],
     },

@@ -1,15 +1,23 @@
+import Image from 'next/image';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import MobileNavBar from '../../components/MobileNavBar';
+import { getPageMetadata } from '../../../lib/seo';
 import styles from './Refund.module.css';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Refund Policy | Makhana Ghar',
-  description: 'Understand the Return and Refund Policy of Makhana Ghar. In rare cases where you receive damaged, defective, or incorrect products, we are here to help.',
-  keywords: 'refund policy, returns makhana, customer satisfaction, makhana ghar',
-  alternates: { canonical: '/refund-policy' },
-};
+export const revalidate = 120;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPageMetadata('refund-policy', {
+    title: 'Refund Policy | Makhana Ghar',
+    description:
+      'Understand the Return and Refund Policy of Makhana Ghar. In rare cases where you receive damaged, defective, or incorrect products, we are here to help.',
+    primaryKeywords: 'refund policy, returns makhana, customer satisfaction, makhana ghar refund',
+    secondaryKeywords: 'damaged goods policy, order cancellation makhana, bulk order refund terms',
+    path: '/refund-policy',
+  });
+}
 
 export default function RefundPolicyPage() {
   return (
@@ -18,34 +26,40 @@ export default function RefundPolicyPage() {
 
       {/* ── HERO BANNER ── */}
       <section className={styles.heroSection}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className={styles.heroBg}
-          src="/banner1.png"
+          src="/banner1.webp"
           alt="Makhana Ghar Refund Policy"
-          aria-hidden="true"
+          width={1920}
+          height={1080}
+          priority
+          sizes="100vw"
+          quality={80}
         />
         <div className={styles.heroOverlay} />
         
         <div className={styles.heroContent}>
           <span className={styles.heroTag}>Returns</span>
           <h1 className={styles.heroHeading}>Refund Policy</h1>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             className={styles.heroRule}
-            src="/line-throw-title.png"
+            src="/line-throw-title.webp"
             alt=""
             aria-hidden="true"
+            width={200}
+            height={10}
           />
           <p className={styles.heroBody}>Effective Date: 10 Jun 2024</p>
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className={styles.grassEdge}
-          src="/grass-4.png"
+          src="/grassnew-white.webp"
           alt=""
           aria-hidden="true"
+          width={1920}
+          height={40}
+          sizes="100vw"
         />
       </section>
 
