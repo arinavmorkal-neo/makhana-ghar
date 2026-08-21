@@ -14,7 +14,7 @@
   height: 45vh;
   background: #1a2e12;
   overflow: hidden;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   display: flex;
   align-items: center;
 }
@@ -54,7 +54,7 @@
 
 .heroTag {
   display: inline-block;
-  font-family: 'Caveat', cursive;
+  font-family: var(--font-caveat), cursive;
   font-size: 24px;
   font-weight: 700;
   color: #f5c842;
@@ -104,7 +104,7 @@
 .blogContainer {
   background: #ffffff;
   padding: 60px 24px 80px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
 }
 
 .blogInner {
@@ -121,7 +121,7 @@
 }
 
 .sectionTitle {
-  font-family: 'Caveat', cursive;
+  font-family: var(--font-caveat), cursive;
   font-size: 1.8rem;
   font-weight: 700;
   color: #1a3a1a;
@@ -153,7 +153,7 @@
 }
 
 .searchInput {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
   padding: 0.55rem 1rem 0.55rem 2.4rem;
   border: 1.5px solid #dce8da;
   border-radius: 8px;
@@ -183,7 +183,7 @@
 }
 
 .tagBtn {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.35rem 0.9rem;
@@ -298,7 +298,7 @@
 }
 
 .cardTitle {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.4;

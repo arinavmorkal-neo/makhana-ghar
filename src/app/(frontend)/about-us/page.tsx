@@ -1,87 +1,69 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getPayload } from 'payload';
+import configPromise from '@payload-config';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import MobileNavBar from '../../components/MobileNavBar';
+import FoundersGrid from './FoundersGrid';
 import styles from './AboutUs.module.css';
 
-/* ── Types ─────────────────────────────────────────── */
-interface Founder {
-  id: string;
-  name: string;
-  role: string;
-  bio: string;
-  photo: {
-    url: string;
-    alt?: string;
-  };
-  linkedinUrl?: string;
-  twitterUrl?: string;
-  order: number;
-}
+export const revalidate = 120; // ISR — revalidate every 2 minutes
 
 /* ── Fallback data (shown when CMS is empty) ───────── */
-const fallbackFounders: Founder[] = [
+const fallbackFounders = [
   {
     id: '1',
     name: 'Rajesh Kumar',
     role: 'Founder & CEO',
     bio: 'With over a decade of experience in the Makhana industry, Rajesh envisioned building a brand that connects Bihar\'s farmers directly with global markets — ensuring quality, fairness, and sustainability at every step.',
-    photo: { url: 'https://ik.imagekit.io/3uuhtxmof/makhana-shop/founder-1_nkMHzY20s.png', alt: 'Founder — Makhana Ghar' },
+    photoUrl: 'https://ik.imagekit.io/3uuhtxmof/makhana-shop/founder-1_nkMHzY20s.png',
+    photoAlt: 'Founder — Makhana Ghar',
     linkedinUrl: '#',
     twitterUrl: '#',
-    order: 0,
   },
   {
     id: '2',
     name: 'Amit Sharma',
     role: 'Co-Founder & COO',
     bio: 'Amit brings deep expertise in supply chain and operations, ensuring that every batch of Makhana Ghar products meets the highest international standards — from Bihar\'s ponds to doorsteps across the globe.',
-    photo: { url: 'https://ik.imagekit.io/3uuhtxmof/makhana-shop/founder-2_lfqB3D16V.png', alt: 'Co-Founder — Makhana Ghar' },
+    photoUrl: 'https://ik.imagekit.io/3uuhtxmof/makhana-shop/founder-2_lfqB3D16V.png',
+    photoAlt: 'Co-Founder — Makhana Ghar',
     linkedinUrl: '#',
     twitterUrl: '#',
-    order: 1,
   },
 ];
 
-export default function AboutUsPage() {
-  const [founders, setFounders] = useState<Founder[]>([]);
-  const [loadingFounders, setLoadingFounders] = useState(true);
+async function getFounders() {
+  try {
+    const payload = await getPayload({ config: configPromise });
+    const result = await payload.find({
+      collection: 'founders',
+      where: { status: { equals: 'published' } },
+      sort: 'order',
+      depth: 1,
+      limit: 10,
+    });
 
-  /* Fetch founders from CMS */
-  useEffect(() => {
-    async function fetchFounders() {
-      try {
-        const res = await fetch('/api/founders?where[status][equals]=published&sort=order&depth=1&limit=10');
-        const data = await res.json();
-        if (data.docs && data.docs.length > 0) {
-          const mapped: Founder[] = data.docs.map((doc: any) => ({
-            id: doc.id,
-            name: doc.name,
-            role: doc.role,
-            bio: doc.bio,
-            photo: {
-              url: doc.imageUrl || doc.photo?.url || doc.photo?.imagekitUrl || '',
-              alt: doc.photo?.alt || doc.name,
-            },
-            linkedinUrl: doc.linkedinUrl || '',
-            twitterUrl: doc.twitterUrl || '',
-            order: doc.order || 0,
-          }));
-          setFounders(mapped);
-        } else {
-          setFounders(fallbackFounders);
-        }
-      } catch {
-        setFounders(fallbackFounders);
-      } finally {
-        setLoadingFounders(false);
-      }
+    if (result.docs && result.docs.length > 0) {
+      return result.docs.map((doc: any) => ({
+        id: doc.id,
+        name: doc.name,
+        role: doc.role,
+        bio: doc.bio,
+        photoUrl: doc.imageUrl || doc.photo?.url || doc.photo?.imagekitUrl || '',
+        photoAlt: doc.photo?.alt || doc.name,
+        linkedinUrl: doc.linkedinUrl || '',
+        twitterUrl: doc.twitterUrl || '',
+      }));
     }
-    fetchFounders();
-  }, []);
+  } catch (e) {
+    console.warn('Could not fetch founders from Payload CMS:', e);
+  }
+  return fallbackFounders;
+}
+
+export default async function AboutUsPage() {
+  const founders = await getFounders();
 
   return (
     <main>
@@ -89,24 +71,28 @@ export default function AboutUsPage() {
 
       {/* ── HERO BANNER ── */}
       <section className={styles.heroSection}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className={styles.heroBg}
-          src="/banner1.png"
+          src="/banner1.webp"
           alt="About Makhana Ghar"
-          aria-hidden="true"
+          width={1920}
+          height={1080}
+          priority
+          sizes="100vw"
+          quality={80}
         />
         <div className={styles.heroOverlay} />
 
         <div className={styles.heroContent}>
           <span className={styles.heroTag}>Know Our Story</span>
           <h1 className={styles.heroHeading}>About Us</h1>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             className={styles.heroRule}
-            src="/line-throw-title.png"
+            src="/line-throw-title.webp"
             alt=""
             aria-hidden="true"
+            width={200}
+            height={10}
           />
           <p className={styles.heroBody}>
             From the heartland of Bihar to global markets — discover the journey
@@ -114,12 +100,14 @@ export default function AboutUsPage() {
           </p>
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className={styles.grassEdge}
-          src="/grassnew-white.png"
+          src="/grassnew-white.webp"
           alt=""
           aria-hidden="true"
+          width={1920}
+          height={40}
+          sizes="100vw"
         />
       </section>
 
@@ -127,10 +115,13 @@ export default function AboutUsPage() {
       <section className={styles.storySection}>
         <div className={styles.storyInner}>
           <div className={styles.storyImageWrap}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/banner2.png"
+            <Image
+              src="/banner2.webp"
               alt="Makhana Ghar — Our Story"
+              width={600}
+              height={500}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              quality={80}
             />
             <span className={styles.storyBadge}>Since 2015</span>
           </div>
@@ -206,50 +197,7 @@ export default function AboutUsPage() {
             </p>
           </div>
 
-          {loadingFounders ? (
-            <div className={styles.foundersLoading}>
-              <div className={styles.foundersSpinner} />
-            </div>
-          ) : (
-            <div className={styles.foundersGrid}>
-              {founders.map((founder) => (
-                <div key={founder.id} className={styles.founderCard}>
-                  <div className={styles.founderImageWrap}>
-                    <Image
-                      src={founder.photo.url}
-                      alt={founder.photo.alt || founder.name}
-                      className={styles.founderImage}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-                      priority
-                    />
-                    <div className={styles.founderImageOverlay} />
-                  </div>
-                  <div className={styles.founderInfo}>
-                    <h3 className={styles.founderName}>{founder.name}</h3>
-                    <span className={styles.founderRole}>{founder.role}</span>
-                    <p className={styles.founderBio}>{founder.bio}</p>
-                    <div className={styles.founderSocials}>
-                      {founder.linkedinUrl && (
-                        <a href={founder.linkedinUrl} className={styles.founderSocialLink} aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                          </svg>
-                        </a>
-                      )}
-                      {founder.twitterUrl && (
-                        <a href={founder.twitterUrl} className={styles.founderSocialLink} aria-label="Twitter" target="_blank" rel="noopener noreferrer">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                          </svg>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <FoundersGrid founders={founders} />
         </div>
       </section>
 
@@ -270,125 +218,35 @@ export default function AboutUsPage() {
 
           {/* Grid Layout for Processing Cards */}
           <div className={styles.processGrid}>
-            {/* Step 1 */}
-            <div className={styles.processCard}>
-              <div className={styles.processCardImageWrap}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/process-step-1.png" alt="Pond Cultivation" className={styles.processCardImage} />
-                <span className={styles.processCardBadge}>01</span>
+            {[
+              { img: '/process-step-1.png', alt: 'Pond Cultivation', num: '01', title: 'Pond Cultivation & Seed Growth', text: "Makhana plants grow naturally in stagnant freshwater ponds of Bihar. Seeds develop inside thorny fruits that mature underwater during monsoon." },
+              { img: '/process-step-2.png', alt: 'Manual Harvesting', num: '02', title: 'Manual Harvesting by Divers', text: "Skilled local farmers dive into ponds to manually collect ripe, spiny fruits from the muddy pond bed — entirely by hand." },
+              { img: '/process-step-3.png', alt: 'Seed Collection and Sun Drying', num: '03', title: 'Seed Collection & Sun Drying', text: "Black seeds are extracted, washed thoroughly, and spread under direct sunlight for 2–3 days of natural drying." },
+              { img: '/process-step-4.png', alt: 'Roasting and Popping', num: '04', title: 'Roasting & Popping (Lawa)', text: "Dried seeds are roasted in an iron pan over high heat, then struck with a wooden mallet to pop the outer shell — revealing fluffy white puffs." },
+              { img: '/process-step-5.png', alt: 'Shell Removal', num: '05', title: 'Shell Removal & Cleaning', text: "The hard black shell is peeled off by hand to reveal white makhana puffs, then cleaned to remove any remaining fragments." },
+              { img: '/process-step-6.png', alt: 'Quality Sorting', num: '06', title: 'Grading & Quality Sorting', text: "Cleaned puffs are sorted by size — 4+ Sutta (small), 5+ Sutta (medium), and 6+ Sutta (large/premium) with quality checks." },
+              { img: '/process-step-7.png', alt: 'Quality Assurance', num: '07', title: 'Moisture Testing & QA', text: "Every batch is tested for moisture (below 12%), checked for purity, and verified against FSSAI & export-grade standards." },
+              { img: '/process-step-8.png', alt: 'Packaging and Dispatch', num: '08', title: 'Packaging & Dispatch', text: "Graded makhana is sealed in food-grade, moisture-proof packaging — bulk bags, retail packs, or custom private-label formats." },
+            ].map((step) => (
+              <div key={step.num} className={styles.processCard}>
+                <div className={styles.processCardImageWrap}>
+                  <Image
+                    src={step.img}
+                    alt={step.alt}
+                    className={styles.processCardImage}
+                    width={400}
+                    height={300}
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
+                  />
+                  <span className={styles.processCardBadge}>{step.num}</span>
+                </div>
+                <div className={styles.processCardBody}>
+                  <h4 className={styles.processCardTitle}>{step.title}</h4>
+                  <p className={styles.processCardText}>{step.text}</p>
+                </div>
               </div>
-              <div className={styles.processCardBody}>
-                <h4 className={styles.processCardTitle}>Pond Cultivation &amp; Seed Growth</h4>
-                <p className={styles.processCardText}>
-                  Makhana plants grow naturally in stagnant freshwater ponds of Bihar. Seeds develop inside thorny fruits that mature underwater during monsoon.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className={styles.processCard}>
-              <div className={styles.processCardImageWrap}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/process-step-2.png" alt="Manual Harvesting" className={styles.processCardImage} />
-                <span className={styles.processCardBadge}>02</span>
-              </div>
-              <div className={styles.processCardBody}>
-                <h4 className={styles.processCardTitle}>Manual Harvesting by Divers</h4>
-                <p className={styles.processCardText}>
-                  Skilled local farmers dive into ponds to manually collect ripe, spiny fruits from the muddy pond bed — entirely by hand.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className={styles.processCard}>
-              <div className={styles.processCardImageWrap}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/process-step-3.png" alt="Seed Collection and Sun Drying" className={styles.processCardImage} />
-                <span className={styles.processCardBadge}>03</span>
-              </div>
-              <div className={styles.processCardBody}>
-                <h4 className={styles.processCardTitle}>Seed Collection &amp; Sun Drying</h4>
-                <p className={styles.processCardText}>
-                  Black seeds are extracted, washed thoroughly, and spread under direct sunlight for 2–3 days of natural drying.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 4 */}
-            <div className={styles.processCard}>
-              <div className={styles.processCardImageWrap}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/process-step-4.png" alt="Roasting and Popping" className={styles.processCardImage} />
-                <span className={styles.processCardBadge}>04</span>
-              </div>
-              <div className={styles.processCardBody}>
-                <h4 className={styles.processCardTitle}>Roasting &amp; Popping (Lawa)</h4>
-                <p className={styles.processCardText}>
-                  Dried seeds are roasted in an iron pan over high heat, then struck with a wooden mallet to pop the outer shell — revealing fluffy white puffs.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 5 */}
-            <div className={styles.processCard}>
-              <div className={styles.processCardImageWrap}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/process-step-5.png" alt="Shell Removal" className={styles.processCardImage} />
-                <span className={styles.processCardBadge}>05</span>
-              </div>
-              <div className={styles.processCardBody}>
-                <h4 className={styles.processCardTitle}>Shell Removal &amp; Cleaning</h4>
-                <p className={styles.processCardText}>
-                  The hard black shell is peeled off by hand to reveal white makhana puffs, then cleaned to remove any remaining fragments.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 6 */}
-            <div className={styles.processCard}>
-              <div className={styles.processCardImageWrap}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/process-step-6.png" alt="Quality Sorting" className={styles.processCardImage} />
-                <span className={styles.processCardBadge}>06</span>
-              </div>
-              <div className={styles.processCardBody}>
-                <h4 className={styles.processCardTitle}>Grading &amp; Quality Sorting</h4>
-                <p className={styles.processCardText}>
-                  Cleaned puffs are sorted by size — 4+ Sutta (small), 5+ Sutta (medium), and 6+ Sutta (large/premium) with quality checks.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 7 */}
-            <div className={styles.processCard}>
-              <div className={styles.processCardImageWrap}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/process-step-7.png" alt="Quality Assurance" className={styles.processCardImage} />
-                <span className={styles.processCardBadge}>07</span>
-              </div>
-              <div className={styles.processCardBody}>
-                <h4 className={styles.processCardTitle}>Moisture Testing &amp; QA</h4>
-                <p className={styles.processCardText}>
-                  Every batch is tested for moisture (below 12%), checked for purity, and verified against FSSAI &amp; export-grade standards.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 8 */}
-            <div className={styles.processCard}>
-              <div className={styles.processCardImageWrap}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/process-step-8.png" alt="Packaging and Dispatch" className={styles.processCardImage} />
-                <span className={styles.processCardBadge}>08</span>
-              </div>
-              <div className={styles.processCardBody}>
-                <h4 className={styles.processCardTitle}>Packaging &amp; Dispatch</h4>
-                <p className={styles.processCardText}>
-                  Graded makhana is sealed in food-grade, moisture-proof packaging — bulk bags, retail packs, or custom private-label formats.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

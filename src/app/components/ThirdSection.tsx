@@ -1,9 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import PhoneInput from 'react-phone-input-2';
+import { useState } from "react";
+import dynamic from 'next/dynamic';
 import 'react-phone-input-2/lib/style.css';
+import { useGeo } from './GeoProvider';
 import styles from "./ThirdSection.module.css";
+
+const PhoneInput = dynamic(() => import('react-phone-input-2'), {
+  ssr: false,
+  loading: () => <input placeholder="Phone" className={styles.fieldInput} disabled />,
+});
 
 /* ─── Inline SVG icons ─── */
 function UserIcon() {
@@ -114,18 +120,7 @@ export default function ThirdSection({ data }: { data?: any }) {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [defaultCountry, setDefaultCountry] = useState('in');
-
-  useEffect(() => {
-    fetch('https://ipapi.co/json/')
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.country_code) {
-          setDefaultCountry(data.country_code.toLowerCase());
-        }
-      })
-      .catch(err => console.error('Failed to fetch country code:', err));
-  }, []);
+  const { countryCode: defaultCountry } = useGeo();
 
   const handleChange = (
     e: React.ChangeEvent<

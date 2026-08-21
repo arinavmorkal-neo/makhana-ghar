@@ -5,7 +5,7 @@
 
 /* Fonts loaded centrally from layout.tsx */
 .wrap {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   background: #ffffff;
   position: relative;
   z-index: 2;
@@ -98,13 +98,13 @@
   align-items: center;
   gap: 10px;
   color: #4A7C3F;
-  font-family: 'Caveat', cursive;
+  font-family: var(--font-caveat), cursive;
   font-size: 24px;
   font-weight: 700;
 }
 
 .heading {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: clamp(1.7rem, 2.5vw, 2.25rem);
   font-weight: 800;
   color: #111111;
@@ -127,7 +127,7 @@
   color: #ffffff;
   padding: 14px 24px;
   border-radius: 50px;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 13.5px;
   font-weight: 700;
   border: none;
@@ -234,7 +234,7 @@
 }
 
 .cardTitle {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: #ffffff;
@@ -243,7 +243,7 @@
 }
 
 .cardDesc {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 12.5px;
   line-height: 1.75;
   color: rgba(255, 255, 255, 0.55);

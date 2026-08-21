@@ -79,7 +79,7 @@
 }
 
 .imageTitle {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 1.3rem;
   font-weight: 700;
   color: #ffffff;
@@ -88,7 +88,7 @@
 }
 
 .imageSubtitle {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.75);
   line-height: 1.5;
@@ -105,7 +105,7 @@
 }
 
 .formTitle {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 1.25rem;
   font-weight: 700;
   color: #1a3a1a;
@@ -113,7 +113,7 @@
 }
 
 .formSubtitle {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 0.78rem;
   color: #888;
   margin: 0 0 20px;
@@ -130,7 +130,7 @@
   font-size: 0.8rem;
   font-weight: 500;
   margin-bottom: 14px;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
 }
 
 .errorMsg {
@@ -142,7 +142,7 @@
   font-size: 0.8rem;
   font-weight: 500;
   margin-bottom: 14px;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
 }
 
 /* ── Form Fields ── */
@@ -152,7 +152,7 @@
 
 .label {
   display: block;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   color: #555;
@@ -161,7 +161,7 @@
 
 .input {
   width: 100%;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 0.82rem;
   color: #1a3a1a;
   padding: 10px 14px;
@@ -193,7 +193,7 @@
 }
 
 .codeSelect {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 0.8rem;
   color: #1a3a1a;
   padding: 10px 8px;
@@ -223,7 +223,7 @@
   border: none;
   border-radius: 10px;
   padding: 13px 20px;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;

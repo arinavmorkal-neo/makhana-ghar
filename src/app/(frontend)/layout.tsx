@@ -1,8 +1,88 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
+import localFont from 'next/font/local';
+import {
+  Inter,
+  Poppins,
+  Playfair_Display,
+  Caveat,
+  Nunito,
+  DM_Sans,
+  Bebas_Neue,
+} from 'next/font/google';
 import LoadingScreen from '../components/LoadingScreen';
+import { GeoProvider } from '../components/GeoProvider';
 import { organizationJsonLd } from '../lib/jsonLd';
 import './globals.css';
+
+/* ── Self-hosted Google Fonts ─────────────────────────── */
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+  variable: '--font-poppins',
+});
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['600', '700', '900'],
+  display: 'swap',
+  variable: '--font-playfair',
+});
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-caveat',
+});
+
+const nunito = Nunito({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  display: 'swap',
+  variable: '--font-nunito',
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  display: 'swap',
+  variable: '--font-dm-sans',
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-bebas',
+});
+
+/* ── Local font: Farmhame ─────────────────────────────── */
+const farmhame = localFont({
+  src: '../../../public/fonts/Farmhouse.ttf',
+  display: 'swap',
+  variable: '--font-farmhame',
+});
+
+/* Combine all CSS variable classes */
+const fontVariables = [
+  inter.variable,
+  poppins.variable,
+  playfairDisplay.variable,
+  caveat.variable,
+  nunito.variable,
+  dmSans.variable,
+  bebasNeue.variable,
+  farmhame.variable,
+].join(' ');
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.makhanaghar.in'),
@@ -37,10 +117,8 @@ export default function FrontendLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={fontVariables}>
       <head>
-
-
         {/* Google Tag Manager */}
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -63,16 +141,6 @@ gtag('js', new Date());
 gtag('config', 'G-J38ME748LK');`}
         </Script>
         {/* End Google tag */}
-
-        {/* Preconnect to Google Fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-
-        {/* Single consolidated Google Fonts request — all families in one call */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
 
         {/* Preload LCP image — hero banner */}
         <link
@@ -99,11 +167,12 @@ gtag('config', 'G-J38ME748LK');`}
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        <LoadingScreen>
-          {children}
-        </LoadingScreen>
+        <GeoProvider>
+          <LoadingScreen>
+            {children}
+          </LoadingScreen>
+        </GeoProvider>
       </body>
     </html>
   );
 }
-

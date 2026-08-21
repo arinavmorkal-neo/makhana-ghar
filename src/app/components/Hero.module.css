@@ -19,7 +19,7 @@
   width: 100%;
   background: #1a2e12;
   overflow: hidden;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
 }
 
 /* ── Background images — crossfade stack ── */
@@ -73,7 +73,7 @@
 /* Tag */
 .tag {
   display: inline-block;
-  font-family: 'Caveat', cursive;
+  font-family: var(--font-caveat), cursive;
   font-size: 22px;
   font-weight: 700;
   color: #f5c842;
@@ -140,7 +140,7 @@
   color: #1a2e12;
   padding: 10px 18px;
   border-radius: 50px;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 13px;
   font-weight: 700;
   border: none;

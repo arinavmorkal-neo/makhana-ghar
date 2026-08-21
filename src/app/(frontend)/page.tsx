@@ -12,10 +12,9 @@ import Footer from '../components/Footer';
 import MobileNavBar from '../components/MobileNavBar';
 import { breadcrumbJsonLd } from '../lib/jsonLd';
 
-// Force dynamic rendering so Payload CMS data is always fresh on Vercel.
-// Without this, the page is statically generated at build time and never
-// re-fetches data from MongoDB when you update content in the admin panel.
-export const dynamic = 'force-dynamic';
+// Revalidate every 60 seconds (ISR) so the page is served from cache
+// and CMS updates appear within a minute, without cold-start delays.
+export const revalidate = 60;
 
 // Map block slugs to component renderers
 function renderBlock(block: any, index: number) {

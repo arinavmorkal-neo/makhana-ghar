@@ -14,7 +14,7 @@
   height: 45vh;
   background: #1a2e12;
   overflow: hidden;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   display: flex;
   align-items: center;
 }
@@ -54,7 +54,7 @@
 
 .heroTag {
   display: inline-block;
-  font-family: 'Caveat', cursive;
+  font-family: var(--font-caveat), cursive;
   font-size: 24px;
   font-weight: 700;
   color: #f5c842;
@@ -104,7 +104,7 @@
 .categoryContainer {
   background: #ffffff;
   padding: 60px 24px 80px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
 }
 
 .categoryInner {
@@ -121,7 +121,7 @@
 }
 
 .sectionTitle {
-  font-family: 'Caveat', cursive;
+  font-family: var(--font-caveat), cursive;
   font-size: 1.8rem;
   font-weight: 700;
   color: #1a3a1a;
@@ -146,7 +146,7 @@
 }
 
 .filterPill {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
   font-size: 0.82rem;
   font-weight: 600;
   padding: 10px 22px;
@@ -291,7 +291,7 @@
 }
 
 .cardTitle {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.35;
@@ -410,7 +410,7 @@
 }
 
 .ctaTitle {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 1.4rem;
   font-weight: 700;
   color: #ffffff;
@@ -426,7 +426,7 @@
 }
 
 .ctaButton {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 0.95rem;
   font-weight: 600;
   background: #f5c842;

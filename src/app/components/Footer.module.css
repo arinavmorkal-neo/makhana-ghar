@@ -6,7 +6,7 @@
 /* ── Footer shell ── */
 .siteFooter {
   background: #0d2d1a;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
   color: rgba(255,255,255,0.70);
   position: relative;
   overflow: visible;
@@ -61,7 +61,7 @@
 }
 
 .brandName {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-playfair), serif;
   font-size: 20px;
   color: #ffffff;
   line-height: 1.1;
@@ -75,7 +75,7 @@
 }
 
 .taglinePill {
-  font-family: 'Caveat', cursive;
+  font-family: var(--font-caveat), cursive;
   font-size: 26px;
   font-weight: 700;
   color: #f5c518;
@@ -112,7 +112,7 @@
 }
 
 .colTitle {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-playfair), serif;
   font-size: 16px;
   font-weight: 600;
   color: #ffffff;
@@ -176,7 +176,7 @@
   padding: 10px 14px;
   font-size: 13px;
   color: #ffffff;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
   width: 100%;
 }
 .newsletterInput::placeholder { color: rgba(255,255,255,0.40); }
@@ -196,7 +196,7 @@
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 6px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
   font-size: 13px;
   color: #ffffff;
   width: 100%;
@@ -239,7 +239,7 @@
   gap: 6px;
   font-size: 13px;
   font-weight: 600;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
   transition: background .2s;
   white-space: nowrap;
   align-self: center;

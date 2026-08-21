@@ -99,7 +99,7 @@
 
 /* ── Number ── */
 .number {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 900;
   color: #f5a623;
@@ -109,7 +109,7 @@
 
 /* ── Label ── */
 .label {
-  font-family: 'Lato', sans-serif;
+  font-family: var(--font-inter), sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.85);

@@ -156,6 +156,7 @@ export default function Header() {
                 width={160}
                 height={56}
                 priority
+                sizes="160px"
                 className={styles.logoImg}
               />
             </a>
