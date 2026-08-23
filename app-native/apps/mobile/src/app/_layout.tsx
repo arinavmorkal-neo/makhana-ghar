@@ -20,23 +20,23 @@ export default function RootLayout() {
 
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: tabBar.activeColor,
-          tabBarInactiveTintColor: tabBar.inactiveColor,
+          tabBarActiveTintColor: '#F5C800',
+          tabBarInactiveTintColor: 'rgba(255,255,255,0.6)',
           tabBarStyle: {
-            backgroundColor: tabBar.bg,
-            borderTopColor: tabBar.borderColor,
+            backgroundColor: '#152b11',
+            borderTopColor: 'rgba(245,200,0,0.2)',
             borderTopWidth: 1,
-            paddingBottom: 6,
+            paddingBottom: 8,
             paddingTop: 6,
-            height: 60,
+            height: 64,
           },
           tabBarLabelStyle: {
-            fontSize: tabBar.labelFontSize,
-            fontWeight: tabBar.labelFontWeight,
+            fontSize: 11,
+            fontWeight: '700',
           },
         }}
       >
