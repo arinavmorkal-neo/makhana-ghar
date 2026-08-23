@@ -1,0 +1,2 @@
+# Ignore mobile app and React Native packages on Vercel web deployment
+app-native
