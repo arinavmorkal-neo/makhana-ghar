@@ -1,0 +1,9 @@
+# EAS Build ignore
+node_modules
+.expo
+dist
+android/build
+android/.gradle
+android/app/build
+android/local.properties
+.git

@@ -39,6 +39,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b5ae496d-b92e-46ef-9938-ff387078a033"
+      }
+    },
+    "owner": "n4neo"
   }
 }
