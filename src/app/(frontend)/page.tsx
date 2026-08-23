@@ -70,6 +70,42 @@ export default async function HomePage() {
     if (result.docs.length > 0) {
       pageData = result.docs[0];
     }
+
+    // Enrich product-section blocks with real product slugs
+    if (pageData?.layout) {
+      const productsResult = await payload.find({
+        collection: 'products',
+        where: { status: { equals: 'published' } },
+        limit: 50,
+        depth: 0,
+      });
+      const dbProducts = productsResult.docs as any[];
+
+      for (const block of pageData.layout) {
+        if (block.blockType === 'product-section' && block.products) {
+          for (const p of block.products) {
+            if (p.slug) continue; // Already has a slug set in CMS
+            // Match by checking if product name words appear in the DB product name
+            const pName = (p.name || '').toLowerCase();
+            const match = dbProducts.find((db) => {
+              const dbName = (db.name || '').toLowerCase();
+              // Extract the grade number (e.g. "4", "5", "6") and check for match
+              const gradeMatch = pName.match(/(\d)\+?\s*sut/);
+              const dbGradeMatch = dbName.match(/(\d)\+?\s*sut/);
+              if (gradeMatch && dbGradeMatch) {
+                return gradeMatch[1] === dbGradeMatch[1] &&
+                  pName.includes(gradeMatch[1]) &&
+                  dbName.includes(dbGradeMatch[1]);
+              }
+              return dbName.includes(pName) || pName.includes(dbName);
+            });
+            if (match) {
+              p.slug = match.slug;
+            }
+          }
+        }
+      }
+    }
   } catch (e) {
     // Database might not be ready yet — fall back to static content
     console.warn('Could not fetch homepage from Payload CMS:', e);

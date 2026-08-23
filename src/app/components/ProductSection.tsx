@@ -7,11 +7,11 @@ import { getImageUrlWithOverride } from '../../lib/getImageUrl';
 
 const defaultProducts: { id: number; name: string; weight: string; price: string; origin: string; category: string; description: string; tags: string[]; image: string; bg: string; slug: string }[] = [];
 
-function getSlugFromName(name: string): string {
-  const n = (name || "").toLowerCase();
-  if (n.includes("6")) return "6-suta-plus-makhana";
-  if (n.includes("5")) return "5-suta-round-makhana";
-  return "4-suta-round-makhana-flake";
+function slugify(name: string): string {
+  return (name || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 export default function ProductSection({ data }: { data?: any }) {
@@ -31,7 +31,7 @@ export default function ProductSection({ data }: { data?: any }) {
         tags: p.tags && p.tags.length > 0 ? p.tags.map((t: any) => t.tag) : [],
         image: getImageUrlWithOverride(p.imageUrl, p.image, "/4+.webp"),
         bg: p.bg || "linear-gradient(160deg, #e8f5e9 0%, #2e7d32 100%)",
-        slug: p.slug || getSlugFromName(p.name),
+        slug: p.slug || slugify(p.name),
       }))
     : defaultProducts;
 
@@ -73,46 +73,48 @@ export default function ProductSection({ data }: { data?: any }) {
       {/* Product cards */}
       <div className={styles.cardsRow}>
         {products.map((p: any) => (
-          <div key={p.id} className={styles.productCard}>
-            {/* Gradient background */}
-            <div className={styles.cardBg} style={{ background: p.bg }} />
+          <Link key={p.id} href={`/product/${p.slug}`} className={styles.productCardLink}>
+            <div className={styles.productCard}>
+              {/* Gradient background */}
+              <div className={styles.cardBg} style={{ background: p.bg }} />
 
-            {/* Product image */}
-            <Image
-              className={styles.cardImage}
-              src={p.image}
-              alt={p.name}
-              width={400}
-              height={400}
-              loading="lazy"
-              sizes="(max-width: 768px) 50vw, 280px"
-            />
+              {/* Product image */}
+              <Image
+                className={styles.cardImage}
+                src={p.image}
+                alt={p.name}
+                width={400}
+                height={400}
+                loading="lazy"
+                sizes="(max-width: 768px) 50vw, 280px"
+              />
 
-            {/* Hover details panel */}
-            <div className={styles.cardHoverPanel}>
-              <div className={styles.panelName}>{p.name}</div>
-              <div className={styles.panelOrigin}>{p.category} · {p.origin}</div>
-              <div className={styles.panelDesc}>{p.description}</div>
-              <div className={styles.panelTags}>
-                {p.tags.map((t: any) => (
-                  <span key={t} className={styles.panelTag}>{t}</span>
-                ))}
-              </div>
-              <div className={styles.panelFooter}>
-                <div>
-                  <div className={styles.panelPrice}>{p.price}</div>
-                  <div className={styles.panelWeight}>{p.weight}</div>
+              {/* Hover details panel */}
+              <div className={styles.cardHoverPanel}>
+                <div className={styles.panelName}>{p.name}</div>
+                <div className={styles.panelOrigin}>{p.category} · {p.origin}</div>
+                <div className={styles.panelDesc}>{p.description}</div>
+                <div className={styles.panelTags}>
+                  {p.tags.map((t: any) => (
+                    <span key={t} className={styles.panelTag}>{t}</span>
+                  ))}
                 </div>
-                <Link href={`/product/${p.slug}`} className={styles.panelBtn}>Enquire Now</Link>
+                <div className={styles.panelFooter}>
+                  <div>
+                    <div className={styles.panelPrice}>{p.price}</div>
+                    <div className={styles.panelWeight}>{p.weight}</div>
+                  </div>
+                  <span className={styles.panelBtn}>Enquire Now</span>
+                </div>
+              </div>
+
+              {/* Mobile-only bottom bar */}
+              <div className={styles.mobileBottom}>
+                <span className={styles.mobileName}>{p.name}</span>
+                <span className={styles.mobileBtn}>Get Now</span>
               </div>
             </div>
-
-            {/* Mobile-only bottom bar */}
-            <div className={styles.mobileBottom}>
-              <span className={styles.mobileName}>{p.name}</span>
-              <Link href={`/product/${p.slug}`} className={styles.mobileBtn}>Get Now</Link>
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

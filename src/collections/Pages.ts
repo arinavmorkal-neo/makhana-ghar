@@ -158,6 +158,13 @@ export const Pages: CollectionConfig = {
                   required: true,
                 },
                 {
+                  name: 'slug',
+                  type: 'text',
+                  admin: {
+                    description: 'URL slug matching the product in the Products collection (e.g. makhana-4-sutta). If empty, auto-generated from name.',
+                  },
+                },
+                {
                   name: 'weight',
                   type: 'text',
                 },
