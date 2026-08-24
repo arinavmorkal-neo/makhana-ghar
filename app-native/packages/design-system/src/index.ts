@@ -6,6 +6,7 @@
  */
 export {
   colors,
+  fonts,
   typography,
   spacing,
   radii,

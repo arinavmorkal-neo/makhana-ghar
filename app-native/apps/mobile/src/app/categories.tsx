@@ -1,312 +1,261 @@
 /**
  * ══════════════════════════════════════════════════════════════
- *  Makhana Ghar — Product Categories Screen
- *  Matches website ProductSlider & Categories layout
+ * Categories Screen — Makhana Varieties
+ * ══════════════════════════════════════════════════════════════
+ * Matches the website's brand aesthetics with hero banner & grade cards
  * ══════════════════════════════════════════════════════════════
  */
-
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
   Pressable,
+  ActivityIndicator,
+  RefreshControl,
   Dimensions,
-  Linking,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import {
-  ArrowRight,
-  Sparkles,
-  MessageCircle,
-  Package,
-  Layers,
-  Award,
-} from 'lucide-react-native';
-import { colors, typography, spacing, radii, shadows } from '@makhana-ghar/design-system';
+import { ArrowRight, Sparkles } from 'lucide-react-native';
+import { colors, fonts, typography, spacing, radii, shadows } from '@makhana-ghar/design-system';
 import { getCategories, resolveImageUrl, type Category } from '@makhana-ghar/core';
+import { AppHeader, AppFooter } from '../components';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const STATIC_CATEGORIES = [
+const fallbackCategories = [
   {
     id: '1',
-    name: 'Makhana 4+ Sutta',
-    slug: 'makhana-4-sutta',
-    badge: 'Popular',
-    desc: 'High demand round makhana flakes for wholesale distribution, retail packs, and snack manufacturing.',
-    image: 'https://www.makhanaghar.in/4+.webp',
-    specs: 'Standard Round • High Expansion',
+    name: '6+ Suta Jumbo Grade',
+    slug: '6-suta-jumbo',
+    icon: '👑',
+    imageUrl: 'https://www.makhanaghar.in/6+.webp',
+    description: 'Largest, flakiest premium grade for high-end retail, gifting and export.',
   },
   {
     id: '2',
-    name: 'Makhana 5+ Sutta (Export)',
-    slug: 'makhana-5-sutta',
-    badge: 'Best Seller',
-    desc: 'Uniform large size, brilliant natural white color, perfectly crisp for premium supermarket brands.',
-    image: 'https://www.makhanaghar.in/5+.webp',
-    specs: 'Export Grade • Uniform Sizing',
+    name: '5+ Suta Medium Grade',
+    slug: '5-suta-medium',
+    icon: '✨',
+    imageUrl: 'https://www.makhanaghar.in/5+.webp',
+    description: 'Popular choice for daily snacking, roasting, and commercial food service.',
   },
   {
     id: '3',
-    name: 'Makhana 6+ Sutta (Super Jumbo)',
-    slug: 'makhana-6-sutta',
-    badge: 'Premium Jumbo',
-    desc: 'Top-tier hand-graded jumbo fox nuts for gourmet luxury lines and international export orders.',
-    image: 'https://www.makhanaghar.in/6+.webp',
-    specs: 'Jumbo Size • Hand Graded',
+    name: '4+ Suta Standard Grade',
+    slug: '4-suta-standard',
+    icon: '🌿',
+    imageUrl: 'https://www.makhanaghar.in/4+.webp',
+    description: 'Crisp and nutritious round flakes, ideal for bulk processing & confectionery.',
   },
   {
     id: '4',
-    name: 'Phool Makhana Lite / Roasted',
-    slug: 'phool-makhana-lite',
-    badge: 'Wholesale Mix',
-    desc: 'Economical grade perfect for roasted snacks, namkeen mixes, curry preparation, and flour milling.',
-    image: 'https://www.makhanaghar.in/4+.webp',
-    specs: 'Value Pack • Versatile Utility',
+    name: 'Raw Makhana Flakes',
+    slug: 'raw-flakes',
+    icon: '📦',
+    imageUrl: 'https://www.makhanaghar.in/banner2.webp',
+    description: 'Wholesale raw flakes for industrial packaging and snack brands.',
   },
 ];
 
 export default function CategoriesScreen() {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    getCategories({ limit: 20 })
-      .then((res) => {
-        if (res.docs.length > 0) setCategories(res.docs);
-      })
-      .catch(() => {});
+  const fetchData = useCallback(async () => {
+    try {
+      const res = await getCategories({ limit: 50 });
+      if (res.docs && res.docs.length > 0) {
+        setCategories(res.docs);
+      } else {
+        setCategories(fallbackCategories as any);
+      }
+    } catch (e) {
+      console.warn('Failed to load categories:', e);
+      setCategories(fallbackCategories as any);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
   }, []);
 
-  const displayList = categories.length > 0 ? categories : (STATIC_CATEGORIES as any);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-      {/* ── Top Header ── */}
-      <View style={styles.header}>
-        <View style={styles.goldBadge}>
-          <Sparkles size={12} color={colors.primaryDeep} />
-          <Text style={styles.goldBadgeText}>PRODUCT GRADES</Text>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => {
+            setRefreshing(true);
+            fetchData();
+          }}
+          tintColor={colors.primary}
+        />
+      }
+    >
+      <AppHeader showBack={true} />
+
+      {/* ── HERO BANNER ── */}
+      <View style={styles.heroSection}>
+        <Image
+          source={{ uri: 'https://www.makhanaghar.in/banner1.webp' }}
+          style={styles.heroBg}
+          contentFit="cover"
+        />
+        <View style={styles.heroOverlay}>
+          <Text style={styles.heroTag}>Product Classification</Text>
+          <Text style={styles.heroTitle}>CATEGORIES &amp; GRADES</Text>
+          <View style={styles.heroRule} />
+          <Text style={styles.heroBody}>
+            Discover each distinct grade of Makhana produced and graded at
+            Makhana Ghar with strict international standards.
+          </Text>
         </View>
-        <Text style={styles.headerTitle}>Explore Categories</Text>
-        <Text style={styles.headerSub}>
-          Precision graded by size and density for FMCG, retail packaging, and export standards.
-        </Text>
       </View>
 
-      {/* ── Category Cards ── */}
-      <View style={styles.list}>
-        {displayList.map((cat: any) => {
-          const img = resolveImageUrl(cat.imageUrl, cat.image, 'https://www.makhanaghar.in') || cat.image || 'https://www.makhanaghar.in/4+.webp';
-          return (
-            <Pressable
-              key={cat.id}
-              style={styles.card}
-              onPress={() => router.push(`/product/${cat.slug || 'makhana-4-sutta'}` as never)}
-            >
-              <Image source={{ uri: img }} style={styles.cardImg} contentFit="cover" />
-              <View style={styles.cardOverlay}>
-                <View style={styles.cardTopRow}>
-                  <View style={styles.badgePill}>
-                    <Text style={styles.badgePillText}>{cat.badge || 'Grade Certified'}</Text>
-                  </View>
-                </View>
+      <View style={styles.content}>
+        <Text style={styles.sectionTitle}>
+          Makhana <Text style={styles.sectionTitleAccent}>Varieties</Text>
+        </Text>
+        <Text style={styles.sectionSub}>
+          Click on any category to view all available products and grades
+        </Text>
 
-                <View style={styles.cardBottomContent}>
-                  <Text style={styles.cardTitle}>{cat.name}</Text>
-                  <Text style={styles.cardDesc} numberOfLines={2}>{cat.desc || cat.description || 'Premium quality makhana sourced directly from Bihar.'}</Text>
-                  
-                  <View style={styles.cardFooter}>
-                    <Text style={styles.cardSpecs}>{cat.specs || '100% Organic • Farm Direct'}</Text>
-                    <View style={styles.viewBtn}>
-                      <Text style={styles.viewBtnText}>View Grade</Text>
-                      <ArrowRight size={14} color={colors.textDark} />
+        {loading ? (
+          <ActivityIndicator size="large" color={colors.primary} />
+        ) : (
+          <View style={styles.grid}>
+            {categories.map((cat: any) => {
+              const imageUrl =
+                resolveImageUrl(cat.imageUrl, cat.image, 'https://www.makhanaghar.in') ||
+                'https://www.makhanaghar.in/4+.webp';
+
+              return (
+                <Pressable
+                  key={cat.id}
+                  style={styles.card}
+                  onPress={() => router.push('/products')}
+                >
+                  <View style={styles.cardImageWrap}>
+                    <Image
+                      source={{ uri: imageUrl }}
+                      style={styles.cardImage}
+                      contentFit="cover"
+                      transition={300}
+                    />
+                    <View style={styles.cardBadge}>
+                      <Text style={styles.cardBadgeText}>{cat.icon || '🌿'}</Text>
                     </View>
                   </View>
-                </View>
-              </View>
-            </Pressable>
-          );
-        })}
+
+                  <View style={styles.cardBody}>
+                    <Text style={styles.cardName}>{cat.name}</Text>
+                    <Text style={styles.cardDesc} numberOfLines={2}>
+                      {cat.description || 'Premium graded Makhana direct from Bihar.'}
+                    </Text>
+
+                    <View style={styles.cardActionRow}>
+                      <Text style={styles.cardActionText}>Explore Products</Text>
+                      <ArrowRight size={14} color="#2e7d32" />
+                    </View>
+                  </View>
+                </Pressable>
+              );
+            })}
+          </View>
+        )}
       </View>
 
-      {/* ── Custom Grade Banner ── */}
-      <View style={styles.customBanner}>
-        <Award size={28} color={colors.accent} />
-        <Text style={styles.customTitle}>Looking for Custom Density or Private Labeling?</Text>
-        <Text style={styles.customSub}>We provide customized sorting, roasting, and nitrogen packaging for retail brands.</Text>
-        <Pressable
-          style={styles.customBtn}
-          onPress={() => Linking.openURL('https://wa.me/918002661555?text=Hi%20Makhana%20Ghar,%20I%20need%20custom%20grade%20and%20private%20label%20makhana')}
-        >
-          <MessageCircle size={16} color={colors.textDark} />
-          <Text style={styles.customBtnText}>Talk to Export Specialist</Text>
-        </Pressable>
-      </View>
-
-      <View style={{ height: 40 }} />
+      {/* Reusable Verified AppFooter */}
+      <AppFooter />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f4f7f3' },
-  content: { paddingBottom: spacing[10] },
+  container: { flex: 1, backgroundColor: colors.bg },
 
-  header: {
-    backgroundColor: '#152b11',
-    paddingTop: 54,
-    paddingBottom: 22,
-    paddingHorizontal: spacing[4],
-    alignItems: 'center',
+  // Hero
+  heroSection: { height: 260, position: 'relative' },
+  heroBg: { width: '100%', height: '100%' },
+  heroOverlay: {
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: 'rgba(26,46,18,0.88)',
+    justifyContent: 'center',
+    paddingHorizontal: spacing[5],
+    paddingTop: 36,
   },
-  goldBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: colors.accent,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: radii.full,
-    marginBottom: 6,
-  },
-  goldBadgeText: {
-    fontSize: 10,
-    fontWeight: '900',
-    color: '#152b11',
+  heroTag: { fontFamily: fonts.caveat, fontSize: 24, color: '#f5c842' },
+  heroTitle: {
+    fontFamily: fonts.bebas,
+    fontSize: 28,
+    color: colors.white,
+    textTransform: 'uppercase',
     letterSpacing: 1,
   },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '900',
-    color: colors.white,
+  heroRule: {
+    width: 100,
+    height: 3,
+    backgroundColor: colors.accent,
+    marginVertical: 6,
+    borderRadius: 2,
   },
-  headerSub: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.75)',
-    textAlign: 'center',
-    marginTop: 4,
-    lineHeight: 18,
-  },
+  heroBody: { fontFamily: fonts.dmSans, fontSize: 12, color: colors.textLight, lineHeight: 17 },
 
-  list: {
-    padding: spacing[4],
-    gap: 16,
-  },
+  content: { padding: spacing[4] },
+  sectionTitle: { fontFamily: fonts.poppinsExtraBold, fontSize: 22, color: '#1a2e12' },
+  sectionTitleAccent: { color: '#2e7d32' },
+  sectionSub: { fontFamily: fonts.dmSans, fontSize: 12, color: '#777', marginTop: 2, marginBottom: spacing[4] },
+
+  grid: { gap: spacing[4] },
   card: {
-    height: 220,
+    backgroundColor: colors.surface,
     borderRadius: 16,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.border,
+    ...shadows.sm.rn,
+  },
+  cardImageWrap: {
+    width: '100%',
+    height: 160,
     position: 'relative',
-    backgroundColor: '#152b11',
-    ...shadows.md.rn,
+    backgroundColor: '#fafdf9',
   },
-  cardImg: {
-    ...StyleSheet.absoluteFill,
-  },
-  cardOverlay: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: 'rgba(18,38,15,0.75)',
-    padding: spacing[4],
-    justifyContent: 'space-between',
-  },
-  cardTopRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  badgePill: {
-    backgroundColor: colors.accent,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: radii.full,
-  },
-  badgePillText: {
-    fontSize: 10,
-    fontWeight: '900',
-    color: colors.textDark,
-  },
-  cardBottomContent: {},
-  cardTitle: {
-    fontSize: 19,
-    fontWeight: '900',
-    color: colors.white,
-  },
-  cardDesc: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.85)',
-    marginTop: 4,
-    lineHeight: 17,
-  },
-  cardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  cardImage: { width: '100%', height: '100%' },
+  cardBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: 'rgba(26,46,18,0.85)',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 12,
-    paddingTop: 8,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.15)',
   },
-  cardSpecs: {
-    fontSize: 11,
-    color: colors.accent,
-    fontWeight: '700',
-  },
-  viewBtn: {
+  cardBadgeText: { fontSize: 16 },
+
+  cardBody: { padding: spacing[4] },
+  cardName: { fontFamily: fonts.poppinsBold, fontSize: 16, color: '#1a2e12', marginBottom: 4 },
+  cardDesc: { fontFamily: fonts.dmSans, fontSize: 12, color: '#666', lineHeight: 18, marginBottom: 10 },
+  cardActionRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: colors.accent,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 6,
+    borderTopWidth: 1,
+    borderTopColor: '#f0ebe3',
+    paddingTop: 8,
   },
-  viewBtnText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: colors.textDark,
-  },
-
-  // Custom Banner
-  customBanner: {
-    marginHorizontal: spacing[4],
-    backgroundColor: '#12260f',
-    padding: spacing[6],
-    borderRadius: 16,
-    alignItems: 'center',
-    borderWidth: 1.5,
-    borderColor: 'rgba(245,200,0,0.3)',
-    marginTop: spacing[4],
-  },
-  customTitle: {
-    fontSize: 16,
-    fontWeight: '900',
-    color: colors.white,
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  customSub: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.75)',
-    textAlign: 'center',
-    marginTop: 6,
-    lineHeight: 18,
-  },
-  customBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    backgroundColor: colors.accent,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: radii.full,
-    marginTop: spacing[4],
-  },
-  customBtnText: {
-    fontSize: 13,
-    fontWeight: '900',
-    color: colors.textDark,
-  },
+  cardActionText: { fontFamily: fonts.poppinsBold, fontSize: 12, color: '#2e7d32' },
 });

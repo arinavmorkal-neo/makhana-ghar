@@ -88,7 +88,7 @@ export interface Category {
 
 // ── Enquiries ─────────────────────────────────────────────
 export type EnquiryStatus = 'new' | 'contacted' | 'in-progress' | 'converted' | 'closed';
-export type EnquiryProduct = 'makhana-4' | 'makhana-5' | 'makhana-6' | 'makhana-lite' | 'custom';
+export type EnquiryProduct = string;
 
 export interface Enquiry {
   id: string;
@@ -96,7 +96,7 @@ export interface Enquiry {
   countryCode?: string;
   contact: string;
   email?: string;
-  product?: EnquiryProduct;
+  product?: string;
   message?: string;
   status: EnquiryStatus;
   notes?: string;
@@ -110,9 +110,10 @@ export interface CreateEnquiry {
   countryCode?: string;
   contact: string;
   email?: string;
-  product?: EnquiryProduct;
+  product?: string;
   message?: string;
   source?: string;
+  sourceComponent?: string;
 }
 
 // ── Blogs ─────────────────────────────────────────────────
@@ -121,15 +122,18 @@ export interface Blog {
   title: string;
   slug: string;
   status?: 'published' | 'draft';
-  excerpt?: string;
-  content?: unknown;  // Lexical rich text
-  featuredImage?: Media | string;
-  featuredImageUrl?: string;
+  date?: string;
   author?: string;
   category?: string;
+  image?: Media | string;
+  imageUrl?: string;
+  excerpt?: string;
+  content?: unknown;
+  readTime?: string;
+  featured?: boolean;
+  views?: number;
   tags?: string[];
   seo?: SEOFields;
-  publishedDate?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -140,8 +144,11 @@ export interface GalleryItem {
   title?: string;
   image?: Media | string;
   imageUrl?: string;
-  caption?: string;
+  category?: string;
+  featured?: boolean;
   order?: number;
+  status?: 'published' | 'draft';
+  caption?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -151,10 +158,14 @@ export interface Founder {
   id: string;
   name: string;
   title?: string;
+  role?: string;
   bio?: string;
   image?: Media | string;
   imageUrl?: string;
+  photo?: Media;
   order?: number;
+  linkedinUrl?: string;
+  twitterUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -210,7 +221,6 @@ export function resolveImageUrl(
   if (!media) return undefined;
   if (typeof media === 'string') return media;
   if (media.url) {
-    // If the URL is relative, prepend the base URL
     if (media.url.startsWith('/') && baseUrl) {
       return `${baseUrl}${media.url}`;
     }

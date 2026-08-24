@@ -75,19 +75,52 @@ export const colors = {
 } as const;
 
 
+export const fonts = {
+  // Little / Farmhouse (The website's custom display typeface)
+  little: 'Little',
+  farmhouse: 'Farmhouse',
+
+  // Caveat (Curvy / handwriting accent)
+  caveat: 'Caveat_700Bold',
+  caveatRegular: 'Caveat_400Regular',
+  caveatSemiBold: 'Caveat_600SemiBold',
+
+  // Bebas Neue (Condensed uppercase display)
+  bebas: 'BebasNeue_400Regular',
+
+  // Poppins (Geometric modern sans)
+  poppins: 'Poppins_400Regular',
+  poppinsMedium: 'Poppins_500Medium',
+  poppinsSemiBold: 'Poppins_600SemiBold',
+  poppinsBold: 'Poppins_700Bold',
+  poppinsExtraBold: 'Poppins_800ExtraBold',
+  poppinsBlack: 'Poppins_900Black',
+
+  // DM Sans (Clean UI / body)
+  dmSans: 'DMSans_400Regular',
+  dmSansMedium: 'DMSans_500Medium',
+  dmSansBold: 'DMSans_700Bold',
+
+  // Inter (Clean system sans)
+  inter: 'Inter_400Regular',
+  interMedium: 'Inter_500Medium',
+  interSemiBold: 'Inter_600SemiBold',
+  interBold: 'Inter_700Bold',
+} as const;
+
 // ── Typography ────────────────────────────────────────────
 export const typography = {
   // Font families — these map to CSS variables on web
   // and to loaded fonts on React Native
   families: {
     brand:    { web: "var(--font-farmhame), Georgia, serif",       rn: 'Farmhouse' },
-    body:     { web: "var(--font-inter), system-ui, sans-serif",   rn: 'Inter' },
-    heading:  { web: "var(--font-poppins), sans-serif",            rn: 'Poppins' },
-    display:  { web: "'Little', 'Bebas Neue', sans-serif",         rn: 'BebasNeue' },
-    accent:   { web: "var(--font-caveat), cursive",                rn: 'Caveat' },
+    body:     { web: "var(--font-inter), system-ui, sans-serif",   rn: fonts.inter },
+    heading:  { web: "var(--font-poppins), sans-serif",            rn: fonts.poppinsBold },
+    display:  { web: "'Little', 'Bebas Neue', sans-serif",         rn: fonts.bebas },
+    accent:   { web: "var(--font-caveat), cursive",                rn: fonts.caveat },
     serif:    { web: "var(--font-playfair), serif",                rn: 'PlayfairDisplay' },
-    ui:       { web: "var(--font-dm-sans), sans-serif",            rn: 'DMSans' },
-    subtitle: { web: "var(--font-nunito), sans-serif",             rn: 'Nunito' },
+    ui:       { web: "var(--font-dm-sans), sans-serif",            rn: fonts.dmSans },
+    subtitle: { web: "var(--font-nunito), sans-serif",             rn: fonts.dmSans },
   },
 
   // Font sizes (px on web, direct number on RN)

@@ -1,495 +1,635 @@
 /**
  * ══════════════════════════════════════════════════════════════
- *  Makhana Ghar — Products Catalog Screen
- *  Matches website ProductSection & ProductSlider styles
+ * Products / Categories Catalog Screen
+ * ══════════════════════════════════════════════════════════════
+ * Exactly recreates the Next.js website /categories page:
+ * - Hero banner with Caveat tag + title underline
+ * - Dynamic Category Filter Pills ("All Products", "4+ Suta", "5+ Suta", "6+ Suta")
+ * - Product cards with Grade badge, star rating, and View Details arrow
+ * - Custom grades & bulk orders bottom banner
  * ══════════════════════════════════════════════════════════════
  */
-
-import React, { useState, useEffect, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
-  RefreshControl,
   Pressable,
+  ActivityIndicator,
+  RefreshControl,
   Dimensions,
-  TextInput,
-  Linking,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import {
-  Search,
-  MessageCircle,
-  Phone,
-  Sparkles,
-  ArrowRight,
-  SlidersHorizontal,
-  Leaf,
-  CheckCircle,
-} from 'lucide-react-native';
-import { colors, typography, spacing, radii, shadows } from '@makhana-ghar/design-system';
+import { ArrowRight, Phone, Star } from 'lucide-react-native';
+import { colors, fonts, typography, spacing, radii, shadows } from '@makhana-ghar/design-system';
 import { getProducts, resolveImageUrl, type Product } from '@makhana-ghar/core';
+import { AppHeader, AppFooter } from '../components';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const CARD_WIDTH = (SCREEN_WIDTH - spacing[4] * 3) / 2;
+const GRID_CARD_WIDTH = (SCREEN_WIDTH - 44) / 2;
 
-const GRADE_FILTERS = ['All Grades', '4+ Sutta', '5+ Sutta', '6+ Sutta', 'Lite / Raw'];
-
-const FALLBACK_PRODUCTS = [
+const fallbackProducts: Product[] = [
   {
-    id: '1',
-    name: 'Makhana 4+ Sutta (Hand Picked)',
-    slug: 'makhana-4-sutta',
-    grade: '4+ Sutta',
-    category: 'Round Flake',
+    id: 'prod-1',
+    name: 'Premium 4 Sutta Raw Makhana',
+    slug: '4-suta-round-makhana-flake',
+    grade: '4 SUTTA',
+    category: '4 Sutta',
     isOrganic: true,
-    rating: 4.9,
-    description: 'Crisp, perfectly popped medium round fox nuts ideal for snacking and packaging.',
+    rating: 4.8,
+    reviews: 125,
     mainImageUrl: 'https://www.makhanaghar.in/4+.webp',
+    description: '4 Sutta Raw Makhana Makhana Ghar 4 Sutta Raw Makhana is...',
   },
   {
-    id: '2',
-    name: 'Makhana 5+ Sutta (Export Quality)',
-    slug: 'makhana-5-sutta',
-    grade: '5+ Sutta',
-    category: 'Export Quality',
+    id: 'prod-2',
+    name: 'Premium 4+ Sutta Raw Makhana',
+    slug: '4-plus-suta-raw-makhana',
+    grade: '4+ SUTTA',
+    category: '4+ Sutta',
     isOrganic: true,
     rating: 4.9,
-    description: 'Uniform large size, high volume expansion, pristine white color.',
-    mainImageUrl: 'https://www.makhanaghar.in/5+.webp',
+    reviews: 180,
+    mainImageUrl: 'https://www.makhanaghar.in/4+.webp',
+    description: 'Premium 4+ Sutta Raw Makhana, carefully selected for...',
   },
   {
-    id: '3',
-    name: 'Makhana 6+ Sutta (Super Jumbo)',
-    slug: 'makhana-6-sutta',
-    grade: '6+ Super Jumbo',
-    category: 'Premium Selection',
+    id: 'prod-3',
+    name: 'Premium 5+ Sutta Raw Makhana',
+    slug: '5-suta-medium-grade-makhana',
+    grade: '5+ SUTTA',
+    category: '5+ Sutta',
+    isOrganic: true,
+    rating: 4.9,
+    reviews: 210,
+    mainImageUrl: 'https://www.makhanaghar.in/5+.webp',
+    description: 'Medium grade 5+ Sutta Makhana with high puff count...',
+  },
+  {
+    id: 'prod-4',
+    name: 'Premium 6+ Sutta Jumbo Makhana',
+    slug: '6-suta-jumbo-grade-makhana',
+    grade: '6+ SUTTA',
+    category: '6+ Sutta',
     isOrganic: true,
     rating: 5.0,
-    description: 'Extra large premium popped lotus seeds for luxury gourmet and international export.',
+    reviews: 340,
     mainImageUrl: 'https://www.makhanaghar.in/6+.webp',
-  },
-  {
-    id: '4',
-    name: 'Phool Makhana Lite (Raw Roasted)',
-    slug: 'phool-makhana-lite',
-    grade: 'Lite Grade',
-    category: 'Standard Pack',
-    isOrganic: true,
-    rating: 4.7,
-    description: 'Cost-effective wholesale grade suitable for flavored roasting and sweet preparations.',
-    mainImageUrl: 'https://www.makhanaghar.in/4+.webp',
+    description: 'Supreme 6+ Sutta Jumbo Grade — largest diameter flakes...',
   },
 ];
 
 export default function ProductsScreen() {
   const router = useRouter();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedGrade, setSelectedGrade] = useState('All Grades');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [products, setProducts] = useState<Product[]>(fallbackProducts);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  const loadProducts = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     try {
       const res = await getProducts({ limit: 50 });
-      if (res.docs.length > 0) {
+      if (res && res.docs && res.docs.length > 0) {
         setProducts(res.docs);
       } else {
-        setProducts(FALLBACK_PRODUCTS as any);
+        setProducts(fallbackProducts);
       }
-    } catch {
-      setProducts(FALLBACK_PRODUCTS as any);
+    } catch (e) {
+      console.warn('Failed to load products, using fallback:', e);
+      setProducts(fallbackProducts);
     } finally {
+      setLoading(false);
       setRefreshing(false);
     }
   }, []);
 
   useEffect(() => {
-    loadProducts();
-  }, [loadProducts]);
+    fetchData();
+  }, [fetchData]);
 
-  const displayList = products.length > 0 ? products : (FALLBACK_PRODUCTS as any);
+  // Standard categories matching user screenshot
+  const categories = [
+    { key: 'all', label: 'All Products' },
+    { key: '4-sutta', label: '4 Sutta', filterVal: '4' },
+    { key: '4-plus-sutta', label: '4+ Sutta', filterVal: '4+' },
+    { key: '5-plus-sutta', label: '5+ Sutta', filterVal: '5+' },
+    { key: '6-plus-sutta', label: '6+ Sutta', filterVal: '6+' },
+  ];
 
-  const filtered = displayList.filter((p: any) => {
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase()));
-    if (!matchesSearch) return false;
-
-    if (selectedGrade === 'All Grades') return true;
-    if (selectedGrade === '4+ Sutta') return p.name.includes('4') || (p.grade && p.grade.includes('4'));
-    if (selectedGrade === '5+ Sutta') return p.name.includes('5') || (p.grade && p.grade.includes('5'));
-    if (selectedGrade === '6+ Sutta') return p.name.includes('6') || (p.grade && p.grade.includes('6'));
-    if (selectedGrade === 'Lite / Raw') return p.name.toLowerCase().includes('lite') || (p.grade && p.grade.toLowerCase().includes('lite'));
-    return true;
-  });
+  const filteredProducts =
+    activeCategory === 'all'
+      ? products
+      : products.filter((p) => {
+          const matchCat = categories.find((c) => c.key === activeCategory);
+          const filter = matchCat?.filterVal || activeCategory;
+          const grade = (p.grade || '').toLowerCase();
+          const name = (p.name || '').toLowerCase();
+          return (
+            grade.includes(filter.toLowerCase()) ||
+            name.includes(filter.toLowerCase())
+          );
+        });
 
   return (
-    <View style={styles.container}>
-      {/* ── TOP BANNER ── */}
-      <View style={styles.headerBanner}>
-        <View style={styles.headerTopRow}>
-          <View>
-            <Text style={styles.headerTag}>WHOLESALE CATALOG</Text>
-            <Text style={styles.headerTitle}>Makhana Products</Text>
-          </View>
-          <Pressable
-            style={styles.headerWaBtn}
-            onPress={() => Linking.openURL('https://wa.me/918002661555?text=Hi%20Makhana%20Ghar,%20please%20send%20full%20product%20catalog%20and%20rates')}
-          >
-            <MessageCircle size={16} color={colors.textDark} />
-            <Text style={styles.headerWaText}>WhatsApp Price List</Text>
-          </Pressable>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => {
+            setRefreshing(true);
+            fetchData();
+          }}
+          tintColor={colors.primary}
+        />
+      }
+      showsVerticalScrollIndicator={false}
+    >
+      <AppHeader showBack={true} />
+
+      {/* ── HERO BANNER ── */}
+      <View style={styles.heroSection}>
+        <Image
+          source={{ uri: 'https://www.makhanaghar.in/banner1.webp' }}
+          style={styles.heroBg}
+          contentFit="cover"
+        />
+        <View style={styles.heroOverlay}>
+          <Text style={styles.heroTag}>Explore</Text>
+          <Text style={styles.heroTitle}>OUR PRODUCTS</Text>
+          <View style={styles.heroRule} />
+          <Text style={styles.heroBody}>
+            Browse our curated collection of premium Makhana — sourced directly
+            from the farms of Bihar, hand-sorted for quality, and packed with
+            freshness.
+          </Text>
         </View>
 
-        {/* Search Bar */}
-        <View style={styles.searchBar}>
-          <Search size={18} color="#888" />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search grades (e.g. 4+, 5+, 6+, organic)..."
-            placeholderTextColor="#888"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
+        {/* Decorative White Grass Edge Image */}
+        <Image
+          source={{ uri: 'https://www.makhanaghar.in/grassnew-white.png' }}
+          style={styles.heroGrass}
+          contentFit="cover"
+        />
       </View>
 
-      {/* ── FILTER PILLS ── */}
-      <View style={styles.filterContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow}>
-          {GRADE_FILTERS.map((grade) => (
+      {/* ── BROWSE BY CATEGORY HEADER (Matching User Screenshot) ── */}
+      <View style={styles.catalogHeader}>
+        <Text style={styles.catalogTitle}>Browse by Category</Text>
+        <Text style={styles.catalogSubtitle}>
+          {filteredProducts.length}{' '}
+          {filteredProducts.length === 1 ? 'product' : 'products'} found
+        </Text>
+      </View>
+
+      {/* ── CATEGORY FILTER PILLS ── */}
+      <View style={styles.filtersWrap}>
+        {categories.map((cat) => {
+          const isActive = activeCategory === cat.key;
+          return (
             <Pressable
-              key={grade}
-              style={[styles.filterPill, selectedGrade === grade && styles.filterPillActive]}
-              onPress={() => setSelectedGrade(grade)}
+              key={cat.key}
+              style={[styles.filterPill, isActive && styles.filterPillActive]}
+              onPress={() => setActiveCategory(cat.key)}
             >
-              <Text style={[styles.filterText, selectedGrade === grade && styles.filterTextActive]}>
-                {grade}
+              <Text
+                style={[
+                  styles.filterPillText,
+                  isActive && styles.filterPillTextActive,
+                ]}
+              >
+                {cat.label}
               </Text>
             </Pressable>
-          ))}
-        </ScrollView>
+          );
+        })}
       </View>
 
-      {/* ── PRODUCTS LIST ── */}
-      <ScrollView
-        contentContainerStyle={styles.gridContent}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); loadProducts(); }} tintColor={colors.accent} />}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.grid}>
-          {filtered.map((item: any) => {
-            const img = resolveImageUrl(item.mainImageUrl, item.mainImage, 'https://www.makhanaghar.in') || 'https://www.makhanaghar.in/4+.webp';
-            return (
+      {/* ── PRODUCT CARDS (2-Column Grid Matching User Screenshot) ── */}
+      <View style={styles.productList}>
+        {filteredProducts.map((product) => {
+          const imageUrl =
+            resolveImageUrl(
+              product.mainImageUrl,
+              product.mainImage,
+              'https://www.makhanaghar.in'
+            ) || 'https://www.makhanaghar.in/4+.webp';
+
+          // Extract size tag from grade or name (e.g. "4 size", "4+ size", "5+ size", "6+ size")
+          const sizeTag = product.grade
+            ? `${product.grade.replace(/sutta|suta/gi, '').trim().toLowerCase()} size`
+            : '4+ size';
+
+          return (
+            <View key={product.id} style={styles.card}>
+              {/* Image & Grade Badges */}
               <Pressable
-                key={item.id}
-                style={styles.card}
-                onPress={() => router.push(`/product/${item.slug || 'makhana-4-sutta'}` as never)}
+                style={styles.cardImageWrap}
+                onPress={() => router.push(`/product/${product.slug}` as never)}
               >
-                <View style={styles.cardImgWrapper}>
-                  <Image source={{ uri: img }} style={styles.cardImg} contentFit="cover" transition={200} />
-                  <View style={styles.gradeTag}>
-                    <Text style={styles.gradeTagText}>{item.grade || 'Export Grade'}</Text>
+                {product.grade && (
+                  <View style={styles.gradeBadge}>
+                    <Text style={styles.gradeBadgeText}>{product.grade}</Text>
                   </View>
-                  {item.isOrganic && (
-                    <View style={styles.organicTag}>
-                      <Leaf size={10} color={colors.success} />
-                      <Text style={styles.organicTagText}>100% Organic</Text>
-                    </View>
-                  )}
-                </View>
-
-                <View style={styles.cardBody}>
-                  <Text style={styles.cardCategory}>{item.category || 'Mithila Harvest'}</Text>
-                  <Text style={styles.cardTitle} numberOfLines={2}>{item.name}</Text>
-                  {item.description && (
-                    <Text style={styles.cardDesc} numberOfLines={2}>{item.description}</Text>
-                  )}
-
-                  <View style={styles.cardFooter}>
-                    <View>
-                      <Text style={styles.priceLabel}>Wholesale Pricing</Text>
-                      <Text style={styles.priceRate}>Direct Factory Rate</Text>
-                    </View>
-                    <View style={styles.enquireBtn}>
-                      <Text style={styles.enquireBtnText}>Enquire</Text>
-                      <ArrowRight size={12} color={colors.textDark} />
-                    </View>
-                  </View>
-                </View>
+                )}
+                <Text style={styles.topSizeText}>{sizeTag}</Text>
+                <Image
+                  source={{ uri: imageUrl }}
+                  style={styles.cardImage}
+                  contentFit="contain"
+                  transition={300}
+                />
               </Pressable>
-            );
-          })}
-        </View>
 
-        {/* Bottom Banner */}
-        <View style={styles.bulkNotice}>
-          <Sparkles size={20} color={colors.accent} />
-          <View style={{ flex: 1 }}>
-            <Text style={styles.bulkNoticeTitle}>Need Custom Packaging or White Labeling?</Text>
-            <Text style={styles.bulkNoticeSub}>We supply in 100g, 250g, 500g pouches and 10kg, 20kg bulk export cartons.</Text>
-          </View>
-          <Pressable
-            style={styles.bulkCallBtn}
-            onPress={() => Linking.openURL('tel:+918002661555')}
-          >
-            <Phone size={14} color={colors.white} />
-            <Text style={styles.bulkCallText}>Call</Text>
-          </Pressable>
-        </View>
+              {/* Card Body */}
+              <View style={styles.cardBody}>
+                <View style={styles.organicPill}>
+                  <Text style={styles.organicText}>Organic</Text>
+                </View>
 
-        <View style={{ height: 40 }} />
-      </ScrollView>
-    </View>
+                <Pressable
+                  onPress={() =>
+                    router.push(`/product/${product.slug}` as never)
+                  }
+                >
+                  <Text style={styles.cardTitle} numberOfLines={2}>
+                    {product.name}
+                  </Text>
+                </Pressable>
+
+                {product.description && (
+                  <Text style={styles.cardDesc} numberOfLines={2}>
+                    {product.description}
+                  </Text>
+                )}
+
+                {/* Rating with 5 Gold Stars */}
+                <View style={styles.ratingRow}>
+                  <View style={styles.starsRow}>
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star
+                        key={s}
+                        size={10}
+                        color="#f5a623"
+                        fill="#f5a623"
+                      />
+                    ))}
+                  </View>
+                  <Text style={styles.ratingText}>
+                    {(product.rating || 4.8).toFixed(1)} ({product.reviews || 125}{' '}
+                    reviews)
+                  </Text>
+                </View>
+
+                {/* Bottom Actions: View Details + Send Enquiry Button */}
+                <View style={styles.cardActionRow}>
+                  <Pressable
+                    style={styles.viewDetailsBtn}
+                    onPress={() =>
+                      router.push(`/product/${product.slug}` as never)
+                    }
+                  >
+                    <Text style={styles.viewDetailsText}>View Details</Text>
+                    <ArrowRight size={11} color="#2e7d32" strokeWidth={2.5} />
+                  </Pressable>
+
+                  <Pressable
+                    style={styles.sendEnquiryBtn}
+                    onPress={() => router.push('/enquiry' as never)}
+                  >
+                    <Text style={styles.sendEnquiryText}>Send Enquiry</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          );
+        })}
+      </View>
+
+      {/* ── BOTTOM BULK ORDERS CTA (Matching User Screenshot) ── */}
+      <View style={styles.bulkCta}>
+        <Text style={styles.bulkCtaTitle}>
+          Looking for custom grades or{'\n'}bulk orders?
+        </Text>
+        <Text style={styles.bulkCtaBody}>
+          We supply all grades from 4 Suta to 6+ Suta Premium. Contact us for
+          wholesale pricing, custom packaging, and export support.
+        </Text>
+        <Pressable
+          style={styles.bulkCtaBtn}
+          onPress={() => router.push('/contact' as never)}
+        >
+          <Phone size={15} color="#d81b60" fill="#d81b60" />
+          <Text style={styles.bulkCtaBtnText}>Get in Touch</Text>
+        </Pressable>
+      </View>
+
+      {/* Reusable Verified AppFooter */}
+      <AppFooter />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f4f7f3' },
-
-  // Header Banner
-  headerBanner: {
-    backgroundColor: '#152b11',
-    paddingTop: 50,
-    paddingBottom: 16,
-    paddingHorizontal: spacing[4],
-  },
-  headerTopRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerTag: {
-    fontSize: 10,
-    fontWeight: '900',
-    color: colors.accent,
-    letterSpacing: 1.5,
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: colors.white,
-    marginTop: 2,
-  },
-  headerWaBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: colors.accent,
-    paddingVertical: 7,
-    paddingHorizontal: 12,
-    borderRadius: radii.full,
-  },
-  headerWaText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: colors.textDark,
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    backgroundColor: 'rgba(255,255,255,0.12)',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginTop: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-  },
-  searchInput: {
+  container: { flex: 1, backgroundColor: '#ffffff' },
+  content: {},
+  loadingContainer: {
     flex: 1,
-    fontSize: 13,
-    color: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+  },
+  loadingText: {
+    marginTop: spacing[3],
+    fontSize: typography.sizes.md,
+    color: colors.textMuted,
   },
 
-  // Filter Row
-  filterContainer: {
-    backgroundColor: colors.white,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0ece0',
+  // Hero
+  heroSection: { height: 260, position: 'relative' },
+  heroBg: { width: '100%', height: '100%' },
+  heroOverlay: {
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: 'rgba(26,46,18,0.85)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: spacing[5],
+    paddingTop: 12,
+    paddingBottom: 16,
   },
-  filterRow: {
-    paddingHorizontal: spacing[4],
+  heroTag: {
+    fontFamily: fonts.caveat,
+    fontSize: 26,
+    color: '#f5c842',
+    marginBottom: 2,
+    textAlign: 'center',
+  },
+  heroTitle: {
+    fontFamily: fonts.bebas,
+    fontSize: 32,
+    color: colors.white,
+    letterSpacing: 1.5,
+    textAlign: 'center',
+  },
+  heroGrass: {
+    position: 'absolute',
+    bottom: -1,
+    left: 0,
+    right: 0,
+    width: '100%',
+    height: 14,
+    zIndex: 10,
+  },
+  heroBody: {
+    fontFamily: fonts.dmSans,
+    fontSize: 12,
+    color: colors.textLight,
+    lineHeight: 18,
+    textAlign: 'center',
+  },
+
+  // Catalog Header
+  catalogHeader: {
+    paddingHorizontal: 16,
+    paddingTop: 24,
+    paddingBottom: 8,
+  },
+  catalogTitle: {
+    fontFamily: fonts.caveat,
+    fontSize: 32,
+    color: '#1a3a1a',
+    lineHeight: 36,
+  },
+  catalogSubtitle: {
+    fontFamily: fonts.poppins,
+    fontSize: 12.5,
+    color: '#666666',
+    marginTop: 4,
+  },
+
+  // Filter Pills (Wrapping container)
+  filtersWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 16,
     paddingVertical: 10,
     gap: 8,
   },
   filterPill: {
-    paddingVertical: 6,
-    paddingHorizontal: 14,
+    paddingVertical: 7,
+    paddingHorizontal: 16,
     borderRadius: radii.full,
-    backgroundColor: '#f0f5ee',
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: '#d5e5d3',
+    borderColor: '#d7e8d7',
   },
   filterPillActive: {
-    backgroundColor: '#152b11',
-    borderColor: '#152b11',
+    backgroundColor: '#1b381b',
+    borderColor: '#1b381b',
   },
-  filterText: {
+  filterPillText: {
+    fontFamily: fonts.poppinsSemiBold,
     fontSize: 12,
-    fontWeight: '700',
-    color: '#335030',
+    color: '#1b381b',
   },
-  filterTextActive: {
-    color: colors.white,
+  filterPillTextActive: {
+    color: '#f5c842',
   },
 
-  // Grid
-  gridContent: {
-    padding: spacing[4],
-  },
-  grid: {
+  // 2-Column Products Grid
+  productList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: spacing[3],
+    paddingHorizontal: 16,
+    rowGap: 14,
+    marginTop: 6,
   },
   card: {
-    width: CARD_WIDTH,
-    backgroundColor: colors.white,
+    width: GRID_CARD_WIDTH,
+    backgroundColor: '#ffffff',
     borderRadius: 14,
-    overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#e1ede0',
-    ...shadows.sm.rn,
-    marginBottom: spacing[2],
+    borderColor: '#edf4ed',
+    overflow: 'hidden',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    elevation: 2,
+    paddingBottom: 10,
   },
-  cardImgWrapper: {
-    height: CARD_WIDTH * 0.95,
-    backgroundColor: '#eef5ec',
+  cardImageWrap: {
+    width: '100%',
+    height: 140,
     position: 'relative',
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 8,
   },
-  cardImg: {
+  cardImage: {
     width: '100%',
     height: '100%',
   },
-  gradeTag: {
+  gradeBadge: {
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: 'rgba(21,43,17,0.85)',
-    paddingHorizontal: 7,
+    backgroundColor: '#1b381b',
     paddingVertical: 3,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: colors.accent,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    zIndex: 10,
   },
-  gradeTagText: {
+  gradeBadgeText: {
+    fontFamily: fonts.poppinsBold,
+    color: '#ffffff',
     fontSize: 9,
-    fontWeight: '800',
-    color: colors.accent,
+    textTransform: 'uppercase',
   },
-  organicTag: {
+  topSizeText: {
     position: 'absolute',
     top: 8,
     right: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    backgroundColor: '#e8f5e9',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: radii.full,
-  },
-  organicTagText: {
-    fontSize: 8,
-    fontWeight: '700',
-    color: colors.success,
+    fontFamily: fonts.poppins,
+    fontSize: 9,
+    color: '#888888',
   },
   cardBody: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingTop: 6,
+    paddingBottom: 2,
   },
-  cardCategory: {
+  organicPill: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#edf7ee',
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    marginBottom: 5,
+  },
+  organicText: {
+    fontFamily: fonts.poppinsMedium,
     fontSize: 9,
-    fontWeight: '700',
     color: '#2e7d32',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
   cardTitle: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#152b11',
-    marginTop: 2,
-    lineHeight: 17,
+    fontFamily: fonts.poppinsBold,
+    fontSize: 12.5,
+    color: '#111111',
+    lineHeight: 16,
+    marginBottom: 4,
   },
   cardDesc: {
+    fontFamily: fonts.poppins,
     fontSize: 10,
-    color: '#6e8c69',
-    marginTop: 4,
+    color: '#777777',
     lineHeight: 14,
+    marginBottom: 6,
   },
-  cardFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 10,
-    paddingTop: 8,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f5ee',
-  },
-  priceLabel: {
-    fontSize: 9,
-    color: '#888',
-  },
-  priceRate: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: '#152b11',
-  },
-  enquireBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    backgroundColor: colors.accent,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  enquireBtnText: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: colors.textDark,
-  },
-
-  // Bulk notice
-  bulkNotice: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    backgroundColor: '#12260f',
-    padding: spacing[4],
-    borderRadius: 12,
-    marginTop: spacing[4],
-    borderWidth: 1,
-    borderColor: 'rgba(245,200,0,0.3)',
-  },
-  bulkNoticeTitle: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: colors.white,
-  },
-  bulkNoticeSub: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.7)',
-    marginTop: 2,
-    lineHeight: 15,
-  },
-  bulkCallBtn: {
+  ratingRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#2d7a27',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 6,
+    marginBottom: 8,
   },
-  bulkCallText: {
+  starsRow: {
+    flexDirection: 'row',
+    gap: 1.5,
+  },
+  ratingText: {
+    fontFamily: fonts.dmSans,
+    fontSize: 9.5,
+    color: '#777777',
+  },
+  cardActionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 4,
+  },
+  viewDetailsBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+  viewDetailsText: {
+    fontFamily: fonts.poppinsBold,
+    fontSize: 10,
+    color: '#2e7d32',
+  },
+  sendEnquiryBtn: {
+    backgroundColor: '#f0f7f0',
+    borderWidth: 1,
+    borderColor: '#d7e8d7',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sendEnquiryText: {
+    fontFamily: fonts.poppinsMedium,
+    fontSize: 9,
+    color: '#2e7d32',
+  },
+
+  // Bulk CTA (Matching User Screenshot)
+  bulkCta: {
+    marginHorizontal: 16,
+    marginTop: 32,
+    marginBottom: 32,
+    paddingVertical: 32,
+    paddingHorizontal: 20,
+    backgroundColor: '#1b381b',
+    borderRadius: 24,
+    alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 14,
+    elevation: 4,
+  },
+  bulkCtaTitle: {
+    fontFamily: fonts.poppinsBold,
+    fontSize: 18,
+    color: '#ffffff',
+    textAlign: 'center',
+    lineHeight: 25,
+    marginBottom: 10,
+  },
+  bulkCtaBody: {
+    fontFamily: fonts.poppins,
     fontSize: 12,
-    fontWeight: '800',
-    color: colors.white,
+    color: '#d4ebd4',
+    lineHeight: 18,
+    textAlign: 'center',
+    marginBottom: 22,
+    paddingHorizontal: 10,
+  },
+  bulkCtaBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: '#f5c242',
+    paddingVertical: 12,
+    paddingHorizontal: 28,
+    borderRadius: 14,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  bulkCtaBtnText: {
+    fontFamily: fonts.poppinsBold,
+    fontSize: 13.5,
+    color: '#0d2d1a',
   },
 });

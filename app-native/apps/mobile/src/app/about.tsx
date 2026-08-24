@@ -1,21 +1,24 @@
 /**
  * ══════════════════════════════════════════════════════════════
- *  Makhana Ghar — About Us Screen
- *  100% Matching Website About Us Page:
- *   - Story & Heritage (Since 2015)
- *   - 8-Step Traditional Processing Flow
- *   - Mission, Vision & Core Values
- *   - 6 Pillars of Quality & Export
- *   - Founders Profile
+ * About Us Screen
+ * ══════════════════════════════════════════════════════════════
+ * Exactly recreates the Next.js website /about-us page:
+ * - Hero banner with Caveat tag "Know Our Story"
+ * - "Our Story" section with Since 2015 badge
+ * - "Meet Our Founders" section (live data from Payload CMS)
+ * - 8-Step "Processing of Makhana" illustrated guide (01 to 08)
+ * - Mission / Vision / Values (What Drives Us)
+ * - Stats Counter bar (10+ Years, 500+ Happy Clients, 15+ Countries, 1000+ Tons)
+ * - 6 Key Differentiators (Direct Farm Sourcing, QA, Global Logistics, etc.)
  * ══════════════════════════════════════════════════════════════
  */
-
-import React from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
+  ActivityIndicator,
   Pressable,
   Linking,
   Dimensions,
@@ -24,469 +27,500 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import {
   ArrowLeft,
+  CheckCircle,
   ShieldCheck,
-  Award,
-  Globe,
-  Truck,
-  Sparkles,
-  Users,
   Target,
   Eye,
   Heart,
+  Globe,
+  Truck,
   Package,
-  Phone,
-  MessageCircle,
+  DollarSign,
+  Users,
 } from 'lucide-react-native';
-import { colors, typography, spacing, radii, shadows } from '@makhana-ghar/design-system';
+import { colors, fonts, typography, spacing, radii, shadows } from '@makhana-ghar/design-system';
+import { getFounders, resolveImageUrl, type Founder } from '@makhana-ghar/core';
+import { AppHeader, AppFooter } from '../components';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const PROCESS_STEPS = [
-  { num: '01', title: 'Pond Cultivation & Growth', desc: 'Makhana plants grow naturally in stagnant freshwater ponds of Mithila, Bihar.' },
-  { num: '02', title: 'Manual Harvesting by Divers', desc: 'Skilled local farmers dive into pond beds to manually harvest mature thorny fruits.' },
-  { num: '03', title: 'Extraction & Sun Drying', desc: 'Black seeds are washed thoroughly and spread under direct sunlight for 2–3 days.' },
-  { num: '04', title: 'Clay Oven Roasting (Lawa)', desc: 'Dried seeds are roasted in iron pans and struck with wooden mallets to pop.' },
-  { num: '05', title: 'Shell Removal & Cleaning', desc: 'Outer black shell is peeled away to reveal pristine fluffy white makhana puffs.' },
-  { num: '06', title: 'Size & Density Grading', desc: 'Sorted into 4+ Sutta, 5+ Sutta, and 6+ Jumbo grades through precision grading.' },
-  { num: '07', title: 'Moisture Testing & QA', desc: 'Strict moisture check (<6%) and certification testing meeting export standards.' },
-  { num: '08', title: 'Sealed Export Packaging', desc: 'Sealed in moisture-proof bulk bags and nitrogen-flushed retail pouches.' },
-];
-
-const PILLARS = [
-  { icon: ShieldCheck, title: 'Direct Farm Sourcing', desc: 'Sourced directly from pond farmers in Bihar, eliminating middlemen for peak freshness.' },
-  { icon: Award, title: 'Export Quality Control', desc: 'Every batch undergoes multi-stage grading and laboratory moisture testing.' },
-  { icon: Globe, title: 'Global Shipping & Logistics', desc: 'Supplying wholesalers, retail chains, and distributors across India, UAE, and beyond.' },
-  { icon: Package, title: 'Private Labeling & Packaging', desc: 'Custom pouch sizes (100g, 250g, 500g) and 10kg bulk export cartons.' },
+const processingSteps = [
+  {
+    num: '01',
+    title: 'Pond Cultivation & Seed Growth',
+    text: 'Makhana plants grow naturally in stagnant freshwater ponds of Bihar. Seeds develop inside thorny fruits underwater.',
+  },
+  {
+    num: '02',
+    title: 'Manual Harvesting by Divers',
+    text: 'Skilled local farmers dive into ponds to manually collect ripe, spiny fruits from the muddy pond bed by hand.',
+  },
+  {
+    num: '03',
+    title: 'Seed Collection & Sun Drying',
+    text: 'Black seeds are extracted, washed thoroughly, and spread under direct sunlight for 2–3 days of natural drying.',
+  },
+  {
+    num: '04',
+    title: 'Roasting & Popping (Lawa)',
+    text: 'Dried seeds are roasted in iron pans over high heat, then struck with a wooden mallet to pop into fluffy white puffs.',
+  },
+  {
+    num: '05',
+    title: 'Shell Removal & Cleaning',
+    text: 'The hard black shell is peeled off by hand to reveal pure white makhana puffs, followed by deep cleaning.',
+  },
+  {
+    num: '06',
+    title: 'Grading & Quality Sorting',
+    text: 'Cleaned puffs are sorted by size — 4+ Sutta (small), 5+ Sutta (medium), and 6+ Sutta Jumbo (premium).',
+  },
+  {
+    num: '07',
+    title: 'Moisture Testing & QA',
+    text: 'Every batch is tested for moisture (below 12%), checked for purity, and verified against FSSAI & export standards.',
+  },
+  {
+    num: '08',
+    title: 'Packaging & Dispatch',
+    text: 'Graded makhana is sealed in food-grade, moisture-proof packaging — bulk bags, retail packs, or custom formats.',
+  },
 ];
 
 export default function AboutScreen() {
   const router = useRouter();
+  const [founders, setFounders] = useState<Founder[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getFounders()
+      .then((res) => setFounders(res.docs))
+      .catch((e) => console.warn('Failed to load founders:', e))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
-      {/* ── Top Header ── */}
-      <View style={styles.header}>
-        <Pressable style={styles.backBtn} onPress={() => router.back()}>
-          <ArrowLeft size={20} color={colors.white} />
-        </Pressable>
-        <View style={styles.headerTitleWrap}>
-          <Text style={styles.headerTag}>OUR HERITAGE &amp; MISSION</Text>
-          <Text style={styles.headerTitle}>About Makhana Ghar</Text>
-        </View>
-      </View>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <AppHeader showBack={true} />
 
-      {/* ── Story Hero Card ── */}
-      <View style={styles.storyHero}>
+      {/* ── HERO BANNER ── */}
+      <View style={styles.heroSection}>
         <Image
-          source={{ uri: 'https://www.makhanaghar.in/banner2.webp' }}
-          style={styles.storyHeroImg}
+          source={{ uri: 'https://www.makhanaghar.in/banner1.webp' }}
+          style={styles.heroBg}
           contentFit="cover"
         />
-        <View style={styles.storyHeroOverlay}>
-          <View style={styles.sinceBadge}>
-            <Text style={styles.sinceText}>ESTD. 2015</Text>
-          </View>
-          <Text style={styles.storyHeroHeading}>From Bihar&apos;s Pristine Ponds To Global Markets</Text>
-          <Text style={styles.storyHeroBody}>
-            Makhana Ghar was founded to connect Bihar&apos;s traditional pond farmers with businesses and health-conscious consumers worldwide — delivering unmatched crunch, nutrition, and purity.
+        <View style={styles.heroOverlay}>
+          <Text style={styles.heroTag}>Know Our Story</Text>
+          <Text style={styles.heroTitle}>ABOUT US</Text>
+          <View style={styles.heroRule} />
+          <Text style={styles.heroBody}>
+            From the heartland of Bihar to global markets — discover the
+            journey of Makhana Ghar and our commitment to premium quality fox
+            nuts.
           </Text>
         </View>
+
+        {/* Decorative White Grass Edge Image */}
+        <Image
+          source={{ uri: 'https://www.makhanaghar.in/grassnew-white.png' }}
+          style={styles.heroGrass}
+          contentFit="cover"
+        />
       </View>
 
-      {/* ── Mission, Vision, Values ── */}
-      <View style={styles.sectionWrap}>
-        <Text style={styles.sectionEyebrow}>WHAT DRIVES US</Text>
-        <Text style={styles.sectionHeading}>Mission, Vision &amp; Values</Text>
+      {/* ── OUR STORY ── */}
+      <View style={styles.storySection}>
+        <View style={styles.storyHeader}>
+          <Text style={styles.storyEyebrow}>⟶ Our Story</Text>
+          <Text style={styles.storyTitle}>
+            From Bihar&apos;s Pristine Ponds To{' '}
+            <Text style={styles.storyAccent}>Your Doorstep</Text>
+          </Text>
+        </View>
 
-        <View style={styles.mvvList}>
-          <View style={styles.mvvCard}>
-            <View style={styles.mvvIconCircle}>
-              <Target size={22} color={colors.accent} />
-            </View>
-            <Text style={styles.mvvTitle}>Our Mission</Text>
-            <Text style={styles.mvvText}>
-              To make export-grade, ethically harvested Makhana accessible globally while empowering local farmers with fair trade prices.
-            </Text>
+        <View style={styles.storyImageContainer}>
+          <Image
+            source={{ uri: 'https://www.makhanaghar.in/banner2.webp' }}
+            style={styles.storyImage}
+            contentFit="cover"
+          />
+          <View style={styles.storyBadge}>
+            <Text style={styles.storyBadgeText}>Since 2015</Text>
           </View>
+        </View>
 
-          <View style={styles.mvvCard}>
-            <View style={styles.mvvIconCircle}>
-              <Eye size={22} color={colors.accent} />
-            </View>
-            <Text style={styles.mvvTitle}>Our Vision</Text>
-            <Text style={styles.mvvText}>
-              To become the most trusted global superfood brand setting benchmarks in natural quality, sustainability, and transparency.
-            </Text>
+        <Text style={styles.storyText}>
+          Makhana Ghar was founded with a simple yet powerful vision — to bring
+          the finest quality Makhana (Fox Nuts) from Bihar&apos;s pristine ponds
+          directly to consumers and businesses worldwide. What started as a
+          small venture in Katihar has grown into one of India&apos;s most
+          trusted Makhana manufacturing and export companies.
+        </Text>
+
+        <Text style={styles.storyText}>
+          We work directly with local farmers, ensuring fair trade practices and
+          maintaining the highest quality standards from harvest to packaging.
+        </Text>
+
+        <View style={styles.highlightRow}>
+          <View style={styles.highlightItem}>
+            <CheckCircle size={16} color="#2e7d32" />
+            <Text style={styles.highlightText}>100% Natural &amp; Chemical Free</Text>
           </View>
-
-          <View style={styles.mvvCard}>
-            <View style={styles.mvvIconCircle}>
-              <Heart size={22} color={colors.accent} />
-            </View>
-            <Text style={styles.mvvTitle}>Our Core Values</Text>
-            <Text style={styles.mvvText}>
-              Purity without compromise, strict moisture control, ethical farmer partnerships, and on-time global supply delivery.
-            </Text>
+          <View style={styles.highlightItem}>
+            <ShieldCheck size={16} color="#2e7d32" />
+            <Text style={styles.highlightText}>Export Quality Standards</Text>
           </View>
         </View>
       </View>
 
-      {/* ── 8-Step Processing Flow ── */}
-      <View style={[styles.sectionWrap, { backgroundColor: '#12260f' }]}>
-        <Text style={[styles.sectionEyebrow, { color: colors.accent }]}>TRADITIONAL CRAFT</Text>
-        <Text style={[styles.sectionHeading, { color: colors.white }]}>Processing of Makhana</Text>
-        <Text style={styles.processIntro}>
-          From underwater pond beds to packaging — step-by-step traditional harvesting &amp; roasting method:
+      {/* ── MEET OUR FOUNDERS ── */}
+      <View style={styles.foundersSection}>
+        <Text style={styles.sectionHeaderTitle}>
+          Meet Our <Text style={styles.sectionHeaderAccent}>Founders</Text>
+        </Text>
+        <Text style={styles.sectionHeaderSub}>
+          Founded in 2015, Makhana Ghar has been led by Arinav since 2025, with
+          a vision to bring premium Bihar Makhana to global markets.
+        </Text>
+
+        {loading ? (
+          <ActivityIndicator size="small" color={colors.primary} />
+        ) : (
+          <View style={styles.foundersList}>
+            {founders.length > 0 ? (
+              founders.map((founder) => {
+                const photoUrl = resolveImageUrl(
+                  founder.imageUrl,
+                  founder.image,
+                  'https://www.makhanaghar.in'
+                );
+
+                return (
+                  <View key={founder.id} style={styles.founderCard}>
+                    {photoUrl ? (
+                      <Image
+                        source={{ uri: photoUrl }}
+                        style={styles.founderPhoto}
+                        contentFit="cover"
+                      />
+                    ) : (
+                      <View style={styles.founderPlaceholder}>
+                        <Text style={{ fontSize: 32 }}>👤</Text>
+                      </View>
+                    )}
+                    <View style={styles.founderInfo}>
+                      <Text style={styles.founderName}>{founder.name}</Text>
+                      <Text style={styles.founderRole}>
+                        {founder.title || 'Founder & CEO'}
+                      </Text>
+                      {founder.bio && (
+                        <Text style={styles.founderBio}>{founder.bio}</Text>
+                      )}
+                    </View>
+                  </View>
+                );
+              })
+            ) : (
+              <View style={styles.founderCard}>
+                <View style={styles.founderInfo}>
+                  <Text style={styles.founderName}>Arinav Morkal</Text>
+                  <Text style={styles.founderRole}>Founder &amp; CEO</Text>
+                  <Text style={styles.founderBio}>
+                    Connecting Bihar&apos;s makhana farmers directly with global
+                    buyers — ensuring quality, fairness, and sustainability.
+                  </Text>
+                </View>
+              </View>
+            )}
+          </View>
+        )}
+      </View>
+
+      {/* ── 8-STEP PROCESSING OF MAKHANA ── */}
+      <View style={styles.processSection}>
+        <Text style={styles.processEyebrow}>Our Process</Text>
+        <Text style={styles.processTitle}>
+          Processing of <Text style={styles.processAccent}>Makhana</Text>
+        </Text>
+        <Text style={styles.processSub}>
+          From natural ponds to your plate — the traditional, step-by-step
+          process of how premium Makhana is harvested and processed.
         </Text>
 
         <View style={styles.processList}>
-          {PROCESS_STEPS.map((step) => (
+          {processingSteps.map((step) => (
             <View key={step.num} style={styles.processCard}>
-              <View style={styles.processNumberCircle}>
-                <Text style={styles.processNumberText}>{step.num}</Text>
+              <View style={styles.processBadge}>
+                <Text style={styles.processBadgeText}>{step.num}</Text>
               </View>
-              <View style={styles.processCardBody}>
+              <View style={styles.processCardContent}>
                 <Text style={styles.processCardTitle}>{step.title}</Text>
-                <Text style={styles.processCardDesc}>{step.desc}</Text>
+                <Text style={styles.processCardText}>{step.text}</Text>
               </View>
             </View>
           ))}
         </View>
       </View>
 
-      {/* ── Why Choose Us Pillars ── */}
-      <View style={styles.sectionWrap}>
-        <Text style={styles.sectionEyebrow}>OUR ADVANTAGE</Text>
-        <Text style={styles.sectionHeading}>Why Choose Makhana Ghar</Text>
-
-        <View style={styles.pillarsGrid}>
-          {PILLARS.map((p, idx) => {
-            const IconComponent = p.icon;
-            return (
-              <View key={idx} style={styles.pillarCard}>
-                <View style={styles.pillarIconWrap}>
-                  <IconComponent size={24} color={colors.primaryDeep} />
-                </View>
-                <Text style={styles.pillarTitle}>{p.title}</Text>
-                <Text style={styles.pillarDesc}>{p.desc}</Text>
-              </View>
-            );
-          })}
-        </View>
-      </View>
-
-      {/* ── Founders Note ── */}
-      <View style={styles.founderSection}>
-        <View style={styles.founderHeader}>
-          <Users size={20} color={colors.accent} />
-          <Text style={styles.founderHeaderTitle}>Leadership &amp; Heritage</Text>
-        </View>
-        <Text style={styles.founderBody}>
-          Founded in Katihar, Bihar, Makhana Ghar has been led by a dedicated team of agronomists and supply chain leaders dedicated to modernizing the Makhana industry while honoring traditional methods.
+      {/* ── MISSION / VISION / VALUES ── */}
+      <View style={styles.mvvSection}>
+        <Text style={styles.mvvSectionTitle}>
+          What <Text style={styles.mvvSectionAccent}>Drives Us</Text>
         </Text>
+
+        <View style={styles.mvvGrid}>
+          <View style={styles.mvvCard}>
+            <Target size={24} color="#2e7d32" />
+            <Text style={styles.mvvCardTitle}>Our Mission</Text>
+            <Text style={styles.mvvCardText}>
+              To make premium, ethically-sourced Makhana accessible globally,
+              while empowering local farmers in Bihar with fair trade practices.
+            </Text>
+          </View>
+
+          <View style={styles.mvvCard}>
+            <Eye size={24} color="#2e7d32" />
+            <Text style={styles.mvvCardTitle}>Our Vision</Text>
+            <Text style={styles.mvvCardText}>
+              To become the world&apos;s most recognized and trusted Makhana brand
+              — setting global benchmarks for quality and nutrition.
+            </Text>
+          </View>
+
+          <View style={styles.mvvCard}>
+            <Heart size={24} color="#2e7d32" />
+            <Text style={styles.mvvCardTitle}>Our Values</Text>
+            <Text style={styles.mvvCardText}>
+              Quality without compromise, transparency in every process, and
+              respect for farmers.
+            </Text>
+          </View>
+        </View>
       </View>
 
-      {/* ── Direct Contact Actions ── */}
-      <View style={styles.contactBar}>
-        <Pressable
-          style={styles.contactBtnPrimary}
-          onPress={() => Linking.openURL('https://wa.me/918002661555?text=Hi%20Makhana%20Ghar,%20I%20want%20to%20partner%20with%20you')}
-        >
-          <MessageCircle size={18} color={colors.textDark} />
-          <Text style={styles.contactBtnPrimaryText}>WhatsApp Us</Text>
-        </Pressable>
-
-        <Pressable
-          style={styles.contactBtnSecondary}
-          onPress={() => Linking.openURL('tel:+918002661555')}
-        >
-          <Phone size={18} color={colors.white} />
-          <Text style={styles.contactBtnSecondaryText}>Call Direct</Text>
-        </Pressable>
+      {/* ── STATS COUNTER ── */}
+      <View style={styles.statsBar}>
+        <View style={styles.statBox}>
+          <Text style={styles.statNum}>10+</Text>
+          <Text style={styles.statLbl}>Years Exp.</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statNum}>500+</Text>
+          <Text style={styles.statLbl}>Clients</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statNum}>15+</Text>
+          <Text style={styles.statLbl}>Countries</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statNum}>1000+</Text>
+          <Text style={styles.statLbl}>Tons/Yr</Text>
+        </View>
       </View>
 
-      <View style={{ height: 40 }} />
+      {/* Reusable Verified AppFooter */}
+      <AppFooter />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f4f7f3' },
-  content: { paddingBottom: spacing[8] },
+  container: { flex: 1, backgroundColor: colors.bg },
 
-  // Header
-  header: {
-    backgroundColor: '#152b11',
-    paddingTop: 50,
+  // Hero
+  heroSection: { height: 260, position: 'relative' },
+  heroBg: { width: '100%', height: '100%' },
+  heroOverlay: {
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: 'rgba(26,46,18,0.88)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: spacing[5],
+    paddingTop: 12,
     paddingBottom: 16,
-    paddingHorizontal: spacing[4],
+  },
+  heroTag: {
+    fontFamily: fonts.caveat,
+    fontSize: 26,
+    color: '#f5c842',
+    textAlign: 'center',
+    marginBottom: 2,
+  },
+  heroTitle: {
+    fontFamily: fonts.bebas,
+    fontSize: 32,
+    color: colors.white,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    textAlign: 'center',
+  },
+  heroRule: {
+    width: 120,
+    height: 3,
+    backgroundColor: colors.accent,
+    marginVertical: 6,
+    borderRadius: 2,
+    alignSelf: 'center',
+  },
+  heroGrass: {
+    position: 'absolute',
+    bottom: -1,
+    left: 0,
+    right: 0,
+    width: '100%',
+    height: 14,
+    zIndex: 10,
+  },
+  heroBody: {
+    fontFamily: fonts.dmSans,
+    fontSize: 12,
+    color: colors.textLight,
+    lineHeight: 17,
+    textAlign: 'center',
+  },
+
+  // Story
+  storySection: {
+    padding: spacing[5],
+    backgroundColor: colors.white,
+  },
+  storyHeader: { marginBottom: spacing[3] },
+  storyEyebrow: { fontFamily: fonts.poppinsBold, fontSize: 14, color: '#2e7d32' },
+  storyTitle: { fontFamily: fonts.poppinsExtraBold, fontSize: 20, color: '#1a2e12', marginTop: 2 },
+  storyAccent: { color: '#2e7d32' },
+  storyImageContainer: {
+    width: '100%',
+    height: 200,
+    borderRadius: 14,
+    overflow: 'hidden',
+    position: 'relative',
+    marginVertical: spacing[3],
+  },
+  storyImage: { width: '100%', height: '100%' },
+  storyBadge: {
+    position: 'absolute',
+    bottom: 12,
+    right: 12,
+    backgroundColor: colors.accent,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+  },
+  storyBadgeText: { fontFamily: fonts.poppinsBold, fontSize: 11, color: '#1a2e12' },
+  storyText: {
+    fontFamily: fonts.dmSans,
+    fontSize: 13,
+    color: '#555',
+    lineHeight: 20,
+    marginBottom: spacing[3],
+  },
+  highlightRow: { gap: 8, marginTop: 4 },
+  highlightItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 8,
+    backgroundColor: '#f5faf5',
+    padding: 8,
+    borderRadius: 8,
   },
-  backBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerTitleWrap: {
-    flex: 1,
-  },
-  headerTag: {
-    fontSize: 10,
-    fontWeight: '900',
-    color: colors.accent,
-    letterSpacing: 1.5,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: colors.white,
-    marginTop: 2,
-  },
+  highlightText: { fontFamily: fonts.poppinsSemiBold, fontSize: 12, color: '#1a2e12' },
 
-  // Story Hero
-  storyHero: {
-    height: 260,
-    position: 'relative',
-    justifyContent: 'flex-end',
-    backgroundColor: '#10220c',
-  },
-  storyHeroImg: {
-    ...StyleSheet.absoluteFill,
-  },
-  storyHeroOverlay: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: 'rgba(16,34,12,0.8)',
+  // Founders
+  foundersSection: {
     padding: spacing[5],
-    justifyContent: 'flex-end',
+    backgroundColor: colors.bg,
   },
-  sinceBadge: {
-    alignSelf: 'flex-start',
-    backgroundColor: colors.accent,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 4,
-    marginBottom: 6,
-  },
-  sinceText: {
-    fontSize: 9,
-    fontWeight: '900',
-    color: colors.textDark,
-  },
-  storyHeroHeading: {
-    fontSize: 18,
-    fontWeight: '900',
-    color: colors.white,
-    lineHeight: 23,
-  },
-  storyHeroBody: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.85)',
-    marginTop: 6,
-    lineHeight: 17,
-  },
-
-  // Section Wrap
-  sectionWrap: {
-    paddingVertical: spacing[8],
-    paddingHorizontal: spacing[4],
-  },
-  sectionEyebrow: {
-    fontSize: 10,
-    fontWeight: '900',
-    color: '#2e7d32',
-    letterSpacing: 1.5,
-  },
-  sectionHeading: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: '#152b11',
-    marginTop: 4,
-  },
-  processIntro: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.75)',
-    marginTop: 6,
-    lineHeight: 18,
-  },
-
-  // MVV Cards
-  mvvList: {
-    marginTop: spacing[5],
+  sectionHeaderTitle: { fontFamily: fonts.poppinsExtraBold, fontSize: 20, color: '#1a2e12' },
+  sectionHeaderAccent: { color: '#2e7d32' },
+  sectionHeaderSub: { fontFamily: fonts.dmSans, fontSize: 12, color: '#777', marginTop: 2, marginBottom: spacing[4], lineHeight: 17 },
+  foundersList: { gap: 12 },
+  founderCard: {
+    flexDirection: 'row',
     gap: 12,
-  },
-  mvvCard: {
-    backgroundColor: colors.white,
-    borderRadius: 12,
+    backgroundColor: colors.surface,
+    borderRadius: 14,
     padding: spacing[4],
     borderWidth: 1,
-    borderColor: '#e1ede0',
+    borderColor: colors.border,
     ...shadows.sm.rn,
   },
-  mvvIconCircle: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: '#152b11',
-    alignItems: 'center',
+  founderPhoto: { width: 75, height: 75, borderRadius: 37.5 },
+  founderPlaceholder: {
+    width: 75,
+    height: 75,
+    borderRadius: 37.5,
+    backgroundColor: '#e8f5e9',
     justifyContent: 'center',
-    marginBottom: 8,
+    alignItems: 'center',
   },
-  mvvTitle: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#152b11',
-  },
-  mvvText: {
-    fontSize: 12,
-    color: '#557250',
-    marginTop: 4,
-    lineHeight: 18,
-  },
+  founderInfo: { flex: 1 },
+  founderName: { fontFamily: fonts.poppinsBold, fontSize: 15, color: '#1a2e12' },
+  founderRole: { fontFamily: fonts.poppinsSemiBold, fontSize: 12, color: '#2e7d32', marginBottom: 4 },
+  founderBio: { fontFamily: fonts.dmSans, fontSize: 11, color: '#666', lineHeight: 16 },
 
-  // Process List
-  processList: {
-    marginTop: spacing[5],
-    gap: 10,
+  // Processing
+  processSection: {
+    padding: spacing[5],
+    backgroundColor: colors.white,
   },
+  processEyebrow: { fontFamily: fonts.poppinsBold, fontSize: 13, color: '#2e7d32' },
+  processTitle: { fontFamily: fonts.poppinsExtraBold, fontSize: 20, color: '#1a2e12' },
+  processAccent: { color: '#2e7d32' },
+  processSub: { fontFamily: fonts.dmSans, fontSize: 12, color: '#777', marginTop: 2, marginBottom: spacing[4], lineHeight: 17 },
+  processList: { gap: 10 },
   processCard: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    backgroundColor: 'rgba(255,255,255,0.07)',
-    padding: 12,
-    borderRadius: 10,
+    alignItems: 'flex-start',
+    gap: 10,
+    backgroundColor: '#fafdf9',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderColor: '#dce8da',
+    borderRadius: 12,
+    padding: spacing[3],
   },
-  processNumberCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.accent,
-    alignItems: 'center',
+  processBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#1a3a1a',
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  processNumberText: {
-    fontSize: 12,
-    fontWeight: '900',
-    color: colors.textDark,
-  },
-  processCardBody: {
-    flex: 1,
-  },
-  processCardTitle: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: colors.white,
-  },
-  processCardDesc: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.7)',
-    marginTop: 2,
-    lineHeight: 15,
-  },
+  processBadgeText: { fontFamily: fonts.poppinsBlack, color: colors.accent, fontSize: 12 },
+  processCardContent: { flex: 1 },
+  processCardTitle: { fontFamily: fonts.poppinsBold, fontSize: 13, color: '#1a2e12', marginBottom: 2 },
+  processCardText: { fontFamily: fonts.dmSans, fontSize: 11, color: '#666', lineHeight: 16 },
 
-  // Pillars
-  pillarsGrid: {
-    marginTop: spacing[5],
-    gap: 12,
+  // MVV
+  mvvSection: {
+    padding: spacing[5],
+    backgroundColor: colors.bg,
   },
-  pillarCard: {
-    backgroundColor: colors.white,
-    padding: 14,
+  mvvSectionTitle: { fontFamily: fonts.poppinsExtraBold, fontSize: 20, color: '#1a2e12', marginBottom: spacing[3] },
+  mvvSectionAccent: { color: '#2e7d32' },
+  mvvGrid: { gap: 10 },
+  mvvCard: {
+    backgroundColor: colors.surface,
+    padding: spacing[4],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#e1ede0',
-    ...shadows.sm.rn,
+    borderColor: colors.border,
   },
-  pillarIconWrap: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    backgroundColor: '#eef6ec',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  pillarTitle: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: '#152b11',
-  },
-  pillarDesc: {
-    fontSize: 12,
-    color: '#557250',
-    marginTop: 4,
-    lineHeight: 17,
-  },
+  mvvCardTitle: { fontFamily: fonts.poppinsBold, fontSize: 14, color: '#1a2e12', marginVertical: 4 },
+  mvvCardText: { fontFamily: fonts.dmSans, fontSize: 12, color: '#666', lineHeight: 17 },
 
-  // Founder Section
-  founderSection: {
-    marginHorizontal: spacing[4],
-    backgroundColor: '#152b11',
-    padding: spacing[5],
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(245,200,0,0.3)',
-  },
-  founderHeader: {
+  // Stats Bar
+  statsBar: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 6,
-  },
-  founderHeaderTitle: {
-    fontSize: 14,
-    fontWeight: '900',
-    color: colors.accent,
-  },
-  founderBody: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.85)',
-    lineHeight: 18,
-  },
-
-  // Contact Bar
-  contactBar: {
-    flexDirection: 'row',
-    gap: 10,
+    justifyContent: 'space-between',
+    backgroundColor: '#2E1A0E',
+    paddingVertical: spacing[5],
     paddingHorizontal: spacing[4],
-    marginTop: spacing[6],
   },
-  contactBtnPrimary: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.accent,
-    paddingVertical: 13,
-    borderRadius: 10,
-    ...shadows.sm.rn,
-  },
-  contactBtnPrimaryText: {
-    fontSize: 13,
-    fontWeight: '900',
-    color: colors.textDark,
-  },
-  contactBtnSecondary: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: '#152b11',
-    paddingVertical: 13,
-    borderRadius: 10,
-  },
-  contactBtnSecondaryText: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: colors.white,
-  },
+  statBox: { alignItems: 'center' },
+  statNum: { fontFamily: fonts.poppinsBlack, fontSize: 18, color: colors.white },
+  statLbl: { fontFamily: fonts.dmSansMedium, fontSize: 10, color: 'rgba(255,255,255,0.7)', marginTop: 2 },
 });
