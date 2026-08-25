@@ -5,25 +5,35 @@ import Image from 'next/image';
 import styles from './Header.module.css';
 import EnquiryPopup from './EnquiryPopup';
 
-/* ── Nav data ────────────────────────────────────────── */
-type NavLink = { label: string; href: string; dropdown?: string[] };
+type DropdownItem = { label: string; href: string };
+type NavLink = { label: string; href: string; dropdown?: DropdownItem[] };
 
 const navLinks: NavLink[] = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about-us' },
   { label: 'Product', href: '/categories' },
+  {
+    label: 'Locations',
+    href: '/categories',
+    dropdown: [
+      { label: 'Pune', href: '/makhana-supplier/pune' },
+      { label: 'Mumbai', href: '/makhana-supplier/mumbai' },
+      { label: 'Delhi', href: '/makhana-supplier/delhi' },
+      { label: 'Bangalore', href: '/makhana-supplier/bangalore' },
+    ],
+  },
   { label: 'Blog', href: '/blog' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Contact', href: '/contact-us' },
 ];
 
 /* ── Dropdown ────────────────────────────────────────── */
-function DropdownMenu({ items }: { items: string[] }) {
+function DropdownMenu({ items }: { items: DropdownItem[] }) {
   return (
     <ul className={styles.dropdown} role="menu">
       {items.map(item => (
-        <li key={item} role="menuitem">
-          <a href="#" className={styles.dropdownItem}>{item}</a>
+        <li key={item.label} role="menuitem">
+          <a href={item.href} className={styles.dropdownItem}>{item.label}</a>
         </li>
       ))}
     </ul>

@@ -67,6 +67,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
       })
     }
+
+    // City Landing Pages
+    const cityPages = await payload.find({
+      collection: 'city-pages',
+      where: { status: { equals: 'published' } },
+      limit: 1000,
+      select: { slug: true, updatedAt: true, seo: true },
+    })
+
+    for (const city of cityPages.docs) {
+      const seo = (city as any).seo || {}
+      if (seo.robotsIndex !== false) {
+        entries.push({
+          url: `${SITE_URL}/makhana-supplier/${(city as any).slug}`,
+          lastModified: new Date((city as any).updatedAt),
+          changeFrequency: 'weekly',
+          priority: 0.85,
+        })
+      }
+    }
   } catch {
     // Database may not be available during build — skip dynamic entries
   }

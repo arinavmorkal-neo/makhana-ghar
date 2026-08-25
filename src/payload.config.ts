@@ -16,6 +16,7 @@ import { Founders } from './collections/Founders';
 import { Faqs } from './collections/Faqs';
 import { Testimonials } from './collections/Testimonials';
 import { DistributorBenefits } from './collections/DistributorBenefits';
+import { CityPages } from './collections/CityPages';
 import { Settings } from './globals/Settings';
 
 const filename = fileURLToPath(import.meta.url);
@@ -32,7 +33,7 @@ export default buildConfig({
     },
     suppressHydrationWarning: true,
   },
-  collections: [Pages, Media, Users, Enquiries, Subscribers, Blogs, Products, Categories, Gallery, Founders, Faqs, Testimonials, DistributorBenefits],
+  collections: [Pages, Media, Users, Enquiries, Subscribers, Blogs, Products, Categories, Gallery, Founders, Faqs, Testimonials, DistributorBenefits, CityPages],
   globals: [Settings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'fallback-secret-for-local-dev-only',

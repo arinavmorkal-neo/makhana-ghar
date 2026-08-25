@@ -147,15 +147,16 @@ const footerData = {
     { label: "Become Distributor", href: "/distributor" },
   ],
   rangeCol1: [
-    { label: "Baal Bhog Makhana Flake", href: "#" },
-    { label: "Top Fox Round Makhana Flake", href: "#" },
-    { label: "4 Suta Round Makhana Flake", href: "#" },
-    { label: "White Plain Makhana Flake", href: "#" },
+    { label: "Makhana 6+ Sutta", href: "/categories" },
+    { label: "Makhana 5+ Sutta", href: "/categories" },
+    { label: "Makhana 4+ Sutta", href: "/categories" },
+    { label: "Phool Makhana Lite", href: "/categories" },
   ],
   rangeCol2: [
-    { label: "16.5mm Makhana Flake", href: "#" },
-    { label: "12.7mm Plain Makhana Flake", href: "#" },
-    { label: "Makhana Flake", href: "#" },
+    { label: "Makhana in Pune", href: "/makhana-supplier/pune" },
+    { label: "Makhana in Mumbai", href: "/makhana-supplier/mumbai" },
+    { label: "Makhana in Delhi", href: "/makhana-supplier/delhi" },
+    { label: "Makhana in Bangalore", href: "/makhana-supplier/bangalore" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy-policy" },
@@ -389,12 +390,12 @@ export default function Footer() {
         {/* Quick Links */}
         <FooterLinkList title="Quick Links" links={quickLinks} />
 
-        {/* Our Range col 1 */}
-        <FooterLinkList title="Our Range" links={rangeCol1} />
+        {/* Our Products */}
+        <FooterLinkList title="Our Products" links={rangeCol1} />
 
-        {/* Our Range col 2 */}
+        {/* Wholesale Cities */}
         <div className={styles.rangeCol2}>
-          <FooterLinkList title="Our Range" links={rangeCol2} />
+          <FooterLinkList title="Wholesale Cities" links={rangeCol2} />
         </div>
       </div>
 
