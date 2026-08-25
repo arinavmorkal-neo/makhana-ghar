@@ -341,6 +341,24 @@ export default async function CityLandingPage({
         },
       ];
 
+  // ── Founder Data (From City CMS with fallback to About Us founder) ──
+  const showFounder = cityDoc.showFounderSection !== false;
+  const founderName = cityDoc.founderName || 'Rajesh Kumar';
+  const founderRole = cityDoc.founderRole || 'Founder & CEO, Makhana Ghar';
+  const founderEyebrow = cityDoc.founderEyebrow || 'Leadership & Vision';
+  const founderHeading = cityDoc.founderTitle || `Meet Our Founder – Connecting Bihar to ${cityName}`;
+  const founderBio =
+    cityDoc.founderBio ||
+    `With over a decade of experience in the Makhana industry, Rajesh envisioned building a brand that connects Bihar’s farmers directly with global markets and wholesale buyers across ${cityName} — ensuring uncompromising quality, fair trade, and export-grade purity at every step.`;
+  const founderQuote =
+    cityDoc.founderQuote ||
+    `Our mission is to bring the authentic crunch, nutrition, and freshness of Bihar Makhana directly to businesses in ${cityName} without intermediate trader markups.`;
+  const founderImage =
+    cityDoc.founderImageUrl ||
+    cityDoc.founderImage?.url ||
+    'https://ik.imagekit.io/3uuhtxmof/makhana-shop/founder-1_nkMHzY20s.png';
+  const founderBadge = cityDoc.founderBadge || 'Since 2015';
+
   // ── Structured Data (JSON-LD) ──
   const breadcrumbs = breadcrumbJsonLd([
     { name: 'Home', url: SITE_URL },
@@ -537,6 +555,56 @@ export default async function CityLandingPage({
               </div>
             </div>
           </section>
+
+          {/* ── FOUNDER SECTION (Left Image, Right Content) ── */}
+          {showFounder && (
+            <section className={styles.founderSection}>
+              <div className={styles.founderImageCol}>
+                <div className={styles.founderImageWrap}>
+                  <Image
+                    src={founderImage}
+                    alt={founderName}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 440px"
+                    className={styles.founderImage}
+                  />
+                  {founderBadge && <span className={styles.founderBadge}>{founderBadge}</span>}
+                </div>
+              </div>
+
+              <div className={styles.founderContent}>
+                <div className={styles.founderEyebrow}>
+                  <svg width="32" height="12" viewBox="0 0 36 14" fill="none">
+                    <path d="M0 7H32M26 1L32 7L26 13" stroke="#2e7d32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {founderEyebrow}
+                </div>
+
+                <h2 className={styles.founderHeading}>
+                  {founderHeading.includes(cityName) ? (
+                    founderHeading
+                  ) : (
+                    <>
+                      {founderHeading} <span>{cityName}</span>
+                    </>
+                  )}
+                </h2>
+
+                <div className={styles.founderNameTag}>
+                  <span className={styles.founderName}>{founderName}</span>
+                  <span className={styles.founderRole}>{founderRole}</span>
+                </div>
+
+                <p className={styles.founderBio}>{founderBio}</p>
+
+                {founderQuote && (
+                  <div className={styles.founderQuoteBox}>
+                    <p className={styles.founderQuoteText}>&ldquo;{founderQuote}&rdquo;</p>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
 
           {/* ── 3. QUICK QUOTE & ENQUIRY FORM ── */}
           <section className={styles.quoteSection}>

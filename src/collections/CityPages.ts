@@ -224,6 +224,77 @@ export const CityPages: CollectionConfig = {
           ],
         },
 
+        // ── Founder & Vision ──
+        {
+          label: 'Founder & Vision',
+          fields: [
+            {
+              name: 'showFounderSection',
+              type: 'checkbox',
+              label: 'Display Founder Section on this City Page',
+              defaultValue: true,
+            },
+            {
+              name: 'founderEyebrow',
+              type: 'text',
+              label: 'Eyebrow Tag',
+              defaultValue: 'Leadership & Vision',
+            },
+            {
+              name: 'founderTitle',
+              type: 'text',
+              label: 'Founder Section Title',
+              admin: {
+                description: 'e.g. "Meet Our Founder – Connecting Bihar to {City}" (Leave empty for auto)',
+              },
+            },
+            {
+              name: 'founderName',
+              type: 'text',
+              label: 'Founder Name',
+              defaultValue: 'Rajesh Kumar',
+            },
+            {
+              name: 'founderRole',
+              type: 'text',
+              label: 'Founder Role / Title',
+              defaultValue: 'Founder & CEO, Makhana Ghar',
+            },
+            {
+              name: 'founderBio',
+              type: 'textarea',
+              label: 'Founder Bio / Message for this City',
+              admin: {
+                description: 'Leave empty to use default biography from About Us page.',
+              },
+            },
+            {
+              name: 'founderQuote',
+              type: 'textarea',
+              label: 'Founder Quote / Vision Statement',
+              defaultValue: 'Our commitment is to bring the purest, unadulterated Makhana directly from Bihar’s pristine wetlands to wholesale buyers with zero compromise on quality and moisture standards.',
+            },
+            {
+              name: 'founderImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Founder Photo Upload',
+            },
+            {
+              name: 'founderImageUrl',
+              type: 'text',
+              label: 'Founder Photo URL (ImageKit / External)',
+              defaultValue: 'https://ik.imagekit.io/3uuhtxmof/makhana-shop/founder-1_nkMHzY20s.png',
+            },
+            {
+              name: 'founderBadge',
+              type: 'text',
+              label: 'Image Badge',
+              defaultValue: 'Since 2015',
+            },
+          ],
+        },
+
         // ── 4. Featured Makhana Grades ──
         {
           label: 'Grades & Products',
