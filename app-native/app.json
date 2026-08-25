@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "20a9ef26-2963-40ca-814d-83d2b44eab63"
+      }
+    },
+    "android": {
+      "package": "com.n4neo.makhanagharapp"
+    }
+  }
+}

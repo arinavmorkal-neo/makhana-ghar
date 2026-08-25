@@ -44,3 +44,13 @@ next-env.d.ts
 /public/media
 
 .vercel
+
+# app-native (React Native monorepo)
+app-native/node_modules
+app-native/apps/mobile/node_modules
+app-native/apps/mobile/.expo/
+app-native/apps/mobile/ios/
+app-native/apps/mobile/android/
+app-native/apps/mobile/dist/
+app-native/packages/*/node_modules
+app-native/packages/*/dist
