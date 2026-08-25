@@ -206,7 +206,7 @@ export default async function TestimonialsPage() {
                 {/* Reviewer info */}
                 <div className={styles.reviewerInfo}>
                   <div className={styles.reviewerAvatar}>
-                    {t.name.split(' ').map((n) => n[0]).join('')}
+                    {t.name.split(' ').map((n: string) => n[0]).join('')}
                   </div>
                   <div className={styles.reviewerDetails}>
                     <span className={styles.reviewerName}>{t.name}</span>
