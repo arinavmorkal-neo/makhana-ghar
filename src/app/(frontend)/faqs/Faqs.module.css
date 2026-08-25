@@ -1,0 +1,398 @@
+/* Fonts loaded centrally from layout.tsx */
+@font-face {
+  font-family: 'Little';
+  src: url('/fonts/Little.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Hero Section ── */
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: 45vh;
+  background: #1a2e12;
+  overflow: hidden;
+  font-family: var(--font-poppins), sans-serif;
+  display: flex;
+  align-items: center;
+}
+
+.heroBg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    rgba(26,46,18,0.92) 0%,
+    rgba(26,46,18,0.80) 50%,
+    rgba(26,46,18,0.40) 85%,
+    transparent 100%
+  );
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  padding: 0 80px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.heroTag {
+  display: inline-block;
+  font-family: var(--font-caveat), cursive;
+  font-size: 24px;
+  font-weight: 700;
+  color: #f5c842;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+}
+
+.heroHeading {
+  font-family: 'Little', sans-serif;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.heroRule {
+  display: block;
+  width: 180px;
+  height: auto;
+  margin: 12px 0 16px;
+}
+
+.heroBody {
+  color: rgba(255,255,255,0.85);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+}
+
+.grassEdge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 20;
+  pointer-events: none;
+  display: block;
+  margin-bottom: -1px;
+}
+
+/* ── FAQ Content Container ── */
+.faqContainer {
+  background: #ffffff;
+  padding: 70px 24px 90px;
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+.faqInner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Section Header ── */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.sectionTitle {
+  font-family: var(--font-caveat), cursive;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1a3a1a;
+  margin-bottom: 8px;
+}
+
+.sectionTitleAccent {
+  color: #2e7d32;
+}
+
+.sectionSubtitle {
+  font-size: 15px;
+  color: #5a7a58;
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Accordion ── */
+.accordionList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.accordionItem {
+  background: #f8faf7;
+  border: 1.5px solid #dce8da;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.accordionItem:hover {
+  border-color: #b5d6b4;
+}
+
+.accordionItemOpen {
+  border-color: #2e7d32;
+  box-shadow: 0 4px 20px rgba(46,125,50,0.08);
+}
+
+.accordionButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a3a1a;
+  transition: color 0.2s ease;
+}
+
+.accordionButton:hover {
+  color: #2e7d32;
+}
+
+.accordionButtonOpen {
+  color: #2e7d32;
+}
+
+.accordionNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2e7d32 0%, #1a5428 100%);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(46,125,50,0.2);
+}
+
+.accordionQuestion {
+  flex: 1;
+}
+
+.accordionIcon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: #5a7a58;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.accordionIconOpen {
+  transform: rotate(180deg);
+  color: #2e7d32;
+}
+
+.accordionPanel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+
+.accordionPanelOpen {
+  max-height: 600px;
+}
+
+.accordionAnswer {
+  padding: 0 24px 22px 72px;
+  font-size: 0.92rem;
+  line-height: 1.8;
+  color: #444444;
+}
+
+/* ── CTA Banner ── */
+.ctaSection {
+  margin-top: 60px;
+  background: linear-gradient(135deg, #1a3a1a 0%, #0d2d1a 50%, #14421f 100%);
+  border-radius: 20px;
+  padding: 52px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaSection::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: rgba(245,200,66,0.06);
+  pointer-events: none;
+}
+
+.ctaSection::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  left: -5%;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: rgba(46,125,50,0.1);
+  pointer-events: none;
+}
+
+.ctaTitle {
+  font-family: var(--font-caveat), cursive;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.ctaTitle span {
+  color: #f5c842;
+}
+
+.ctaBody {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.75);
+  max-width: 600px;
+  margin: 0 auto 28px;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+.ctaButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.ctaBtnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: #f5c842;
+  color: #1a3a1a;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: var(--font-dm-sans), sans-serif;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+}
+
+.ctaBtnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(245,200,66,0.3);
+}
+
+.ctaBtnSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-dm-sans), sans-serif;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+  text-decoration: none;
+}
+
+.ctaBtnSecondary:hover {
+  transform: translateY(-2px);
+  border-color: #f5c842;
+  background: rgba(245,200,66,0.08);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .heroSection {
+    height: 35vh;
+  }
+  .heroContent {
+    padding: 0 24px;
+  }
+  .faqContainer {
+    padding: 48px 16px 60px;
+  }
+  .ctaSection {
+    padding: 40px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    height: 30vh;
+  }
+  .heroTag {
+    font-size: 18px;
+  }
+  .heroBody {
+    font-size: 13px;
+  }
+  .sectionTitle {
+    font-size: 2rem;
+  }
+  .accordionButton {
+    padding: 16px 18px;
+    font-size: 0.9rem;
+  }
+  .accordionAnswer {
+    padding: 0 18px 18px 18px;
+  }
+  .accordionNumber {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+  .ctaTitle {
+    font-size: 1.4rem;
+  }
+}
