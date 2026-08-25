@@ -343,20 +343,20 @@ export default async function CityLandingPage({
 
   // ── Founder Data (From City CMS with fallback to About Us founder) ──
   const showFounder = cityDoc.showFounderSection !== false;
-  const founderName = cityDoc.founderName || 'Rajesh Kumar';
+  const founderName = cityDoc.founderName || 'Arinav Morkal';
   const founderRole = cityDoc.founderRole || 'Founder & CEO, Makhana Ghar';
   const founderEyebrow = cityDoc.founderEyebrow || 'Leadership & Vision';
   const founderHeading = cityDoc.founderTitle || `Meet Our Founder – Connecting Bihar to ${cityName}`;
   const founderBio =
     cityDoc.founderBio ||
-    `With over a decade of experience in the Makhana industry, Rajesh envisioned building a brand that connects Bihar’s farmers directly with global markets and wholesale buyers across ${cityName} — ensuring uncompromising quality, fair trade, and export-grade purity at every step.`;
+    `Leading Makhana Ghar with a vision to connect Bihar’s harvest wetlands directly with global markets and wholesale buyers across ${cityName} — Arinav ensures uncompromising quality, fair trade, and export-grade purity at every step.`;
   const founderQuote =
     cityDoc.founderQuote ||
     `Our mission is to bring the authentic crunch, nutrition, and freshness of Bihar Makhana directly to businesses in ${cityName} without intermediate trader markups.`;
   const founderImage =
     cityDoc.founderImageUrl ||
     cityDoc.founderImage?.url ||
-    'https://ik.imagekit.io/3uuhtxmof/makhana-shop/founder-1_nkMHzY20s.png';
+    '/image/arinav.png';
   const founderBadge = cityDoc.founderBadge || 'Since 2015';
 
   // ── Structured Data (JSON-LD) ──

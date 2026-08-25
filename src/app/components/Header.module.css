@@ -205,43 +205,54 @@
   transform: rotate(180deg);
 }
 
-/* ── Dropdown ── */
+/* ── Dropdown (Glassmorphism Blur) ── */
 .dropdown {
   position: absolute;
   top: calc(100% + 1px);
   left: 0;
   list-style: none;
-  padding: 0.5rem 0;
+  padding: 0.6rem 0;
   margin: 0;
-  background: #fff;
-  border: 1px solid #e2ede0;
-  border-top: 2px solid #2d7a27;
-  border-radius: 0 0 8px 8px;
-  min-width: 200px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(226, 237, 224, 0.7);
+  border-top: 2.5px solid #2d7a27;
+  border-radius: 0 0 12px 12px;
+  min-width: 210px;
+  box-shadow: 0 14px 34px rgba(26, 46, 24, 0.14), 0 2px 8px rgba(0, 0, 0, 0.04);
   z-index: 300;
-  animation: dropdownIn 0.2s ease both;
+  animation: dropdownIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes dropdownIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .dropdownItem {
   display: block;
-  padding: 0.55rem 1.1rem;
-  font-size: 0.84rem;
-  color: #3a5038;
-  transition: background 0.15s ease, color 0.15s ease;
+  padding: 0.62rem 1.15rem;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: #243b22;
+  transition: all 0.2s ease;
   text-decoration: none;
-  border-left: 2px solid transparent;
+  border-left: 3px solid transparent;
 }
 
 .dropdownItem:hover {
-  background: #f0f7ef;
-  color: #2d7a27;
+  background: rgba(45, 122, 39, 0.12);
+  color: #1e631b;
+  font-weight: 600;
   border-left-color: #2d7a27;
+  padding-left: 1.35rem;
 }
 
 /* ── CTA button ── */

@@ -252,7 +252,7 @@ export const CityPages: CollectionConfig = {
               name: 'founderName',
               type: 'text',
               label: 'Founder Name',
-              defaultValue: 'Rajesh Kumar',
+              defaultValue: 'Arinav Morkal',
             },
             {
               name: 'founderRole',
@@ -283,8 +283,8 @@ export const CityPages: CollectionConfig = {
             {
               name: 'founderImageUrl',
               type: 'text',
-              label: 'Founder Photo URL (ImageKit / External)',
-              defaultValue: 'https://ik.imagekit.io/3uuhtxmof/makhana-shop/founder-1_nkMHzY20s.png',
+              label: 'Founder Photo URL (ImageKit / External / Public)',
+              defaultValue: '/image/arinav.png',
             },
             {
               name: 'founderBadge',
