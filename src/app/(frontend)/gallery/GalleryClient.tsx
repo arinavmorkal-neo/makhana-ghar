@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './Gallery.module.css';
 
@@ -18,7 +18,16 @@ export interface GalleryItem {
   };
 }
 
-const categories = ['all', 'products', 'farm', 'events', 'packaging', 'team'];
+const categoryLabels: Record<string, string> = {
+  all: 'All Photos',
+  products: 'Makhana Products',
+  farm: 'Farm & Harvest',
+  processing: 'Processing & Sorting',
+  packaging: 'Packaging & Export',
+  team: 'Leadership & Team',
+};
+
+const filterCategories = ['all', 'products', 'farm', 'processing', 'packaging', 'team'];
 
 export default function GalleryClient({ initialItems }: { initialItems: GalleryItem[] }) {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -37,17 +46,27 @@ export default function GalleryClient({ initialItems }: { initialItems: GalleryI
 
   const prevImage = useCallback(() => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((prev) =>
-      prev! > 0 ? prev! - 1 : filtered.length - 1
-    );
+    setLightboxIndex((prev) => (prev! > 0 ? prev! - 1 : filtered.length - 1));
   }, [lightboxIndex, filtered.length]);
 
   const nextImage = useCallback(() => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((prev) =>
-      prev! < filtered.length - 1 ? prev! + 1 : 0
-    );
+    setLightboxIndex((prev) => (prev! < filtered.length - 1 ? prev! + 1 : 0));
   }, [lightboxIndex, filtered.length]);
+
+  /* Keyboard controls for lightbox */
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'ArrowRight') nextImage();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxIndex, prevImage, nextImage]);
 
   return (
     <>
@@ -55,35 +74,50 @@ export default function GalleryClient({ initialItems }: { initialItems: GalleryI
         <div className={styles.galleryInner}>
           {/* Section Header */}
           <div className={styles.sectionHeader}>
+            <span className={styles.sectionEyebrow}>
+              <svg width="24" height="12" viewBox="0 0 36 14" fill="none">
+                <path d="M0 7H32M26 1L32 7L26 13" stroke="#2e7d32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              High Purity Fox Nuts
+            </span>
             <h2 className={styles.sectionTitle}>
-              Moments from <span className={styles.sectionTitleAccent}>Farm to Factory</span>
+              Moments from <span>Farm to Factory</span>
             </h2>
             <p className={styles.sectionSubtitle}>
-              Take a visual tour through our harvest ponds in Bihar, our sorting &amp;
-              grading facility, and the premium Makhana we deliver worldwide.
+              Take a visual tour through our harvest ponds in Katihar, traditional sun-drying yards, automated grading facilities, and premium export-grade packaging.
             </p>
           </div>
 
           {/* Filter Pills */}
           <div className={styles.filterBar}>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                className={`${styles.filterBtn}${
-                  activeFilter === cat ? ` ${styles.filterBtnActive}` : ''
-                }`}
-                onClick={() => setActiveFilter(cat)}
-              >
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
-              </button>
-            ))}
+            {filterCategories.map((cat) => {
+              const count =
+                cat === 'all'
+                  ? items.length
+                  : items.filter((i) => i.category === cat).length;
+
+              if (cat !== 'all' && count === 0) return null;
+
+              return (
+                <button
+                  key={cat}
+                  className={`${styles.filterBtn}${
+                    activeFilter === cat ? ` ${styles.filterBtnActive}` : ''
+                  }`}
+                  onClick={() => setActiveFilter(cat)}
+                >
+                  <span>{categoryLabels[cat] || cat}</span>
+                  <span className={styles.filterCount}>{count}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Image Grid */}
           {filtered.length === 0 ? (
             <div className={styles.emptyState}>
               <span className={styles.emptyIcon}>📷</span>
-              <p>No photos in this category yet.</p>
+              <p>No photos found in this category yet.</p>
             </div>
           ) : (
             <div className={styles.galleryGrid}>
@@ -102,27 +136,37 @@ export default function GalleryClient({ initialItems }: { initialItems: GalleryI
                     <Image
                       src={item.image.url || '/4+.webp'}
                       alt={item.image.alt || item.title}
-                      width={item.image.width || 600}
-                      height={item.image.height || 450}
-                      loading="lazy"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 380px"
                       className={styles.cardImage}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 350px"
                     />
+
+                    {/* Featured Badge */}
+                    {item.featured && (
+                      <span className={styles.featuredBadge}>Featured</span>
+                    )}
+
+                    {/* Category Chip Top Right */}
+                    <span className={styles.categoryChip}>
+                      {categoryLabels[item.category]?.split(' ')[0] || item.category}
+                    </span>
+
+                    {/* Overlay with Title & Expand Icon */}
                     <div className={styles.cardOverlay}>
                       <div className={styles.cardInfo}>
                         <span className={styles.cardCategory}>
-                          {item.category.toUpperCase()}
+                          {categoryLabels[item.category] || item.category}
                         </span>
                         <h3 className={styles.cardTitle}>{item.title}</h3>
                       </div>
                       <div className={styles.expandIcon}>
                         <svg
-                          width="20"
-                          height="20"
+                          width="18"
+                          height="18"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
-                          strokeWidth="2"
+                          strokeWidth="2.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         >
@@ -143,19 +187,24 @@ export default function GalleryClient({ initialItems }: { initialItems: GalleryI
 
       {/* ── LIGHTBOX MODAL ── */}
       {lightboxIndex !== null && filtered[lightboxIndex] && (
-        <div className={styles.lightbox} onClick={closeLightbox}>
+        <div className={styles.lightbox} onClick={closeLightbox} role="dialog" aria-modal="true">
           <div
             className={styles.lightboxContent}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
-            <button
-              className={styles.closeBtn}
-              onClick={closeLightbox}
-              aria-label="Close lightbox"
-            >
-              ✕
-            </button>
+            {/* Top Bar inside Lightbox */}
+            <div className={styles.lightboxTopBar}>
+              <span className={styles.lightboxCounter}>
+                {lightboxIndex + 1} / {filtered.length}
+              </span>
+              <button
+                className={styles.closeBtn}
+                onClick={closeLightbox}
+                aria-label="Close lightbox"
+              >
+                ✕
+              </button>
+            </div>
 
             {/* Prev button */}
             <button
@@ -166,7 +215,7 @@ export default function GalleryClient({ initialItems }: { initialItems: GalleryI
               ‹
             </button>
 
-            {/* Image */}
+            {/* Image Main Container */}
             <div className={styles.lightboxImageWrap}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -179,11 +228,12 @@ export default function GalleryClient({ initialItems }: { initialItems: GalleryI
               />
               <div className={styles.lightboxCaption}>
                 <span className={styles.lightboxCategory}>
-                  {filtered[lightboxIndex].category.toUpperCase()}
+                  {categoryLabels[filtered[lightboxIndex].category] ||
+                    filtered[lightboxIndex].category}
                 </span>
-                <h4 className={styles.lightboxTitle}>
+                <h3 className={styles.lightboxTitle}>
                   {filtered[lightboxIndex].title}
-                </h4>
+                </h3>
               </div>
             </div>
 

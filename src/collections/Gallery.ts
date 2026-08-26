@@ -38,8 +38,9 @@ export const Gallery: CollectionConfig = {
       options: [
         { label: 'Products', value: 'products' },
         { label: 'Farm', value: 'farm' },
-        { label: 'Events', value: 'events' },
+        { label: 'Processing & Sorting', value: 'processing' },
         { label: 'Packaging', value: 'packaging' },
+        { label: 'Events', value: 'events' },
         { label: 'Team', value: 'team' },
       ],
       admin: {

@@ -17,36 +17,131 @@ export async function generateMetadata(): Promise<Metadata> {
     title: 'Photo Gallery | Farm to Factory Tour – Makhana Ghar',
     description:
       'Explore photos of our Makhana ponds in Bihar, manual harvesting divers, sun-drying yards, sorting facilities, and premium packaging at Makhana Ghar.',
-    primaryKeywords: 'makhana gallery, makhana farm photos, bihar makhana harvesting pictures, makhana factory images',
-    secondaryKeywords: 'popped lotus seed processing photos, makhana processing unit bihar, katihar makhana farm pictures',
     path: '/gallery',
+    noIndex: true,
   });
 }
 
 const fallbackItems: GalleryItem[] = [
   {
     id: '1',
-    title: 'Premium Makhana Selection',
+    title: '6+ Sutta Jumbo Makhana',
     category: 'products',
     featured: true,
-    order: 0,
-    image: { url: '/4+.webp', alt: 'Premium Makhana' },
+    order: 1,
+    image: { url: '/4+.webp', alt: '6+ Sutta Jumbo Makhana' },
   },
   {
     id: '2',
-    title: 'Farm Fresh Harvest',
-    category: 'farm',
+    title: '5+ Sutta Premium Makhana',
+    category: 'products',
     featured: false,
-    order: 1,
-    image: { url: '/new-section.webp', alt: 'Farm Harvest' },
+    order: 2,
+    image: { url: '/5+.webp', alt: '5+ Sutta Premium Makhana' },
   },
   {
     id: '3',
-    title: 'Quality Packaging',
+    title: '4+ Sutta Raw Makhana',
+    category: 'products',
+    featured: false,
+    order: 3,
+    image: { url: '/4+.webp', alt: '4+ Sutta Raw Makhana' },
+  },
+  {
+    id: '4',
+    title: 'Flavored Roasted Makhana Series',
+    category: 'products',
+    featured: false,
+    order: 4,
+    image: { url: '/new-section.webp', alt: 'Flavored Roasted Makhana' },
+  },
+  {
+    id: '5',
+    title: 'Freshwater Pond Cultivation in Katihar',
+    category: 'farm',
+    featured: true,
+    order: 5,
+    image: { url: '/process-step-1.png', alt: 'Freshwater Pond Cultivation' },
+  },
+  {
+    id: '6',
+    title: 'Traditional Skilled Divers Harvesting Seeds',
+    category: 'farm',
+    featured: false,
+    order: 6,
+    image: { url: '/process-step-2.png', alt: 'Traditional Skilled Divers Harvesting Seeds' },
+  },
+  {
+    id: '7',
+    title: 'Natural Sun-Drying & Moisture Conditioning',
+    category: 'farm',
+    featured: false,
+    order: 7,
+    image: { url: '/process-step-3.png', alt: 'Natural Sun-Drying Yards' },
+  },
+  {
+    id: '8',
+    title: 'Our Bihar Farmer Community Partners',
+    category: 'farm',
+    featured: false,
+    order: 8,
+    image: { url: '/farmer-popup.webp', alt: 'Bihar Farmer Community Partners' },
+  },
+  {
+    id: '9',
+    title: 'Artisanal Fire Roasting & Hand Popping',
+    category: 'processing',
+    featured: true,
+    order: 9,
+    image: { url: '/process-step-4.png', alt: 'Artisanal Fire Roasting & Popping' },
+  },
+  {
+    id: '10',
+    title: 'Mechanical Sieve Size Grading (4+, 5+, 6+ Sutta)',
+    category: 'processing',
+    featured: false,
+    order: 10,
+    image: { url: '/process-step-5.png', alt: 'Size Grading' },
+  },
+  {
+    id: '11',
+    title: 'Quality Testing & Moisture Inspection (<12%)',
+    category: 'processing',
+    featured: false,
+    order: 11,
+    image: { url: '/process-step-6.png', alt: 'Moisture Inspection' },
+  },
+  {
+    id: '12',
+    title: 'Nitrogen-Flushed Airtight Packing',
+    category: 'packaging',
+    featured: true,
+    order: 12,
+    image: { url: '/process-step-7.png', alt: 'Nitrogen-Flushed Packaging' },
+  },
+  {
+    id: '13',
+    title: 'Bulk Freight & Global Container Logistics',
     category: 'packaging',
     featured: false,
-    order: 2,
-    image: { url: '/banner2.webp', alt: 'Packaging' },
+    order: 13,
+    image: { url: '/process-step-8.png', alt: 'Bulk Freight & Container Logistics' },
+  },
+  {
+    id: '14',
+    title: 'Export-Grade Pallets & Retail Cartons',
+    category: 'packaging',
+    featured: false,
+    order: 14,
+    image: { url: '/banner2.webp', alt: 'Export-Grade Pallets' },
+  },
+  {
+    id: '15',
+    title: 'Leadership & Direct Farm Sourcing Vision',
+    category: 'team',
+    featured: false,
+    order: 15,
+    image: { url: '/image/arinav.png', alt: 'Arinav Morkal - Founder & CEO' },
   },
 ];
 
@@ -92,10 +187,6 @@ export default async function GalleryPage() {
 
   return (
     <main>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
-      />
       <Header />
 
       {/* ── HERO BANNER ── */}

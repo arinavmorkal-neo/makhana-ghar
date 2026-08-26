@@ -345,6 +345,14 @@ export const CityPages: CollectionConfig = {
                   type: 'text',
                   label: 'Image URL',
                 },
+                {
+                  name: 'productSlug',
+                  type: 'text',
+                  label: 'Product Details Page Slug (e.g. premium-6-plus-sutta-raw-makhana)',
+                  admin: {
+                    description: 'Links the button directly to this product detail page (/product/[slug]).',
+                  },
+                },
               ],
             },
           ],

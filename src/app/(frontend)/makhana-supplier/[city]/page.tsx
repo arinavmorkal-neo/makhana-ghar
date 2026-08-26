@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
@@ -138,6 +139,7 @@ const defaultGrades = [
     size: '18mm - 22mm Diameter',
     description: 'Largest, ultra-fluffy white lotus seeds. Minimum black spot defect, ideal for premium gift packs and luxury retail brands.',
     imageUrl: '/4+.webp',
+    slug: 'premium-6-plus-sutta-raw-makhana',
   },
   {
     name: '5+ Sutta Premium Makhana',
@@ -145,6 +147,7 @@ const defaultGrades = [
     size: '15mm - 18mm Diameter',
     description: 'Crisp, hand-sorted raw fox nuts with maximum crunch. The most popular grade across commercial traders and food brands.',
     imageUrl: '/5+.webp',
+    slug: 'premium-5-plus-sutta-raw-makhana',
   },
   {
     name: '4+ Sutta Raw Makhana',
@@ -152,6 +155,7 @@ const defaultGrades = [
     size: '12mm - 15mm Diameter',
     description: 'High-nutrition, naturally sun-dried makhana puffs suitable for bulk snacking, roasting, flour making, and industrial cooking.',
     imageUrl: '/4+.webp',
+    slug: 'premium-4-plus-sutta-raw-makhana',
   },
 ];
 
@@ -556,22 +560,9 @@ export default async function CityLandingPage({
             </div>
           </section>
 
-          {/* ── FOUNDER SECTION (Left Image, Right Content) ── */}
+          {/* ── FOUNDER SECTION (Content Left, Image Right) ── */}
           {showFounder && (
             <section className={styles.founderSection}>
-              <div className={styles.founderImageCol}>
-                <div className={styles.founderImageWrap}>
-                  <Image
-                    src={founderImage}
-                    alt={founderName}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 440px"
-                    className={styles.founderImage}
-                  />
-                  {founderBadge && <span className={styles.founderBadge}>{founderBadge}</span>}
-                </div>
-              </div>
-
               <div className={styles.founderContent}>
                 <div className={styles.founderEyebrow}>
                   <svg width="32" height="12" viewBox="0 0 36 14" fill="none">
@@ -603,10 +594,123 @@ export default async function CityLandingPage({
                   </div>
                 )}
               </div>
+
+              <div className={styles.founderImageCol}>
+                <div className={styles.founderImageWrap}>
+                  <Image
+                    src={founderImage}
+                    alt={founderName}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 320px"
+                    className={styles.founderImage}
+                  />
+                  {founderBadge && <span className={styles.founderBadge}>{founderBadge}</span>}
+                </div>
+              </div>
             </section>
           )}
 
-          {/* ── 3. QUICK QUOTE & ENQUIRY FORM ── */}
+          {/* ── 3. FEATURED MAKHANA GRADES ── */}
+          <section>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>
+                Available <span>Makhana Grades</span> in {cityName}
+              </h2>
+              <p className={styles.sectionSubtitle}>
+                {cityDoc.gradesSubtitle || `Machine-sorted and handpicked fox nut grades ready for wholesale dispatch across ${cityName}.`}
+              </p>
+            </div>
+
+            <div className={styles.gradesGrid}>
+              {grades.map((grade: any, idx: number) => {
+                const productHref =
+                  grade.productSlug
+                    ? `/product/${grade.productSlug}`
+                    : grade.slug
+                    ? `/product/${grade.slug}`
+                    : grade.name?.toLowerCase().includes('6')
+                    ? '/product/premium-6-plus-sutta-raw-makhana'
+                    : grade.name?.toLowerCase().includes('5')
+                    ? '/product/premium-5-plus-sutta-raw-makhana'
+                    : '/product/premium-4-plus-sutta-raw-makhana';
+
+                return (
+                  <div key={idx} className={styles.gradeCard}>
+                    <Link href={productHref} className={styles.gradeImageWrap}>
+                      <Image
+                        src={grade.imageUrl || '/4+.webp'}
+                        alt={grade.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className={styles.gradeImage}
+                      />
+                      {grade.badge && <span className={styles.gradeBadge}>{grade.badge}</span>}
+                    </Link>
+                    <div className={styles.gradeBody}>
+                      <h3 className={styles.gradeTitle}>
+                        <Link href={productHref} style={{ color: 'inherit', textDecoration: 'none' }}>
+                          {grade.name}
+                        </Link>
+                      </h3>
+                      {grade.size && <span className={styles.gradeSize}>📏 {grade.size}</span>}
+                      <p className={styles.gradeText}>{grade.description}</p>
+                      <Link href={productHref} className={styles.gradeActionBtn}>
+                        Enquire For {cityName}
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* ── 4. WHY CHOOSE MAKHANA GHAR ── */}
+          <section>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>
+                Why Choose <span>Makhana Ghar</span>
+              </h2>
+              <p className={styles.sectionSubtitle}>
+                {`Direct origin sourcing, uncompromising quality control, and dependable business support for traders and brands in ${cityName}.`}
+              </p>
+            </div>
+
+            <div className={styles.whyGrid}>
+              {whyChooseList.map((item: any, idx: number) => (
+                <div key={idx} className={styles.whyCard}>
+                  <div className={styles.whyIconWrap}>
+                    {iconRenderMap[item.icon] || iconRenderMap.quality}
+                  </div>
+                  <h3 className={styles.whyTitle}>{item.title}</h3>
+                  <p className={styles.whyText}>{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ── 5. SUPPLY CHAIN PROCESS ── */}
+          <section className={styles.processSection}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>
+                Farm-to-Doorstep <span>Supply Chain</span>
+              </h2>
+              <p className={styles.sectionSubtitle}>
+                {`How authentic Bihar Makhana travels from pristine harvest ponds to your commercial facility in ${cityName}.`}
+              </p>
+            </div>
+
+            <div className={styles.processGrid}>
+              {processList.map((step: any, idx: number) => (
+                <div key={idx} className={styles.processCard}>
+                  <div className={styles.processNumber}>{step.stepNumber || `0${idx + 1}`}</div>
+                  <h4 className={styles.processCardTitle}>{step.title}</h4>
+                  <p className={styles.processCardText}>{step.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ── 6. QUICK QUOTE & ENQUIRY FORM ── */}
           <section className={styles.quoteSection}>
             <div className={styles.quoteInfo}>
               <span className={styles.quoteTag}>⚡ Direct Farm Gate Rates</span>
@@ -634,89 +738,6 @@ export default async function CityLandingPage({
             </div>
 
             <CityQuoteForm cityName={cityName} />
-          </section>
-
-          {/* ── 4. FEATURED MAKHANA GRADES ── */}
-          <section>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>
-                Available <span>Makhana Grades</span> in {cityName}
-              </h2>
-              <p className={styles.sectionSubtitle}>
-                {cityDoc.gradesSubtitle || `Machine-sorted and handpicked fox nut grades ready for wholesale dispatch across ${cityName}.`}
-              </p>
-            </div>
-
-            <div className={styles.gradesGrid}>
-              {grades.map((grade: any, idx: number) => (
-                <div key={idx} className={styles.gradeCard}>
-                  <div className={styles.gradeImageWrap}>
-                    <Image
-                      src={grade.imageUrl || '/4+.webp'}
-                      alt={grade.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className={styles.gradeImage}
-                    />
-                    {grade.badge && <span className={styles.gradeBadge}>{grade.badge}</span>}
-                  </div>
-                  <div className={styles.gradeBody}>
-                    <h3 className={styles.gradeTitle}>{grade.name}</h3>
-                    {grade.size && <span className={styles.gradeSize}>📏 {grade.size}</span>}
-                    <p className={styles.gradeText}>{grade.description}</p>
-                    <a href="#quote-form" className={styles.gradeActionBtn}>
-                      Enquire For {cityName}
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* ── 5. WHY CHOOSE MAKHANA GHAR ── */}
-          <section>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>
-                Why Choose <span>Makhana Ghar</span>
-              </h2>
-              <p className={styles.sectionSubtitle}>
-                {`Direct origin sourcing, uncompromising quality control, and dependable business support for traders and brands in ${cityName}.`}
-              </p>
-            </div>
-
-            <div className={styles.whyGrid}>
-              {whyChooseList.map((item: any, idx: number) => (
-                <div key={idx} className={styles.whyCard}>
-                  <div className={styles.whyIconWrap}>
-                    {iconRenderMap[item.icon] || iconRenderMap.quality}
-                  </div>
-                  <h3 className={styles.whyTitle}>{item.title}</h3>
-                  <p className={styles.whyText}>{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* ── 6. SUPPLY CHAIN PROCESS ── */}
-          <section className={styles.processSection}>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>
-                Farm-to-Doorstep <span>Supply Chain</span>
-              </h2>
-              <p className={styles.sectionSubtitle}>
-                {`How authentic Bihar Makhana travels from pristine harvest ponds to your commercial facility in ${cityName}.`}
-              </p>
-            </div>
-
-            <div className={styles.processGrid}>
-              {processList.map((step: any, idx: number) => (
-                <div key={idx} className={styles.processCard}>
-                  <div className={styles.processNumber}>{step.stepNumber || `0${idx + 1}`}</div>
-                  <h4 className={styles.processCardTitle}>{step.title}</h4>
-                  <p className={styles.processCardText}>{step.description}</p>
-                </div>
-              ))}
-            </div>
           </section>
 
           {/* ── 7. CLIENT TESTIMONIALS ── */}

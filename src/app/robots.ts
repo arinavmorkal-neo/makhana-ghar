@@ -15,6 +15,8 @@ export default function robots(): MetadataRoute.Robots {
         "/cart/",
         "/checkout/",
         "/account/",
+        "/gallery",
+        "/gallery/",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

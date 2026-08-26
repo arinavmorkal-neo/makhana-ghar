@@ -22,9 +22,7 @@ const navLinks: NavLink[] = [
       { label: 'Bangalore', href: '/makhana-supplier/bangalore' },
     ],
   },
-  { label: 'Blog', href: '/blog' },
   { label: 'Gallery', href: '/gallery' },
-  { label: 'Contact', href: '/contact-us' },
 ];
 
 /* ── Dropdown ────────────────────────────────────────── */
