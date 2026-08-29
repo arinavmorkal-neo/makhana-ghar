@@ -13,6 +13,55 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/product/6-suta-plus-makhana',
+        destination: '/categories',
+        permanent: true,
+      },
+      {
+        source: '/product/5-suta-round-makhana',
+        destination: '/categories',
+        permanent: true,
+      },
+      {
+        source: '/product/4-suta-round-makhana-flake',
+        destination: '/categories',
+        permanent: true,
+      },
+      {
+        source: '/product/premium-6-plus-sutta-raw-makhana',
+        destination: '/categories',
+        permanent: true,
+      },
+      {
+        source: '/product/premium-5-plus-sutta-raw-makhana',
+        destination: '/categories',
+        permanent: true,
+      },
+      {
+        source: '/product/premium-4-plus-sutta-raw-makhana',
+        destination: '/categories',
+        permanent: true,
+      },
+      {
+        source: '/product/6-suta-jumbo-grade-makhana',
+        destination: '/categories',
+        permanent: true,
+      },
+      {
+        source: '/product/5-suta-medium-grade-makhana',
+        destination: '/categories',
+        permanent: true,
+      },
+      {
+        source: '/product/4-plus-suta-raw-makhana',
+        destination: '/categories',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

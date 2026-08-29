@@ -151,14 +151,14 @@ export default function ContactScreen() {
 
         <Pressable
           style={styles.channelCard}
-          onPress={() => Linking.openURL('mailto:arinav@makhanaghar.in')}
+          onPress={() => Linking.openURL('mailto:makhanagha.marketing@gmail.com')}
         >
           <View style={[styles.channelIcon, { backgroundColor: '#2e7d32' }]}>
             <Mail size={20} color={colors.white} />
           </View>
           <View style={styles.channelInfo}>
             <Text style={styles.channelTitle}>Email Us</Text>
-            <Text style={styles.channelValue}>arinav@makhanaghar.in</Text>
+            <Text style={styles.channelValue}>makhanagha.marketing@gmail.com</Text>
             <Text style={styles.channelSub}>For official &amp; export inquiries</Text>
           </View>
         </Pressable>

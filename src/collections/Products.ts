@@ -1,10 +1,31 @@
-import { CollectionConfig } from 'payload';
+import type { CollectionConfig } from 'payload';
+
+const formatSlug = (val: string): string =>
+  val
+    ?.toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || '';
 
 export const Products: CollectionConfig = {
   slug: 'products',
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'status', 'grade', 'updatedAt'],
+  },
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (data) {
+          if (!data.slug && data.name) {
+            data.slug = formatSlug(data.name);
+          } else if (data.slug) {
+            data.slug = formatSlug(data.slug);
+          }
+        }
+        return data;
+      },
+    ],
   },
   fields: [
     {
@@ -16,11 +37,10 @@ export const Products: CollectionConfig = {
     {
       name: 'slug',
       type: 'text',
-      required: true,
       unique: true,
       admin: {
         position: 'sidebar',
-        description: 'URL-friendly identifier (e.g. 4-suta-round-makhana-flake)',
+        description: 'Auto-generated from Product Name if left blank (e.g. makhana-4-sutta)',
       },
     },
     {

@@ -263,7 +263,7 @@ export default function TermsPage() {
               <div className={styles.contactBox}>
                 <span className={styles.contactLabel}>Email</span>
                 <span className={styles.contactValue}>
-                  <a href="mailto:arinav@makhanaghar.in">arinav@makhanaghar.in</a>
+                  <a href="mailto:makhanagha.marketing@gmail.com">makhanagha.marketing@gmail.com</a>
                 </span>
               </div>
             </div>

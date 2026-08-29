@@ -139,7 +139,6 @@ const defaultGrades = [
     size: '18mm - 22mm Diameter',
     description: 'Largest, ultra-fluffy white lotus seeds. Minimum black spot defect, ideal for premium gift packs and luxury retail brands.',
     imageUrl: '/4+.webp',
-    slug: 'premium-6-plus-sutta-raw-makhana',
   },
   {
     name: '5+ Sutta Premium Makhana',
@@ -147,7 +146,6 @@ const defaultGrades = [
     size: '15mm - 18mm Diameter',
     description: 'Crisp, hand-sorted raw fox nuts with maximum crunch. The most popular grade across commercial traders and food brands.',
     imageUrl: '/5+.webp',
-    slug: 'premium-5-plus-sutta-raw-makhana',
   },
   {
     name: '4+ Sutta Raw Makhana',
@@ -155,7 +153,6 @@ const defaultGrades = [
     size: '12mm - 15mm Diameter',
     description: 'High-nutrition, naturally sun-dried makhana puffs suitable for bulk snacking, roasting, flour making, and industrial cooking.',
     imageUrl: '/4+.webp',
-    slug: 'premium-4-plus-sutta-raw-makhana',
   },
 ];
 
@@ -383,7 +380,7 @@ export default async function CityLandingPage({
       url: SITE_URL,
       logo: `${SITE_URL}/logo.webp`,
       telephone: '+91-8002661555',
-      email: 'arinav@makhanaghar.in',
+      email: 'makhanagha.marketing@gmail.com',
     },
     areaServed: {
       '@type': 'City',
@@ -628,11 +625,7 @@ export default async function CityLandingPage({
                     ? `/product/${grade.productSlug}`
                     : grade.slug
                     ? `/product/${grade.slug}`
-                    : grade.name?.toLowerCase().includes('6')
-                    ? '/product/premium-6-plus-sutta-raw-makhana'
-                    : grade.name?.toLowerCase().includes('5')
-                    ? '/product/premium-5-plus-sutta-raw-makhana'
-                    : '/product/premium-4-plus-sutta-raw-makhana';
+                    : '/categories';
 
                 return (
                   <div key={idx} className={styles.gradeCard}>

@@ -169,10 +169,10 @@ export function AppFooter() {
           </Pressable>
           <Pressable
             style={styles.footerContactItem}
-            onPress={() => Linking.openURL('mailto:arinav@makhanaghar.in')}
+            onPress={() => Linking.openURL('mailto:makhanagha.marketing@gmail.com')}
           >
             <Mail size={15} color="#f5c518" strokeWidth={2} />
-            <Text style={styles.footerContactText}>arinav@makhanaghar.in</Text>
+            <Text style={styles.footerContactText}>makhanagha.marketing@gmail.com</Text>
           </Pressable>
         </View>
 

@@ -54,6 +54,7 @@ async function getProduct(slug: string): Promise<ProductData | null> {
       if (images.length === 0) images.push('/4+.webp');
 
       return {
+        slug: doc.slug || slug,
         name: doc.name || '',
         tagline: doc.tagline || `Why Choose ${doc.name}?`,
         description: doc.description || '',
@@ -80,20 +81,7 @@ export default async function ProductPage({
   const product = await getProduct(slug);
 
   if (!product) {
-    return (
-      <main>
-        <Header />
-        <div style={{ textAlign: 'center', padding: '100px 20px', fontFamily: 'var(--font-poppins), sans-serif' }}>
-          <h1>Product Not Found</h1>
-          <p style={{ color: '#888', marginTop: 12 }}>The product you are looking for does not exist.</p>
-          <Link href="/categories" style={{ color: '#2e7d32', marginTop: 20, display: 'inline-block' }}>
-            ← Back to All Products
-          </Link>
-        </div>
-        <Footer />
-        <MobileNavBar />
-      </main>
-    );
+    notFound();
   }
 
   const breadcrumbs = breadcrumbJsonLd([

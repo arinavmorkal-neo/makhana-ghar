@@ -7,6 +7,7 @@ import EnquiryPopup from '../../../components/EnquiryPopup';
 import styles from './Product.module.css';
 
 export interface ProductData {
+  slug?: string;
   name: string;
   tagline: string;
   description: string;
@@ -213,7 +214,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
             <div className={styles.shareRow}>
               <span className={styles.shareLabel}>Share:</span>
               <a
-                href={`https://wa.me/?text=Check out ${encodeURIComponent(product.name)} from Makhana Ghar! https://www.makhanaghar.in/product/${encodeURIComponent(product.name)}`}
+                href={`https://wa.me/?text=${encodeURIComponent(`Check out ${product.name} from Makhana Ghar! https://www.makhanaghar.in/product/${product.slug || ''}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.shareBtn} ${styles.shareBtnWhatsapp}`}
@@ -222,7 +223,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                 💬
               </a>
               <a
-                href="https://www.facebook.com/profile.php?id=61590384691167"
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://www.makhanaghar.in/product/${product.slug || ''}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.shareBtn} ${styles.shareBtnFacebook}`}
@@ -231,7 +232,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                 f
               </a>
               <a
-                href={`https://twitter.com/intent/tweet?text=Check out ${encodeURIComponent(product.name)} from Makhana Ghar!`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${product.name} from Makhana Ghar! https://www.makhanaghar.in/product/${product.slug || ''}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.shareBtn} ${styles.shareBtnTwitter}`}

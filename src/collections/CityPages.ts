@@ -348,7 +348,7 @@ export const CityPages: CollectionConfig = {
                 {
                   name: 'productSlug',
                   type: 'text',
-                  label: 'Product Details Page Slug (e.g. premium-6-plus-sutta-raw-makhana)',
+                  label: 'Product Details Page Slug (e.g. makhana-6-sutta)',
                   admin: {
                     description: 'Links the button directly to this product detail page (/product/[slug]).',
                   },

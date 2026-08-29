@@ -1,10 +1,31 @@
-import { CollectionConfig } from 'payload';
+import type { CollectionConfig } from 'payload';
+
+const formatSlug = (val: string): string =>
+  val
+    ?.toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || '';
 
 export const Blogs: CollectionConfig = {
   slug: 'blogs',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'status', 'date', 'updatedAt'],
+  },
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (data) {
+          if (!data.slug && data.title) {
+            data.slug = formatSlug(data.title);
+          } else if (data.slug) {
+            data.slug = formatSlug(data.slug);
+          }
+        }
+        return data;
+      },
+    ],
   },
   fields: [
     {
@@ -15,11 +36,10 @@ export const Blogs: CollectionConfig = {
     {
       name: 'slug',
       type: 'text',
-      required: true,
       unique: true,
       admin: {
         position: 'sidebar',
-        description: 'URL-friendly identifier (e.g. my-blog-post)',
+        description: 'Auto-generated from Blog Title if left blank (e.g. my-blog-post)',
       },
     },
     {
