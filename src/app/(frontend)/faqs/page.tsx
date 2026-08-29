@@ -63,7 +63,7 @@ const fallbackFaqs = [
   {
     question: 'How can I place a wholesale or bulk order?',
     answer:
-      'You can place a wholesale order by contacting us directly through our Contact Us page, by calling us at +91 8002661555, or by emailing makhanagha.marketing@gmail.com. Our team will provide you with pricing, available grades, and delivery timelines based on your requirements.',
+      'You can place a wholesale order by contacting us directly through our Contact Us page, by calling us at +91 8002661555, or by emailing makhanaghar.marketing@gmail.com. Our team will provide you with pricing, available grades, and delivery timelines based on your requirements.',
   },
   {
     question: 'What are the payment terms for wholesale orders?',

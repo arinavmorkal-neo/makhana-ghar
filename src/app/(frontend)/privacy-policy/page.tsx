@@ -225,7 +225,7 @@ export default function PrivacyPage() {
               <div className={styles.contactBox}>
                 <span className={styles.contactLabel}>Email</span>
                 <span className={styles.contactValue}>
-                  <a href="mailto:makhanagha.marketing@gmail.com">makhanagha.marketing@gmail.com</a>
+                  <a href="mailto:makhanaghar.marketing@gmail.com">makhanaghar.marketing@gmail.com</a>
                 </span>
               </div>
             </div>

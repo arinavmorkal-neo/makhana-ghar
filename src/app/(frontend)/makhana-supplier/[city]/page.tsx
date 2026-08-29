@@ -380,7 +380,7 @@ export default async function CityLandingPage({
       url: SITE_URL,
       logo: `${SITE_URL}/logo.webp`,
       telephone: '+91-8002661555',
-      email: 'makhanagha.marketing@gmail.com',
+      email: 'makhanaghar.marketing@gmail.com',
     },
     areaServed: {
       '@type': 'City',

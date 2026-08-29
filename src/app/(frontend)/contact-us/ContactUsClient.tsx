@@ -114,7 +114,7 @@ export default function ContactUsClient() {
             </div>
             <h3 className={styles.infoTitle}>Email Us</h3>
             <p className={styles.infoText}>
-              <a href="mailto:makhanagha.marketing@gmail.com">makhanagha.marketing@gmail.com</a>
+              <a href="mailto:makhanaghar.marketing@gmail.com">makhanaghar.marketing@gmail.com</a>
               <br />
               We reply within 24 hours
             </p>
