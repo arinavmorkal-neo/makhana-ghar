@@ -49,15 +49,19 @@ export async function POST(req: NextRequest) {
       });
 
       sendToGoogleAppScript({
+        form_type: 'enquiry',
         website: 'Makhana Ghar',
         form: 'Contact Us',
         name,
         email,
+        country_code: '+91',
         phone: sheetPhone,
         message: formattedMessage,
+        status: 'New',
+        url: body.pagePath ? `https://www.makhanaghar.in${body.pagePath}` : 'https://www.makhanaghar.in',
         pageUrl: body.pagePath || '',
         source: 'Contact Page',
-      }, 'Enquiries');
+      }, 'enquire');
     });
 
     return NextResponse.json({

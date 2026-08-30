@@ -7,14 +7,16 @@ export async function sendToGoogleAppScript(data: Record<string, any>, sheetName
   }
 
   try {
-    const payload = sheetName ? { sheetName, ...data } : data;
+    const formData = new URLSearchParams();
+    if (sheetName) formData.append('sheetName', sheetName);
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value !== undefined && value !== null ? String(value) : '');
+    });
 
     const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      body: formData,
+      redirect: 'follow',
     });
 
     if (!response.ok) {

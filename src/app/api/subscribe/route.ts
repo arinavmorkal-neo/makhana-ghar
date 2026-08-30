@@ -55,12 +55,17 @@ export async function POST(req: NextRequest) {
       });
 
       sendToGoogleAppScript({
+        form_type: 'subscribe',
         website: 'Makhana Ghar',
         form: 'Newsletter Subscription',
+        name: body.name || 'Subscriber',
         email: trimmedEmail,
+        phone: body.phone || '',
+        status: 'Active',
+        url: body.pagePath ? `https://www.makhanaghar.in${body.pagePath}` : 'https://www.makhanaghar.in',
         pageUrl: body.pagePath || '',
-        source: 'newsletter',
-      }, 'Subscribers');
+        source: 'Footer',
+      }, 'suscribe');
     });
 
     return NextResponse.json({

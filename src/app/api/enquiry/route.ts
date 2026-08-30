@@ -58,16 +58,21 @@ export async function POST(req: NextRequest) {
       });
 
       sendToGoogleAppScript({
+        form_type: 'enquiry',
         website: 'Makhana Ghar',
         form: 'Product Enquiry',
         name,
         email,
-        phone,
+        country_code: countryCode || '+91',
+        phone: contact,
+        grade: productLabel,
         product: productLabel,
-        message,
+        message: message || '',
+        status: 'New',
+        url: body.pagePath ? `https://www.makhanaghar.in${body.pagePath}` : 'https://www.makhanaghar.in',
         pageUrl: body.pagePath || '',
         source: sourceString,
-      }, 'Enquiries');
+      }, 'enquire');
     });
 
     return NextResponse.json({
