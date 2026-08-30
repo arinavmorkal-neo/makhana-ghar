@@ -14,6 +14,10 @@ export async function submitToGoogleSheet(
 
   if (typeof window !== "undefined") {
     formData.append("url", window.location.href);
+    if (!data.source || data.source === "Website") {
+      const slug = window.location.pathname.replace(/^\/+|\/+$/g, "");
+      formData.set("source", slug || "home");
+    }
   }
 
   const response = await fetch(GOOGLE_SCRIPT_URL, {

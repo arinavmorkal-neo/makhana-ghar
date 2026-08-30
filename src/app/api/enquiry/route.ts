@@ -1,8 +1,23 @@
-import { NextRequest, NextResponse, after } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { sendToGoogleAppScript } from '@/lib/google-app-script';
 import { triggerWebhook, getWebhookUrl } from '@/lib/webhook';
+
+function extractPageSlug(pagePath?: string): string {
+  if (!pagePath) return 'home';
+  try {
+    let path = pagePath;
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      const url = new URL(path);
+      path = url.pathname;
+    }
+    path = path.split('?')[0].replace(/^\/+|\/+$/g, '');
+    return path || 'home';
+  } catch {
+    return pagePath.replace(/^\/+|\/+$/g, '') || 'home';
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,75 +25,82 @@ export async function POST(req: NextRequest) {
     const { name, countryCode, contact, email, product, message } = body;
 
     // ── Validation ──
-    if (!name || !contact || !email) {
+    if (!name || !contact) {
       return NextResponse.json(
-        { success: false, error: 'Name, contact, and email are required.' },
+        { success: false, error: 'Name and contact number are required.' },
         { status: 400 }
       );
     }
 
-    // ── 1. Save to Payload CMS (MongoDB) + resolve webhook URL in parallel ──
-    const payload = await getPayload({ config: configPromise });
-    const sourceString = body.sourceComponent 
-      ? `${body.sourceComponent} (${body.pagePath})`
-      : (body.pagePath ? `Website Form (${body.pagePath})` : 'Website Form');
-    const [enquiry, webhookUrl] = await Promise.all([
-      payload.create({
+    const cleanEmail = email && email !== 'N/A' && email.includes('@') ? email.trim() : '';
+    const cleanPhone = String(contact).trim();
+    const cleanCountryCode = countryCode || '+91';
+    const pageSlug = extractPageSlug(body.pagePath || body.url || body.slug);
+
+    const productLabel = (({
+      'makhana-4': 'Makhana 4+ Sutta',
+      'makhana-5': 'Makhana 5+ Sutta',
+      'makhana-6': 'Makhana 6+ Sutta',
+      'makhana-lite': 'Phool Makhana Lite',
+      'custom': 'Custom Grade / Mix',
+    } as Record<string, string>)[product]) || product || 'Makhana (Fox Nuts)';
+
+    const pageUrl = body.pagePath
+      ? (body.pagePath.startsWith('http') ? body.pagePath : `https://www.makhanaghar.in/${pageSlug === 'home' ? '' : pageSlug}`)
+      : 'https://www.makhanaghar.in';
+
+    // ── 1. Send to Google Sheets (source = page slug) ──
+    const googleSheetPromise = sendToGoogleAppScript({
+      form_type: 'enquiry',
+      website: 'Makhana Ghar',
+      form: 'Product Enquiry',
+      name: name.trim(),
+      email: cleanEmail || 'makhanaghar.marketing@gmail.com',
+      country_code: cleanCountryCode,
+      phone: cleanPhone,
+      grade: productLabel,
+      product: productLabel,
+      message: message || '',
+      status: 'New',
+      url: pageUrl,
+      pageUrl: pageUrl,
+      source: pageSlug,
+    }, 'enquire');
+
+    // ── 2. Save to Payload CMS (MongoDB) safely in parallel ──
+    let enquiryId: string | null = null;
+    try {
+      const payload = await getPayload({ config: configPromise });
+      const enquiry = await payload.create({
         collection: 'enquiries',
         data: {
-          name,
-          countryCode: countryCode || '+91',
-          contact,
-          email: email === 'N/A' ? 'no-reply@makhanaghar.in' : email,
-          product: product || undefined,
+          name: name.trim(),
+          countryCode: cleanCountryCode,
+          contact: cleanPhone,
+          email: cleanEmail || 'makhanaghar.marketing@gmail.com',
+          product: productLabel,
           message: message || '',
           status: 'new',
-          source: sourceString,
+          source: body.sourceComponent ? `${body.sourceComponent} (${pageSlug})` : pageSlug,
         },
-      }),
-      getWebhookUrl(),
-    ]);
-
-    // ── 2. Run Background Tasks (Google Sheets & Webhook) ──
-    // Use after() so they don't block the HTTP response and cause high duration
-    after(() => {
-      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-      const phone = `'${countryCode || '+91'} ${contact}`;
-      const productLabel = (({
-        'makhana-4': 'Makhana 4+ Sutta',
-        'makhana-5': 'Makhana 5+ Sutta',
-        'makhana-6': 'Makhana 6+ Sutta',
-        'makhana-lite': 'Phool Makhana Lite',
-        'custom': 'Custom Grade / Mix',
-      } as Record<string, string>)[product]) || product || 'Not specified';
-
-      const webhookBody = { ...body, product: productLabel };
-      triggerWebhook(webhookBody, 'Enquiry', webhookUrl).catch((err) => {
-        console.error('Webhook failed:', err.message);
       });
+      enquiryId = String(enquiry.id);
+    } catch (cmsErr: any) {
+      console.warn('Could not save enquiry to CMS DB (Google Sheets capture active):', cmsErr?.message || cmsErr);
+    }
 
-      sendToGoogleAppScript({
-        form_type: 'enquiry',
-        website: 'Makhana Ghar',
-        form: 'Product Enquiry',
-        name,
-        email,
-        country_code: countryCode || '+91',
-        phone: contact,
-        grade: productLabel,
-        product: productLabel,
-        message: message || '',
-        status: 'New',
-        url: body.pagePath ? `https://www.makhanaghar.in${body.pagePath}` : 'https://www.makhanaghar.in',
-        pageUrl: body.pagePath || '',
-        source: sourceString,
-      }, 'enquire');
-    });
+    // ── 3. Webhook ──
+    getWebhookUrl().then((webhookUrl) => {
+      triggerWebhook({ ...body, product: productLabel, source: pageSlug }, 'Enquiry', webhookUrl).catch(() => {});
+    }).catch(() => {});
+
+    // Await Google Sheet request
+    await googleSheetPromise;
 
     return NextResponse.json({
       success: true,
       message: 'Thank you! We will get back to you shortly.',
-      id: enquiry.id,
+      id: enquiryId || 'enquiry-recorded',
     });
   } catch (error: any) {
     console.error('Enquiry submission error:', error);

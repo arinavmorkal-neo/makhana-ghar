@@ -41,15 +41,8 @@ export const Enquiries: CollectionConfig = {
     },
     {
       name: 'product',
-      type: 'select',
-      label: 'Product Interest',
-      options: [
-        { label: 'Makhana 4+ Sutta', value: 'makhana-4' },
-        { label: 'Makhana 5+ Sutta', value: 'makhana-5' },
-        { label: 'Makhana 6+ Sutta', value: 'makhana-6' },
-        { label: 'Phool Makhana Lite', value: 'makhana-lite' },
-        { label: 'Custom Grade / Mix', value: 'custom' },
-      ],
+      type: 'text',
+      label: 'Product Interest / Grade',
     },
     {
       name: 'message',
