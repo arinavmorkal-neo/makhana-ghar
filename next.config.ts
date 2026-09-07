@@ -31,21 +31,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/product/premium-6-plus-sutta-raw-makhana',
-        destination: '/categories',
-        permanent: true,
-      },
-      {
-        source: '/product/premium-5-plus-sutta-raw-makhana',
-        destination: '/categories',
-        permanent: true,
-      },
-      {
-        source: '/product/premium-4-plus-sutta-raw-makhana',
-        destination: '/categories',
-        permanent: true,
-      },
-      {
         source: '/product/6-suta-jumbo-grade-makhana',
         destination: '/categories',
         permanent: true,

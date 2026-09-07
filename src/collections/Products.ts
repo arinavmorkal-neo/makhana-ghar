@@ -4,6 +4,7 @@ const formatSlug = (val: string): string =>
   val
     ?.toLowerCase()
     .trim()
+    .replace(/\+/g, '-plus')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '') || '';
 
