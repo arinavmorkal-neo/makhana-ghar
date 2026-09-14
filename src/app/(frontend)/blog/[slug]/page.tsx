@@ -75,9 +75,9 @@ export default async function BlogDetailPage({
   const dateParts = blog.date ? blog.date.split(' ') : ['Today'];
 
   const breadcrumbs = breadcrumbJsonLd([
-    { name: 'Home', url: 'https://www.makhanaghar.in' },
-    { name: 'Blog', url: 'https://www.makhanaghar.in/blog' },
-    { name: blog.title, url: `https://www.makhanaghar.in/blog/${blog.slug}` },
+    { name: 'Home', url: 'https://makhanaghar.in' },
+    { name: 'Blog', url: 'https://makhanaghar.in/blog' },
+    { name: blog.title, url: `https://makhanaghar.in/blog/${blog.slug}` },
   ]);
 
   const articleStructuredData = articleJsonLd({

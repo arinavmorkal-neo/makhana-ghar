@@ -103,8 +103,8 @@ export default async function FaqsPage() {
   const faqs = await getFaqs();
 
   const breadcrumbs = breadcrumbJsonLd([
-    { name: 'Home', url: 'https://www.makhanaghar.in' },
-    { name: "FAQ's", url: 'https://www.makhanaghar.in/faqs' },
+    { name: 'Home', url: 'https://makhanaghar.in' },
+    { name: "FAQ's", url: 'https://makhanaghar.in/faqs' },
   ]);
 
   /* FAQPage structured data for Google rich results */

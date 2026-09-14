@@ -61,8 +61,8 @@ export default async function BlogPage() {
   const blogs = await getBlogs();
 
   const breadcrumbs = breadcrumbJsonLd([
-    { name: 'Home', url: 'https://www.makhanaghar.in' },
-    { name: 'Blog', url: 'https://www.makhanaghar.in/blog' },
+    { name: 'Home', url: 'https://makhanaghar.in' },
+    { name: 'Blog', url: 'https://makhanaghar.in/blog' },
   ]);
 
   return (

@@ -1,4 +1,4 @@
-const SITE_URL = 'https://www.makhanaghar.in';
+const SITE_URL = 'https://makhanaghar.in';
 
 /**
  * Organization + WebSite schema — injected once in the layout.

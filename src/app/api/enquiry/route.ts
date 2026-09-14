@@ -46,8 +46,8 @@ export async function POST(req: NextRequest) {
     } as Record<string, string>)[product]) || product || 'Makhana (Fox Nuts)';
 
     const pageUrl = body.pagePath
-      ? (body.pagePath.startsWith('http') ? body.pagePath : `https://www.makhanaghar.in/${pageSlug === 'home' ? '' : pageSlug}`)
-      : 'https://www.makhanaghar.in';
+      ? (body.pagePath.startsWith('http') ? body.pagePath : `https://makhanaghar.in/${pageSlug === 'home' ? '' : pageSlug}`)
+      : 'https://makhanaghar.in';
 
     // ── 1. Send to Google Sheets (source = page slug) ──
     const googleSheetPromise = sendToGoogleAppScript({

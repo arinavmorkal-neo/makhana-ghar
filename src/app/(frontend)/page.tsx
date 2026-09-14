@@ -53,7 +53,7 @@ function renderBlock(block: any, index: number) {
 }
 
 const homeBreadcrumb = breadcrumbJsonLd([
-  { name: 'Home', url: 'https://www.makhanaghar.in' },
+  { name: 'Home', url: 'https://makhanaghar.in' },
 ]);
 
 export default async function HomePage() {

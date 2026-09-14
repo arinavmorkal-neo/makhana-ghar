@@ -104,8 +104,8 @@ export default async function DistributorPage() {
   const benefits = await getBenefits();
 
   const breadcrumbs = breadcrumbJsonLd([
-    { name: 'Home', url: 'https://www.makhanaghar.in' },
-    { name: 'Become Distributor', url: 'https://www.makhanaghar.in/distributor' },
+    { name: 'Home', url: 'https://makhanaghar.in' },
+    { name: 'Become Distributor', url: 'https://makhanaghar.in/distributor' },
   ]);
 
   return (

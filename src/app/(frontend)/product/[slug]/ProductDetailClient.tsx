@@ -214,7 +214,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
             <div className={styles.shareRow}>
               <span className={styles.shareLabel}>Share:</span>
               <a
-                href={`https://wa.me/?text=${encodeURIComponent(`Check out ${product.name} from Makhana Ghar! https://www.makhanaghar.in/product/${product.slug || ''}`)}`}
+                href={`https://wa.me/?text=${encodeURIComponent(`Check out ${product.name} from Makhana Ghar! https://makhanaghar.in/product/${product.slug || ''}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.shareBtn} ${styles.shareBtnWhatsapp}`}
@@ -223,7 +223,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                 💬
               </a>
               <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://www.makhanaghar.in/product/${product.slug || ''}`)}`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://makhanaghar.in/product/${product.slug || ''}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.shareBtn} ${styles.shareBtnFacebook}`}
@@ -232,7 +232,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                 f
               </a>
               <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${product.name} from Makhana Ghar! https://www.makhanaghar.in/product/${product.slug || ''}`)}`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${product.name} from Makhana Ghar! https://makhanaghar.in/product/${product.slug || ''}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.shareBtn} ${styles.shareBtnTwitter}`}

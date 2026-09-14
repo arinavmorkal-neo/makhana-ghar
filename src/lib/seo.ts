@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 
-export const SITE_URL = 'https://www.makhanaghar.in';
+export const SITE_URL = 'https://makhanaghar.in';
 export const SITE_NAME = 'Makhana Ghar';
 
 export interface SeoInput {

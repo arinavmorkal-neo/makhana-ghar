@@ -23,8 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function ContactUsPage() {
   const breadcrumbs = breadcrumbJsonLd([
-    { name: 'Home', url: 'https://www.makhanaghar.in' },
-    { name: 'Contact Us', url: 'https://www.makhanaghar.in/contact-us' },
+    { name: 'Home', url: 'https://makhanaghar.in' },
+    { name: 'Contact Us', url: 'https://makhanaghar.in/contact-us' },
   ]);
 
   return (

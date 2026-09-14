@@ -85,9 +85,9 @@ export default async function ProductPage({
   }
 
   const breadcrumbs = breadcrumbJsonLd([
-    { name: 'Home', url: 'https://www.makhanaghar.in' },
-    { name: 'Products', url: 'https://www.makhanaghar.in/categories' },
-    { name: product.name, url: `https://www.makhanaghar.in/product/${slug}` },
+    { name: 'Home', url: 'https://makhanaghar.in' },
+    { name: 'Products', url: 'https://makhanaghar.in/categories' },
+    { name: product.name, url: `https://makhanaghar.in/product/${slug}` },
   ]);
 
   const structuredProduct = productJsonLd({

@@ -20,8 +20,8 @@ export async function POST(req: NextRequest) {
     const cleanPhone = phone ? String(phone).trim() : '';
     const cleanName = name ? String(name).trim() : 'Subscriber';
     const pageUrl = body.pagePath
-      ? (body.pagePath.startsWith('http') ? body.pagePath : `https://www.makhanaghar.in${body.pagePath}`)
-      : 'https://www.makhanaghar.in';
+      ? (body.pagePath.startsWith('http') ? body.pagePath : `https://makhanaghar.in${body.pagePath}`)
+      : 'https://makhanaghar.in';
 
     // ── 1. Send to Google Sheets immediately & reliably ──
     const googleSheetPromise = sendToGoogleAppScript({

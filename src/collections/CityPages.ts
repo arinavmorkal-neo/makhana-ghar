@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload';
 
 const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET || 'makhana-revalidate-secret-key';
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.makhanaghar.in';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://makhanaghar.in';
 
 async function triggerRevalidation(slug: string) {
   if (!slug) return;
@@ -539,7 +539,7 @@ export const CityPages: CollectionConfig = {
                   type: 'text',
                   label: 'Custom Canonical URL (Optional)',
                   admin: {
-                    description: 'Leave empty for automatic canonical (https://www.makhanaghar.in/makhana-supplier/{slug})',
+                    description: 'Leave empty for automatic canonical (https://makhanaghar.in/makhana-supplier/{slug})',
                   },
                 },
                 {

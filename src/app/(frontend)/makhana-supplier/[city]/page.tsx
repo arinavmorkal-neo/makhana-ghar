@@ -14,7 +14,7 @@ import type { Metadata } from 'next';
 export const revalidate = 120; // ISR cache 2 minutes
 export const dynamicParams = true; // Allow newly published cities to render immediately on-demand
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.makhanaghar.in';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://makhanaghar.in';
 
 /* ── Fetch City Data ── */
 async function getCityPage(citySlug: string) {

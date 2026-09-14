@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
     const formattedMessage = `Subject: ${subject || 'General Enquiry'}\n\n${message || ''}`;
     const pageSlug = extractPageSlug(body.pagePath || body.url || body.slug);
     const pageUrl = body.pagePath
-      ? (body.pagePath.startsWith('http') ? body.pagePath : `https://www.makhanaghar.in/${pageSlug}`)
-      : 'https://www.makhanaghar.in/contact-us';
+      ? (body.pagePath.startsWith('http') ? body.pagePath : `https://makhanaghar.in/${pageSlug}`)
+      : 'https://makhanaghar.in/contact-us';
 
     // ── 1. Send to Google Sheets immediately (source = page slug) ──
     const googleSheetPromise = sendToGoogleAppScript({

@@ -85,7 +85,7 @@ const fontVariables = [
 ].join(' ');
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.makhanaghar.in'),
+  metadataBase: new URL('https://makhanaghar.in'),
 
   title: {
     default: 'Makhana Ghar | Premium Wholesale Makhana Supplier from Bihar',
@@ -98,14 +98,14 @@ export const metadata: Metadata = {
   applicationName: 'Makhana Ghar',
 
   alternates: {
-    canonical: 'https://www.makhanaghar.in/',
+    canonical: 'https://makhanaghar.in/',
   },
 
   openGraph: {
     title: 'Makhana Ghar | Premium Wholesale Makhana Supplier from Bihar',
     description:
       'Premium Makhana manufacturer, wholesaler and exporter from Bihar.',
-    url: 'https://www.makhanaghar.in/',
+    url: 'https://makhanaghar.in/',
     siteName: 'Makhana Ghar',
     type: 'website',
   },

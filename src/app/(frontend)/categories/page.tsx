@@ -58,8 +58,8 @@ export default async function CategoriesPage() {
   const products = await getProducts();
 
   const breadcrumbs = breadcrumbJsonLd([
-    { name: 'Home', url: 'https://www.makhanaghar.in' },
-    { name: 'Products', url: 'https://www.makhanaghar.in/categories' },
+    { name: 'Home', url: 'https://makhanaghar.in' },
+    { name: 'Products', url: 'https://makhanaghar.in/categories' },
   ]);
 
   return (

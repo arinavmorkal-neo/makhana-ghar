@@ -181,8 +181,8 @@ export default async function GalleryPage() {
   const items = await getGalleryItems();
 
   const breadcrumbs = breadcrumbJsonLd([
-    { name: 'Home', url: 'https://www.makhanaghar.in' },
-    { name: 'Gallery', url: 'https://www.makhanaghar.in/gallery' },
+    { name: 'Home', url: 'https://makhanaghar.in' },
+    { name: 'Gallery', url: 'https://makhanaghar.in/gallery' },
   ]);
 
   return (

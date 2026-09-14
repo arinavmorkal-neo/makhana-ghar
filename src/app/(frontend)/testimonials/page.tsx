@@ -113,8 +113,8 @@ export default async function TestimonialsPage() {
   const testimonials = await getTestimonials();
 
   const breadcrumbs = breadcrumbJsonLd([
-    { name: 'Home', url: 'https://www.makhanaghar.in' },
-    { name: 'Testimonials', url: 'https://www.makhanaghar.in/testimonials' },
+    { name: 'Home', url: 'https://makhanaghar.in' },
+    { name: 'Testimonials', url: 'https://makhanaghar.in/testimonials' },
   ]);
 
   return (
