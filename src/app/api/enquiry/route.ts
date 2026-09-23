@@ -95,12 +95,24 @@ export async function POST(req: NextRequest) {
     }).catch(() => {});
 
     // Await Google Sheet request
-    await googleSheetPromise;
+    let googleSheetResult: string | undefined;
+    let googleSheetError: string | undefined;
+    try {
+      googleSheetResult = await googleSheetPromise;
+    } catch (gsErr: any) {
+      googleSheetError = gsErr?.message || String(gsErr);
+      console.error('Google Sheet error:', googleSheetError);
+    }
 
     return NextResponse.json({
       success: true,
       message: 'Thank you! We will get back to you shortly.',
       id: enquiryId || 'enquiry-recorded',
+      _debug: {
+        googleSheetUrl: process.env.GOOGLE_APP_SCRIPT_URL ? 'SET' : 'MISSING',
+        googleSheetResult: googleSheetResult || null,
+        googleSheetError: googleSheetError || null,
+      },
     });
   } catch (error: any) {
     console.error('Enquiry submission error:', error);
