@@ -109,8 +109,8 @@ export async function POST(req: NextRequest) {
       message: 'Thank you! We will get back to you shortly.',
       id: enquiryId || 'enquiry-recorded',
       _debug: {
-        googleSheetUrl: process.env.GOOGLE_APP_SCRIPT_URL ? 'SET' : 'MISSING',
-        googleSheetResult: googleSheetResult || null,
+        googleSheetStatus: googleSheetResult?.includes('success') ? 'SUCCESS' : 'FALLBACK_OR_PENDING',
+        googleSheetResult: googleSheetResult ? googleSheetResult.slice(0, 150) : null,
         googleSheetError: googleSheetError || null,
       },
     });
