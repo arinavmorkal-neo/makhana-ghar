@@ -13,6 +13,7 @@ import {
 import LoadingScreen from '../components/LoadingScreen';
 import { GeoProvider } from '../components/GeoProvider';
 import WhatsAppFloating from '../components/WhatsAppFloating';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { organizationJsonLd } from '../lib/jsonLd';
 import './globals.css';
 
@@ -173,6 +174,7 @@ gtag('config', 'G-J38ME748LK');`}
             {children}
           </LoadingScreen>
           <WhatsAppFloating />
+          <SpeedInsights />
         </GeoProvider>
       </body>
     </html>

@@ -13,6 +13,7 @@
     "@payloadcms/db-mongodb": "^3.84.1",
     "@payloadcms/next": "^3.84.1",
     "@payloadcms/richtext-lexical": "^3.84.1",
+    "@vercel/speed-insights": "^2.0.0",
     "googleapis": "^172.0.0",
     "graphql": "^16.14.0",
     "lucide-react": "^1.16.0",
