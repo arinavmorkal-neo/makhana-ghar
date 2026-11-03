@@ -1,8 +1,11 @@
 import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { fallbackBlogs } from '../lib/fallbackBlogs'
 
 const SITE_URL = 'https://makhanaghar.in'
+// Stable static page lastModified date to avoid dynamic timestamp churn
+const STATIC_LASTMOD = new Date('2026-10-15')
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = []
@@ -25,7 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const page of staticPages) {
     entries.push({
       url: `${SITE_URL}${page.path}`,
-      lastModified: new Date(),
+      lastModified: STATIC_LASTMOD,
       changeFrequency: page.changeFrequency,
       priority: page.priority,
     })
@@ -58,13 +61,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: { slug: true, updatedAt: true },
     })
 
-    for (const blog of blogs.docs) {
-      entries.push({
-        url: `${SITE_URL}/blog/${(blog as any).slug}`,
-        lastModified: new Date((blog as any).updatedAt),
-        changeFrequency: 'monthly',
-        priority: 0.7,
-      })
+    if (blogs.docs.length > 0) {
+      for (const blog of blogs.docs) {
+        entries.push({
+          url: `${SITE_URL}/blog/${(blog as any).slug}`,
+          lastModified: new Date((blog as any).updatedAt),
+          changeFrequency: 'monthly',
+          priority: 0.7,
+        })
+      }
+    } else {
+      // Fallback curated blogs if CMS blogs collection is empty
+      for (const blog of fallbackBlogs) {
+        entries.push({
+          url: `${SITE_URL}/blog/${blog.slug}`,
+          lastModified: STATIC_LASTMOD,
+          changeFrequency: 'monthly',
+          priority: 0.7,
+        })
+      }
     }
 
     // City Landing Pages

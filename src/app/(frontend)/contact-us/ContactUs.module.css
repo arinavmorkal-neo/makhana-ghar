@@ -363,101 +363,335 @@
   }
 }
 
-/* ── Map Section ── */
+/* ── Facility Section ── */
+.facilitySection,
 .mapSection {
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1.5px solid #dce8da;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-}
-
-.mapHeader {
-  background: #f8faf7;
-  padding: 24px 28px;
-  border-bottom: 1.5px solid #dce8da;
-}
-
-.mapTitle {
-  font-family: var(--font-caveat), cursive;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #1a3a1a;
-  margin-bottom: 4px;
-}
-
-.mapAddress {
-  font-size: 0.85rem;
-  color: #5a7a58;
-  line-height: 1.5;
-}
-
-.mapWrap {
-  width: 100%;
-  height: 360px;
-}
-
-.mapWrap iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-}
-
-/* ── Business Hours Card ── */
-.hoursSection {
-  background: #f8faf7;
-  border: 1.5px solid #dce8da;
-  border-radius: 16px;
-  padding: 28px;
-  margin-top: 24px;
-}
-
-.hoursTitle {
-  font-family: var(--font-poppins), sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1a3a1a;
-  margin-bottom: 16px;
   display: flex;
+  flex-direction: column;
+}
+
+.facilityCard,
+.mapCard {
+  background: #f8faf7;
+  border: 1.5px solid #dce8da;
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.facilityHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.facilityBadge {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
+  background: rgba(46, 125, 50, 0.08);
+  border: 1px solid rgba(46, 125, 50, 0.22);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #1e5a24;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
-.hoursTitle svg {
+.pulseDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2e7d32;
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7);
+  animation: pulseDotAnim 2s infinite ease-out;
+}
+
+@keyframes pulseDotAnim {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(46, 125, 50, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 125, 50, 0);
+  }
+}
+
+.facilityTitle,
+.mapTitle {
+  font-family: var(--font-caveat), cursive;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #1a3a1a;
+  line-height: 1.15;
+  margin: 0 0 8px;
+}
+
+.facilityTitleAccent {
   color: #2e7d32;
 }
 
-.hoursGrid {
+.facilitySubtitle,
+.mapSubtitle {
+  font-size: 0.88rem;
+  color: #5a7a58;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Facility Highlights Grid ── */
+.facilityHighlights {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.hoursRow {
+.facilityItem {
   display: flex;
-  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  background: #ffffff;
+  border: 1.5px solid #e3ede1;
+  border-radius: 14px;
+  padding: 14px 16px;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.facilityItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(26, 58, 26, 0.08);
+  border-color: #2e7d32;
+}
+
+.facilityIconWrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
   align-items: center;
-  font-size: 0.85rem;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
-.hoursDay {
+.facilityItem:hover .facilityIconWrap {
+  transform: scale(1.06);
+}
+
+.iconWheat {
+  background: rgba(46, 125, 50, 0.12);
+  color: #2e7d32;
+}
+
+.iconSun {
+  background: rgba(230, 161, 0, 0.14);
+  color: #c48300;
+}
+
+.iconBox {
+  background: rgba(16, 149, 106, 0.12);
+  color: #0f8b63;
+}
+
+.iconTruck {
+  background: rgba(0, 137, 123, 0.12);
+  color: #00897b;
+}
+
+.facilityItemText {
+  flex: 1;
+  min-width: 0;
+}
+
+.facilityItemTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.facilityItemTitle {
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
   color: #1a3a1a;
-  font-weight: 500;
+  margin: 0;
 }
 
-.hoursTime {
+.facilityStatPill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #edf6ec;
+  color: #256a2c;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.facilityItemDesc {
+  font-size: 0.82rem;
   color: #5a7a58;
+  line-height: 1.45;
+  margin: 0;
 }
 
-.hoursTime.closed {
-  color: #d32f2f;
-  font-weight: 500;
+/* ── Facility Address Bar ── */
+.facilityAddressBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: #ffffff;
+  border: 1.5px dashed #cbdcc9;
+  border-radius: 12px;
+  padding: 12px 16px;
+  transition: border-color 0.2s ease;
 }
 
-.hoursDivider {
-  height: 1px;
-  background: #dce8da;
-  margin: 4px 0;
+.facilityAddressBar:hover {
+  border-color: #2e7d32;
+}
+
+.addressLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.addressPinIcon {
+  color: #2e7d32;
+  flex-shrink: 0;
+}
+
+.addressDetails {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.addressLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #728c70;
+}
+
+.addressValue {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #1a3a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mapLinkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border: 1.5px solid #2e7d32;
+  border-radius: 8px;
+  color: #2e7d32;
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.mapLinkBtn:hover {
+  background: #2e7d32;
+  color: #ffffff;
+}
+
+/* ── Quick WhatsApp Banner ── */
+.quickContactBanner {
+  background: linear-gradient(135deg, #e8f5e9 0%, #d8edd9 100%);
+  border: 1.5px solid #b7dfbc;
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.08);
+}
+
+.qcTextWrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.qcHeadline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #14491c;
+  font-size: 0.92rem;
+  font-weight: 700;
+  font-family: var(--font-poppins), sans-serif;
+}
+
+.qcPulseDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #25D366;
+  box-shadow: 0 0 6px #25D366;
+  flex-shrink: 0;
+}
+
+.qcText {
+  font-size: 0.8rem;
+  color: #35633b;
+  margin: 3px 0 0 0;
+  line-height: 1.4;
+}
+
+.qcWhatsappBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 10px;
+  background: #25D366;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 700;
+  font-family: var(--font-dm-sans), sans-serif;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.qcWhatsappBtn:hover {
+  transform: translateY(-2px);
+  background: #20ba59;
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45);
+  color: #ffffff;
+}
+
+.qcWhatsappIcon {
+  display: block;
+  flex-shrink: 0;
 }
 
 /* ── CTA Banner ── */
@@ -593,6 +827,9 @@
   .formSection {
     padding: 28px 24px;
   }
+  .facilityCard {
+    padding: 28px 24px;
+  }
   .ctaSection {
     padding: 40px 24px;
   }
@@ -622,6 +859,44 @@
   }
   .infoCard {
     padding: 24px 20px;
+  }
+  .facilityCard {
+    padding: 22px 16px;
+    border-radius: 16px;
+  }
+  .facilityTitle {
+    font-size: 1.75rem;
+  }
+  .facilityItem {
+    padding: 12px;
+  }
+  .facilityItemTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .facilityAddressBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .addressValue {
+    white-space: normal;
+  }
+  .mapLinkBtn {
+    width: 100%;
+    justify-content: center;
+  }
+  .quickContactBanner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+    gap: 14px;
+    padding: 16px;
+  }
+  .qcWhatsappBtn {
+    width: 100%;
+    justify-content: center;
   }
   .mapWrap {
     height: 260px;

@@ -24,6 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
+import { fallbackBlogs } from '../../../lib/fallbackBlogs';
+
 async function getBlogs(): Promise<BlogPostItem[]> {
   try {
     const payload = await getPayload({ config: configPromise });
@@ -54,7 +56,20 @@ async function getBlogs(): Promise<BlogPostItem[]> {
   } catch (err) {
     console.error('Failed to fetch blogs for blog page:', err);
   }
-  return [];
+
+  // Fallback blogs for preview, design testing, and search engines
+  return fallbackBlogs.map((b) => ({
+    id: b.id,
+    slug: b.slug,
+    title: b.title,
+    date: b.date,
+    author: b.author,
+    category: b.category,
+    image: b.image,
+    excerpt: b.excerpt,
+    featured: b.featured,
+    readTime: b.readTime,
+  }));
 }
 
 export default async function BlogPage() {

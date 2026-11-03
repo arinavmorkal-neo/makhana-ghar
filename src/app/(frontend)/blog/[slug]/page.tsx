@@ -10,6 +10,7 @@ import MobileNavBar from '../../../components/MobileNavBar';
 import { articleJsonLd, breadcrumbJsonLd } from '../../../lib/jsonLd';
 import { getBlogMetadata } from '../../../../lib/seo';
 import { getImageUrlWithOverride } from '../../../../lib/getImageUrl';
+import { fallbackBlogs } from '../../../../lib/fallbackBlogs';
 import styles from './BlogDetail.module.css';
 
 export const revalidate = 60; // ISR 60s
@@ -57,6 +58,25 @@ async function getBlogPost(slug: string) {
   } catch (err) {
     console.error('Failed to fetch blog post server-side:', err);
   }
+
+  // Fallback blog posts for testing, design preview, and search indexation
+  const fallback = fallbackBlogs.find((b) => b.slug === slug);
+  if (fallback) {
+    return {
+      id: fallback.id,
+      slug: fallback.slug,
+      title: fallback.title,
+      date: fallback.date,
+      author: fallback.author,
+      category: fallback.category,
+      image: fallback.image,
+      excerpt: fallback.excerpt,
+      readTime: fallback.readTime,
+      views: fallback.views,
+      content: fallback.content,
+    };
+  }
+
   return null;
 }
 

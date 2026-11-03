@@ -266,54 +266,165 @@ export default function ContactUsClient() {
             </form>
           </div>
 
-          {/* Map / Facility Info */}
-          <div className={styles.mapSection}>
-            <div className={styles.mapCard}>
-              <h3 className={styles.mapTitle}>Our Processing Facility</h3>
-              <p className={styles.mapSubtitle}>
-                Located at the heart of India&apos;s primary Makhana growing region in Bihar.
-              </p>
+          {/* Processing Facility Info */}
+          <div className={styles.facilitySection}>
+            <div className={styles.facilityCard}>
+              <div className={styles.facilityHeader}>
+                <div className={styles.facilityBadge}>
+                  <span className={styles.pulseDot} />
+                  <span>Katihar, Bihar · Processing Hub</span>
+                </div>
+                <h3 className={styles.facilityTitle}>
+                  Our Processing <span className={styles.facilityTitleAccent}>Facility</span>
+                </h3>
+                <p className={styles.facilitySubtitle}>
+                  Located at the heart of India&apos;s primary Makhana growing region in Bihar, directly connected to pristine harvest ponds for unmatched quality &amp; traceability.
+                </p>
+              </div>
 
               <div className={styles.facilityHighlights}>
                 <div className={styles.facilityItem}>
-                  <span className={styles.facilityIcon}>🌾</span>
-                  <div>
-                    <strong>Direct Farm Access</strong>
-                    <p>Ponds within 15 km of our processing unit</p>
+                  <div className={`${styles.facilityIconWrap} ${styles.iconWheat}`}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M2 22 16 8" />
+                      <path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
+                      <path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
+                      <path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
+                      <path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z" />
+                    </svg>
+                  </div>
+                  <div className={styles.facilityItemText}>
+                    <div className={styles.facilityItemTop}>
+                      <strong className={styles.facilityItemTitle}>Direct Farm Access</strong>
+                      <span className={styles.facilityStatPill}>&lt; 15 km Radius</span>
+                    </div>
+                    <p className={styles.facilityItemDesc}>
+                      Ponds within 15 km of our processing unit ensure immediate sorting and farm-fresh flavor.
+                    </p>
                   </div>
                 </div>
+
                 <div className={styles.facilityItem}>
-                  <span className={styles.facilityIcon}>☀️</span>
-                  <div>
-                    <strong>Natural Sun-Drying</strong>
-                    <p>Over 20,000 sq ft of clean drying yards</p>
+                  <div className={`${styles.facilityIconWrap} ${styles.iconSun}`}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="4" />
+                      <path d="M12 2v2" />
+                      <path d="M12 20v2" />
+                      <path d="m4.93 4.93 1.41 1.41" />
+                      <path d="m17.66 17.66 1.41 1.41" />
+                      <path d="M2 12h2" />
+                      <path d="M20 12h2" />
+                      <path d="m6.34 17.66-1.41 1.41" />
+                      <path d="m19.07 4.93-1.41 1.41" />
+                    </svg>
+                  </div>
+                  <div className={styles.facilityItemText}>
+                    <div className={styles.facilityItemTop}>
+                      <strong className={styles.facilityItemTitle}>Natural Sun-Drying</strong>
+                      <span className={styles.facilityStatPill}>20,000+ sq ft</span>
+                    </div>
+                    <p className={styles.facilityItemDesc}>
+                      Over 20,000 sq ft of clean drying yards preserving natural nutrients, aroma, and crispness.
+                    </p>
                   </div>
                 </div>
+
                 <div className={styles.facilityItem}>
-                  <span className={styles.facilityIcon}>📦</span>
-                  <div>
-                    <strong>Modern Packaging Facility</strong>
-                    <p>Food-grade, climate-controlled packaging</p>
+                  <div className={`${styles.facilityIconWrap} ${styles.iconBox}`}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m16.5 9.4-9-5.19" />
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                      <polyline points="3.29 7 12 12 20.71 7" />
+                      <line x1="12" x2="12" y1="22" y2="12" />
+                    </svg>
+                  </div>
+                  <div className={styles.facilityItemText}>
+                    <div className={styles.facilityItemTop}>
+                      <strong className={styles.facilityItemTitle}>Modern Packaging Facility</strong>
+                      <span className={styles.facilityStatPill}>Food-Grade</span>
+                    </div>
+                    <p className={styles.facilityItemDesc}>
+                      Hygienic climate-controlled facility with moisture-lock bags and export-ready grading.
+                    </p>
                   </div>
                 </div>
+
                 <div className={styles.facilityItem}>
-                  <span className={styles.facilityIcon}>🚛</span>
-                  <div>
-                    <strong>Pan-India &amp; Global Dispatch</strong>
-                    <p>Connected via road, rail, and port logistics</p>
+                  <div className={`${styles.facilityIconWrap} ${styles.iconTruck}`}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
+                      <path d="M15 18H9" />
+                      <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
+                      <circle cx="17" cy="18.5" r="2.5" />
+                      <circle cx="7" cy="18.5" r="2.5" />
+                    </svg>
+                  </div>
+                  <div className={styles.facilityItemText}>
+                    <div className={styles.facilityItemTop}>
+                      <strong className={styles.facilityItemTitle}>Pan-India &amp; Global Dispatch</strong>
+                      <span className={styles.facilityStatPill}>Freight Ready</span>
+                    </div>
+                    <p className={styles.facilityItemDesc}>
+                      Connected via national highways, freight rail corridors, and sea port transit routes.
+                    </p>
                   </div>
                 </div>
               </div>
 
+              {/* Facility Address Bar */}
+              <div className={styles.facilityAddressBar}>
+                <div className={styles.addressLeft}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.addressPinIcon}>
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <div className={styles.addressDetails}>
+                    <span className={styles.addressLabel}>Processing Unit Address</span>
+                    <span className={styles.addressValue}>Mangal Bazar, Katihar, Bihar 854105, India</span>
+                  </div>
+                </div>
+                <a
+                  href="https://maps.google.com/?q=Mangal+Bazar,+Katihar,+Bihar+854105"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.mapLinkBtn}
+                  title="Open location in Google Maps"
+                >
+                  <span>View Map</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7" />
+                    <polyline points="7 7 17 7 17 17" />
+                  </svg>
+                </a>
+              </div>
+
+              {/* Quick WhatsApp Banner */}
               <div className={styles.quickContactBanner}>
-                <p className={styles.qcText}>Need immediate assistance?</p>
+                <div className={styles.qcTextWrap}>
+                  <div className={styles.qcHeadline}>
+                    <span className={styles.qcPulseDot} />
+                    <strong>Need immediate assistance?</strong>
+                  </div>
+                  <p className={styles.qcText}>
+                    Chat live with our wholesale desk for real-time stock, pricing &amp; lot samples.
+                  </p>
+                </div>
                 <a
                   href="https://wa.me/918002661555?text=Hello%2C%20I%20have%20an%20urgent%20enquiry%20regarding%20makhana%20wholesale."
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.qcWhatsappBtn}
                 >
-                  Chat on WhatsApp 💬
+                  <svg
+                    className={styles.qcWhatsappIcon}
+                    viewBox="0 0 32 32"
+                    fill="currentColor"
+                    width="18"
+                    height="18"
+                  >
+                    <path d="M16 2.5C8.544 2.5 2.5 8.544 2.5 16c0 2.628.75 5.08 2.053 7.153L3 29.5l6.568-1.52A13.436 13.436 0 0016 29.5c7.456 0 13.5-6.044 13.5-13.5S23.456 2.5 16 2.5zm0 24.636c-2.296 0-4.453-.664-6.28-1.808l-.45-.28-4.148.96 1.002-3.992-.295-.468A11.144 11.144 0 014.864 16C4.864 9.86 9.86 4.864 16 4.864S27.136 9.86 27.136 16 22.14 27.136 16 27.136zm6.818-8.777c-.373-.187-2.207-1.089-2.55-1.213-.342-.125-.59-.187-.84.187-.248.373-.964 1.213-1.182 1.462-.218.249-.436.28-.809.094a10.22 10.22 0 01-3.003-1.854 11.272 11.272 0 01-2.079-2.587c-.218-.374-.023-.576.164-.762.168-.168.374-.436.56-.654.187-.218.249-.374.374-.623.125-.25.062-.467-.031-.654-.094-.187-.84-2.024-1.152-2.772-.303-.728-.612-.629-.84-.641l-.717-.012c-.25 0-.654.094-.996.467s-1.308 1.277-1.308 3.114c0 1.838 1.34 3.613 1.526 3.863.187.249 2.637 4.027 6.39 5.648.893.385 1.59.615 2.133.788.897.285 1.713.245 2.358.149.72-.108 2.207-.903 2.518-1.774.312-.872.312-1.62.218-1.775-.093-.156-.342-.25-.716-.436z" />
+                  </svg>
+                  <span>Chat on WhatsApp</span>
                 </a>
               </div>
             </div>

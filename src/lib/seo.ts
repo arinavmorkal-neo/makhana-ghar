@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 
+import { fallbackBlogs } from './fallbackBlogs';
+
 export const SITE_URL = 'https://makhanaghar.in';
 export const SITE_NAME = 'Makhana Ghar';
 
@@ -252,6 +254,17 @@ export async function getBlogMetadata(slug: string): Promise<Metadata> {
     }
   } catch (err) {
     console.warn(`[SEO] Failed to fetch blog SEO for "${slug}":`, err);
+  }
+
+  const fallback = fallbackBlogs.find((b) => b.slug === slug);
+  if (fallback) {
+    return constructMetadata({
+      title: fallback.seo?.metaTitle || `${fallback.title} | Makhana Ghar Blog`,
+      description: fallback.seo?.metaDescription || fallback.excerpt,
+      primaryKeywords: fallback.seo?.primaryKeywords,
+      path: `/blog/${slug}`,
+      image: fallback.image,
+    });
   }
 
   return constructMetadata({
